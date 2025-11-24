@@ -1,92 +1,65 @@
-'use client';
-
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { cn } from "@/lib/utils";
 import {
   LayoutDashboard,
-  Users,
+  UserPlus,
   BookOpen,
-  FileCheck,
-  ClipboardCheck,
   FileText,
-  Settings,
-  LogOut,
-  ChefHat
+  Award,
+  ShieldCheck,
+  FolderOpen,
+  Settings
 } from 'lucide-react';
 
-const sidebarItems = [
-  {
-    title: "Ana Panel",
-    href: "/",
-    icon: LayoutDashboard,
-  },
-  {
-    title: "Telebe Qeydiyyat",
-    href: "/telebe-qeydiyyat",
-    icon: Users,
-  },
-  {
-    title: "Sinav Merkezi (CTH)",
-    href: "/sinav-merkezi/degerlendirme",
-    icon: FileCheck,
-  },
-  {
-    title: "Kalite Guvence (IV)",
-    href: "/kalite-kontrol",
-    icon: ClipboardCheck,
-  },
-  {
-    title: "Raporlar & Formlar",
-    href: "/formlar",
-    icon: FileText,
-  },
-  {
-    title: "Ayarlar",
-    href: "/ayarlar",
-    icon: Settings,
-  },
-];
-
-export function Sidebar() {
+export default function Sidebar() {
   const pathname = usePathname();
 
+  const isActive = (path: string) => pathname === path;
+
   return (
-    <div className="hidden md:flex h-screen w-72 flex-col fixed left-0 top-0 border-r bg-slate-900 text-white">
-      <div className="p-6 flex items-center gap-3 border-b border-slate-800">
-        <div className="p-2 bg-blue-600 rounded-lg">
-          <ChefHat className="h-6 w-6 text-white" />
-        </div>
+    <div className="w-64 bg-slate-900 text-white h-screen flex flex-col fixed left-0 top-0 overflow-y-auto">
+      {/* LOGO ALANI */}
+      <div className="p-6 border-b border-slate-800">
+        <h1 className="text-xl font-bold text-blue-400">Turan Gastro</h1>
+        <p className="text-xs text-slate-400">Akademi Yönetimi</p>
+      </div>
+
+      <nav className="flex-1 p-4 space-y-8">
+
+        {/* GRUP 1: Ümumi İdarəetmə */}
         <div>
-          <h1 className="font-bold text-lg tracking-tight">Turan Gastro</h1>
-          <p className="text-xs text-slate-400">Akademi Yonetimi</p>
+          <h3 className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-3 px-2">
+            Ümumi İdarəetmə
+          </h3>
+          <div className="space-y-1">
+            <Link href="/" className={`flex items-center gap-3 px-3 py-2 rounded-md transition-colors ${isActive('/') ? 'bg-blue-600 text-white' : 'text-slate-300 hover:bg-slate-800'}`}>
+              <LayoutDashboard size={18} />
+              <span>Ana Panel</span>
+            </Link>
+            <Link href="/telebe-qeydiyyat" className={`flex items-center gap-3 px-3 py-2 rounded-md transition-colors ${isActive('/telebe-qeydiyyat') ? 'bg-blue-600 text-white' : 'text-slate-300 hover:bg-slate-800'}`}>
+              <UserPlus size={18} />
+              <span>Tələbə Qeydiyyat</span>
+            </Link>
+            <Link href="/kurslar" className={`flex items-center gap-3 px-3 py-2 rounded-md transition-colors ${isActive('/kurslar') ? 'bg-blue-600 text-white' : 'text-slate-300 hover:bg-slate-800'}`}>
+              <BookOpen size={18} />
+              <span>Kurslar və Qiymətlər</span>
+            </Link>
+          </div>
         </div>
-      </div>
 
-      <div className="flex-1 overflow-y-auto py-6 px-4 space-y-1">
-        {sidebarItems.map((item) => (
-          <Link
-            key={item.href}
-            href={item.href}
-            className={cn(
-              "flex items-center gap-3 px-3 py-2.5 text-sm font-medium rounded-lg transition-all group",
-              pathname === item.href
-                ? "bg-blue-600 text-white shadow-lg shadow-blue-900/20"
-                : "text-slate-400 hover:text-white hover:bg-slate-800"
-            )}
-          >
-            <item.icon className={cn("h-5 w-5 transition-colors", pathname === item.href ? "text-white" : "text-slate-500 group-hover:text-white")} />
-            {item.title}
-          </Link>
-        ))}
-      </div>
+        {/* GRUP 2: DMA (Dövlət Məşğulluq) */}
+        <div>
+          <h3 className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-3 px-2">
+            DMA (Dövlət Məşğulluq)
+          </h3>
+          <div className="space-y-1">
+            {/* İmtahan Protokolları için Evrak Merkezine yönlendiriyoruz */}
+            <Link href="/sened-idare" className={`flex items-center gap-3 px-3 py-2 rounded-md transition-colors ${isActive('/sened-idare') ? 'bg-blue-600 text-white' : 'text-slate-300 hover:bg-slate-800'}`}>
+              <FileText size={18} />
+              <span>İmtahan Protokolları</span>
+            </Link>
+          </div>
+        </div>
 
-      <div className="p-4 border-t border-slate-800">
-        <button className="flex items-center gap-3 w-full px-3 py-2.5 text-sm font-medium text-slate-400 hover:text-white hover:bg-slate-800 rounded-lg transition-all">
-          <LogOut className="h-5 w-5" />
-          Cixis Yap
-        </button>
-      </div>
-    </div>
-  );
-}
+        {/* GRUP 3: CTH (Beynəlxalq) */}
+        <div>
