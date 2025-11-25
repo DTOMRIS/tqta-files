@@ -79,6 +79,13 @@ export default function StudentRegistration() {
     // 9. Müqavilə Tipi
     muqavileTipi: "",
 
+    // 10. CTH ÖZEL ALANLARI (Accreditation)
+    cthStudentNumber: "", // CTH-dən alınacaq
+    cohortId: "", // Məs: "March 2025"
+    enrollmentDate: "", // Dərsə başlama tarixi (2 həftə qaydası!)
+    englishLevel: "", // A2, B1, B2, C1 və ya IELTS
+    educationLevel: "", // Əvvəlki təhsil
+
     // Şərtlər
     sertleriQebulEtdim: false,
     melumatIslemesiRazi: false
@@ -297,6 +304,61 @@ ${specificRules}
     return fullContract;
   };
 
+  const handleKaydet = async () => {
+    // 1. Basit Doğrulama
+    if (!formData.ad || !formData.soyad) {
+      alert("⚠️ Lütfen Ad və Soyad daxil edin!");
+      return;
+    }
+    if (!formData.email || !formData.mobilTelefon) {
+      alert("⚠️ Email və Mobil Telefon məcburidir!");
+      return;
+    }
+    if (!formData.kursId) {
+      alert("⚠️ Zəhmət olmasa kurs seçin!");
+      return;
+    }
+    if (!formData.sertleriQebulEtdim) {
+      alert("⚠️ Şərtləri qəbul etməlisiniz!");
+      return;
+    }
+    if (ageError) {
+      alert(ageError);
+      return;
+    }
+
+    try {
+      // Butonu "Yükleniyor..." yapabilirsin burada
+      console.log("Kayıt başlatılıyor...");
+
+      // 2. API'ye Gönder
+      const response = await fetch('/api/students', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          ...formData,
+          finalPrice: finalPrice
+        })
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        alert("✅ Tələbə uğurla Neon veritabanına yazıldı!\n\nID: " + result.data.id);
+        console.log("Kayıt başarılı:", result.data);
+
+        // Formu temizle (isteğe bağlı)
+        // setFormData({ ... initial state ... });
+      } else {
+        alert("❌ Xəta: " + result.error);
+      }
+
+    } catch (error) {
+      console.error("Form gönderme hatası:", error);
+      alert("❌ Sistemsel bir xəta baş verdi. Zəhmət olmasa yenidən cəhd edin.");
+    }
+  };
+
   const handlePrintContract = () => {
     if (!formData.sertleriQebulEtdim) {
       alert("Zəhmət olmasa şərtləri qəbul edin.");
@@ -319,9 +381,14 @@ ${specificRules}
     <div className="space-y-8 p-4 md:p-8">
       <div className="flex justify-between items-center print:hidden">
         <h1 className="text-3xl font-bold">Tələbə Qeydiyyat Formu</h1>
-        <Button onClick={handlePrintContract} variant="outline" disabled={!formData.sertleriQebulEtdim || !selectedCourse || !!ageError}>
-          <Printer className="mr-2 h-4 w-4" /> Müqaviləni Çap Et
-        </Button>
+        <div className="flex gap-2">
+          <Button onClick={handleKaydet} variant="default" disabled={!formData.sertleriQebulEtdim || !selectedCourse || !!ageError}>
+            <Save className="mr-2 h-4 w-4" /> Qeydiyyatı Tamamla
+          </Button>
+          <Button onClick={handlePrintContract} variant="outline" disabled={!formData.sertleriQebulEtdim || !selectedCourse || !!ageError}>
+            <Printer className="mr-2 h-4 w-4" /> Müqaviləni Çap Et
+          </Button>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 print:hidden">
@@ -541,6 +608,112 @@ ${specificRules}
               </div>
             </CardContent>
           </Card>
+
+          {/* 5.5. CTH ADMISSION CRITERIA (Qəbul Şərtləri) */}
+          {(selectedCourse && selectedCourse.tip === 'CTH') && (
+            <Card className="border-purple-200 bg-purple-50">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2 text-purple-800">
+                  <GraduationCap className="w-5 h-5" />
+                  CTH Qəbul Şərtləri (Admission Requirements)
+                </CardTitle>
+                <p className="text-sm text-purple-700 mt-2">
+                  ⚠️ CTH tələbləri: Öğrenci dərsə başladıqdan sonra <strong>14 gün ərzində</strong> CTH-ə qeydiyyatdan keçməlidir!
+                </p>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label>İngilis Dili Səviyyəsi *</Label>
+                    <Select onValueChange={(val) => handleInputChange('englishLevel', val)}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Seçin..." />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="A2">A2 (Elementary) - Minimum</SelectItem>
+                        <SelectItem value="B1">B1 (Intermediate)</SelectItem>
+                        <SelectItem value="B2">B2 (Upper-Intermediate) - Tövsiyə</SelectItem>
+                        <SelectItem value="C1">C1 (Advanced)</SelectItem>
+                        <SelectItem value="IELTS 5.5">IELTS 5.5</SelectItem>
+                        <SelectItem value="IELTS 6.0">IELTS 6.0</SelectItem>
+                        <SelectItem value="IELTS 6.5+">IELTS 6.5+</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <p className="text-xs text-purple-600">
+                      CTH Level 2 üçün minimum B1 (Intermediate) tələb olunur
+                    </p>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label>Dərsə Başlama Tarixi (Enrollment Date) *</Label>
+                    <Input
+                      type="date"
+                      value={formData.enrollmentDate}
+                      onChange={(e) => handleInputChange('enrollmentDate', e.target.value)}
+                      className="border-purple-300"
+                    />
+                    {formData.enrollmentDate && (
+                      <div className="text-xs bg-red-50 border border-red-200 p-2 rounded">
+                        <p className="text-red-700 font-semibold">
+                          📅 CTH Qeydiyyat Son Tarixi: {
+                            new Date(new Date(formData.enrollmentDate).getTime() + 14 * 24 * 60 * 60 * 1000)
+                              .toLocaleDateString('az-AZ')
+                          }
+                        </p>
+                        <p className="text-red-600 text-xs mt-1">
+                          Bu tarixdən sonra qeydiyyat gecikmə cəzası ilə nəticələnər!
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label>Cohort (Dönem)</Label>
+                    <Select onValueChange={(val) => handleInputChange('cohortId', val)}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Seçin..." />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="January 2025">January 2025</SelectItem>
+                        <SelectItem value="March 2025">March 2025</SelectItem>
+                        <SelectItem value="May 2025">May 2025</SelectItem>
+                        <SelectItem value="September 2025">September 2025</SelectItem>
+                        <SelectItem value="November 2025">November 2025</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label>CTH Student Number</Label>
+                    <Input
+                      value={formData.cthStudentNumber}
+                      onChange={(e) => handleInputChange('cthStudentNumber', e.target.value)}
+                      placeholder="CTH-dən alındıqdan sonra daxil edin"
+                      className="border-purple-300"
+                    />
+                    <p className="text-xs text-purple-600">
+                      Bu nömrə CTH-ə qeydiyyatdan sonra verilir (ömürlük)
+                    </p>
+                  </div>
+                </div>
+
+                <div className="bg-purple-100 border border-purple-300 p-3 rounded">
+                  <p className="text-sm text-purple-800 font-semibold">
+                    📋 CTH Qeydiyyat Checklist:
+                  </p>
+                  <ul className="text-xs text-purple-700 mt-2 space-y-1 list-disc list-inside">
+                    <li>İngilis dili səviyyəsi minimum B1 olmalıdır</li>
+                    <li>Dərsə başladıqdan 14 gün ərzində CTH-ə qeydiyyat</li>
+                    <li>Passport ölçüsündə foto (ağ fon)</li>
+                    <li>ID/Passport surəti</li>
+                  </ul>
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
 
           {/* 6. SAĞLIQ VƏ ALERJİ */}
           <Card>
