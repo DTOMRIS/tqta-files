@@ -2,34 +2,54 @@
 
 CTH Accreditation compliant education management platform.
 
-## Features
+## 🚀 Features
 
-- Student Registration with CTH Admission Criteria
-- 14-day CTH Registration Deadline Tracking
-- Progress Tutorials Management
-- Digital Portfolio (Recipe Logs, Videos, Assignments)
-- Internal Verification System
-- Assessment Management
+- **Student Registration:** CTH Admission Criteria & 14-day Deadline Tracking
+- **Dashboard:** Real-time stats and deadline alerts
+- **Progress Tutorials:** Academic tracking with IV approval workflow
+- **Digital Portfolio:** Evidence management (Recipe Logs, Videos, Assignments)
+- **Internal Verification:** Assessment grading and verification system
+- **Authentication:** Role-based access (Admin/Teacher)
 
-## Tech Stack
+## 🛠 Tech Stack
 
-- Next.js 15
-- Neon PostgreSQL
-- Drizzle ORM
-- NextAuth.js
-- Shadcn UI
+- **Framework:** Next.js 15
+- **Database:** Neon PostgreSQL
+- **ORM:** Drizzle ORM
+- **Auth:** NextAuth.js
+- **UI:** Shadcn UI + Tailwind CSS
 
-## Deployment
+## 📦 Deployment
 
-Deployed on Vercel: [Your URL]
+This project is ready for deployment on Vercel.
 
-## Environment Variables
+### Environment Variables Required:
 
-Required for production:
-- `DATABASE_URL` - Neon PostgreSQL connection string
-- `NEXTAUTH_URL` - Production URL
-- `NEXTAUTH_SECRET` - Secret key for NextAuth
+```env
+DATABASE_URL=postgresql://...
+NEXTAUTH_URL=https://your-app.vercel.app
+NEXTAUTH_SECRET=your-secret-key
+```
 
-## License
+## 🏁 Getting Started
+
+1. **Clone the repo:**
+   ```bash
+   git clone https://github.com/username/repo.git
+   ```
+
+2. **Install dependencies:**
+   ```bash
+   npm install
+   ```
+
+3. **Run development server:**
+   ```bash
+   npm run dev
+   ```
+
+4. **Open:** http://localhost:3000
+
+## 📄 License
 
 Proprietary - TQTA
