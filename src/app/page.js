@@ -88,8 +88,8 @@ export default function Home() {
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Ana Panel</h1>
-          <p className="text-muted-foreground">Turan Gastro Egitim Sistemine hos geldiniz.</p>
+          <h1 className="text-3xl font-bold tracking-tight">Ana Panel (CTH v1.0)</h1>
+          <p className="text-muted-foreground">Turan Gastro Egitim Sistemi - CTH Akreditasyon Paneli</p>
         </div>
 
         <div className="flex gap-3">
