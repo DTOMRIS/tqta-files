@@ -1,5 +1,9 @@
+'use client';
+
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { ScrollText, FileCheck, Clock } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { ScrollText, FileCheck, Clock, FileDown } from "lucide-react";
+import { exportToExcel } from '@/lib/excel';
 
 export default function DMAProtocolsPage() {
     const protocols = [
@@ -8,6 +12,23 @@ export default function DMAProtocolsPage() {
         { id: "DMA-2024-003", date: "2024-06-10", course: "Ofisiant", students: 15, status: "Planlaşdırılır" },
     ];
 
+    const handleExport = () => {
+        if (protocols.length === 0) {
+            alert('Export ediləcək məlumat yoxdur');
+            return;
+        }
+
+        const data = protocols.map(p => ({
+            'Protokol №': p.id,
+            'Tarix': p.date,
+            'İxtisas': p.course,
+            'Tələbə Sayı': p.students,
+            'Status': p.status
+        }));
+
+        exportToExcel(data, `dma_protokollar_${new Date().toISOString().split('T')[0]}.xlsx`);
+    };
+
     return (
         <div className="space-y-6">
             <div className="flex justify-between items-center">
@@ -15,6 +36,10 @@ export default function DMAProtocolsPage() {
                     <ScrollText className="h-8 w-8 text-blue-600" />
                     DMA İmtahan Protokolları
                 </h1>
+                <Button onClick={handleExport} variant="outline">
+                    <FileDown className="mr-2 h-4 w-4" />
+                    Excel-ə Export
+                </Button>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">

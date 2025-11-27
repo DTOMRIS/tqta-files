@@ -21,7 +21,9 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table";
-import { BookOpen, CheckCircle, Clock, AlertCircle, Loader2 } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { BookOpen, CheckCircle, Clock, AlertCircle, Loader2, ArrowLeft, FileDown } from 'lucide-react';
+import { exportToExcel } from '@/lib/excel';
 
 const CTH_UNITS = [
     { code: 'CTH-L2-COOK', name: 'CTH Level 2 Cookery' },
@@ -163,12 +165,43 @@ export default function AkademikTakipPage() {
         });
     };
 
+    const router = useRouter();
+
+    const handleExport = () => {
+        if (tutorials.length === 0) {
+            alert('Export ediləcək məlumat yoxdur');
+            return;
+        }
+
+        const data = tutorials.map(t => ({
+            'Tələbə': `${t.studentAd} ${t.studentSoyad}`,
+            'Unit': t.unitName || t.unitCode,
+            'Mövzu': t.topic,
+            'Tarix': new Date(t.tutorialDate).toLocaleDateString('az-AZ'),
+            'Müəllim': t.tutorName || '-',
+            'IV Status': t.ivChecked ? `Təsdiqlənib (${t.ivCheckedBy})` : 'Gözləyir'
+        }));
+
+        exportToExcel(data, `akademik_takip_${new Date().toISOString().split('T')[0]}.xlsx`);
+    };
+
     return (
         <div className="space-y-6">
             {/* Header */}
-            <div>
-                <h1 className="text-3xl font-bold">Akademik Takip</h1>
-                <p className="text-muted-foreground">Progress Tutorials - CTH Tələbi</p>
+            <div className="flex items-center justify-between">
+                <div className="flex items-center gap-4">
+                    <Button variant="outline" size="icon" onClick={() => router.back()}>
+                        <ArrowLeft className="h-4 w-4" />
+                    </Button>
+                    <div>
+                        <h1 className="text-3xl font-bold">Akademik Takip</h1>
+                        <p className="text-muted-foreground">Progress Tutorials - CTH Tələbi</p>
+                    </div>
+                </div>
+                <Button onClick={handleExport} variant="outline">
+                    <FileDown className="mr-2 h-4 w-4" />
+                    Excel-ə Export
+                </Button>
             </div>
 
             {/* Tutorial Əlavə Et */}

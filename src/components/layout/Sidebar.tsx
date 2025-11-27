@@ -49,7 +49,7 @@ export function Sidebar() {
             <h3 className="mb-2 px-2 text-xs font-semibold text-slate-500 uppercase tracking-wider">{section.title}</h3>
             <div className="space-y-1">
               {section.items.map((item) => (
-                <Link key={item.href} href={item.href} className={cn("flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-lg transition-all group", pathname === item.href ? "bg-blue-600 text-white" : "text-slate-400 hover:text-white")}> 
+                <Link key={item.href} href={item.href} className={cn("flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-lg transition-all group", pathname === item.href ? "bg-blue-600 text-white" : "text-slate-400 hover:text-white")}>
                   <item.icon className="h-4 w-4" /> {item.title}
                 </Link>
               ))}

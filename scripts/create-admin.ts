@@ -1,6 +1,7 @@
 // Admin istifadəçi yaratmaq üçün script
 // Çalıştır: npx tsx scripts/create-admin.ts
 
+import 'dotenv/config';
 import bcrypt from 'bcryptjs';
 import { db } from '../src/lib/db';
 import { users } from '../src/lib/schema';
