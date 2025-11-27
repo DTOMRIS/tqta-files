@@ -2,8 +2,8 @@
 import { useState, useEffect } from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Clock, AlertTriangle, CheckCircle, Award } from 'lucide-react';
+import { Clock, AlertTriangle, CheckCircle, Award, Download } from 'lucide-react';
+import * as XLSX from 'xlsx';
 
 export default function CthPanel() {
     const [students, setStudents] = useState([]);
@@ -14,23 +14,69 @@ export default function CthPanel() {
         fetch('/api/cth/pending-registrations')
             .then(res => res.json())
             .then(data => {
-                setStudents(Array.isArray(data) ? data : []); // Hata koruması
+                setStudents(Array.isArray(data) ? data : []);
                 setLoading(false);
             })
             .catch(err => console.error("Veri çekme hatası:", err));
     }, []);
 
-    // Kalan Gün Hesaplayıcı (CTH 14 Gün Kuralı)
+    // Kalan Gün Hesaplayıcı
     const calculateDaysLeft = (startDateString) => {
         if (!startDateString) return 0;
         const start = new Date(startDateString);
         const deadline = new Date(start);
-        deadline.setDate(deadline.getDate() + 14); // 2 Hafta ekle 
-
+        deadline.setDate(deadline.getDate() + 14);
         const today = new Date();
         const diffTime = deadline - today;
-        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-        return diffDays;
+        return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    };
+
+    // --- CTH EXCEL ROBOTU (Registration Entry Spreadsheet) ---
+    const handleExportCTH = () => {
+        if (students.length === 0) return alert("Listede tələbə yoxdur!");
+
+        try {
+            // 1. CTH Sütun Başlıkları (Kılavuza Göre)
+            // Satır 22'den başlaması için üstte boşluk bırakacağız veya template mantığı kuracağız.
+            // Biz "Data Only" verip, kullanıcının Master File'a yapıştırmasını kolaylaştıralım.
+
+            const cthData = students.map(s => ({
+                "CTH Number": s.cthStudentNumber || "NEW", // Yeni kayıt ise boş veya NEW
+                "Title": "Mr/Ms", // Manuel düzeltilebilir
+                "First Name": s.ad,
+                "Surname": s.soyad,
+                "Gender": "M/F", // Veritabanında varsa çekilir
+                "DOB (dd/mm/yyyy)": s.dogumTarihi ? new Date(s.dogumTarihi).toLocaleDateString('en-GB') : "",
+                "Email": s.email || "",
+                "Course": "Culinary L2" // Kurs adını dinamik de alabiliriz
+            }));
+
+            // 2. Excel Sayfasını Oluştur
+            // CTH Kılavuzu: "Headings start on row 22" 
+            // Bu yüzden üst kısma 21 tane boş satır ekliyoruz.
+
+            const emptyRows = Array(21).fill({});
+            const finalData = [...emptyRows, ...cthData];
+
+            const ws = XLSX.utils.json_to_sheet(finalData, { skipHeader: true }); // Header'ı biz kontrol edelim
+
+            // Manuel Header Ekleme (Tam 22. Satıra)
+            XLSX.utils.sheet_add_aoa(ws, [[
+                "CTH Number", "Title", "First Name", "Surname", "Gender", "DOB", "Email", "Course"
+            ]], { origin: "A22" });
+
+            // Veriyi Header'ın altına (Satır 23'e) başlat
+            XLSX.utils.sheet_add_json(ws, cthData, { origin: "A23", skipHeader: true });
+
+            // 3. Dosyayı İndir
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, "Registration Entry");
+            XLSX.writeFile(wb, `CTH_Registration_Upload_${new Date().toISOString().slice(0, 10)}.xlsx`);
+
+        } catch (error) {
+            console.error("Excel hatası:", error);
+            alert("Excel oluşturulamadı.");
+        }
     };
 
     return (
@@ -42,13 +88,18 @@ export default function CthPanel() {
                     </h1>
                     <p className="text-purple-600">London CTH Kayıt ve Sertifikasyon Takibi</p>
                 </div>
-                <div className="bg-white p-3 rounded-lg shadow-sm text-center border">
-                    <span className="block text-2xl font-bold text-purple-700">{students.length}</span>
-                    <span className="text-xs text-gray-500 uppercase">Bekleyen Kayıt</span>
-                </div>
+
+                {/* EXCEL ROBOTU BUTONU */}
+                <Button
+                    onClick={handleExportCTH}
+                    className="bg-green-600 hover:bg-green-700 text-white gap-2 shadow-lg"
+                >
+                    <Download size={20} />
+                    CTH Hub Excel İndir
+                </Button>
             </div>
 
-            {/* 1. ACİL DURUM LİSTESİ (14 GÜN KURALI) */}
+            {/* 1. ACİL DURUM LİSTESİ */}
             <Card className="border-t-4 border-t-purple-600 shadow-md">
                 <CardHeader>
                     <CardTitle className="flex items-center gap-2">
@@ -69,11 +120,10 @@ export default function CthPanel() {
                             <table className="w-full text-sm text-left">
                                 <thead className="bg-purple-50 text-purple-900 font-semibold">
                                     <tr>
-                                        <th className="p-3 rounded-tl-lg">Tələbə</th>
+                                        <th className="p-3">Tələbə</th>
                                         <th className="p-3">Başlama Tarixi</th>
                                         <th className="p-3">Dil (IELTS)</th>
                                         <th className="p-3">Status / Kalan Gün</th>
-                                        <th className="p-3 text-right rounded-tr-lg">Əməliyyat</th>
                                     </tr>
                                 </thead>
                                 <tbody className="divide-y">
@@ -110,11 +160,6 @@ export default function CthPanel() {
                                                         {statusText}
                                                     </span>
                                                 </td>
-                                                <td className="p-3 text-right">
-                                                    <Button size="sm" variant="outline" className="text-purple-700 border-purple-200 hover:bg-purple-50">
-                                                        Qeydiyyat Formu (PDF)
-                                                    </Button>
-                                                </td>
                                             </tr>
                                         );
                                     })}
@@ -124,28 +169,6 @@ export default function CthPanel() {
                     )}
                 </CardContent>
             </Card>
-
-            {/* 2. CTH İŞ AKIŞ BİLGİSİ */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div className="bg-blue-50 p-4 rounded-lg border border-blue-100">
-                    <h3 className="font-bold text-blue-800 mb-2">1. Qeydiyyat (Membership)</h3>
-                    <p className="text-xs text-blue-600">
-                        Dərs başlayandan 14 gün ərzində tələbə CTH portalına düşməlidir. Ömürlük "CTH Number" alınır.
-                    </p>
-                </div>
-                <div className="bg-orange-50 p-4 rounded-lg border border-orange-100">
-                    <h3 className="font-bold text-orange-800 mb-2">2. İmtahan Girişi</h3>
-                    <p className="text-xs text-orange-600">
-                        İmtahan tarixlərinə 6 həftə qalmış "Assessment Registration" edilməlidir.
-                    </p>
-                </div>
-                <div className="bg-green-50 p-4 rounded-lg border border-green-100">
-                    <h3 className="font-bold text-green-800 mb-2">3. Nəticələr</h3>
-                    <p className="text-xs text-green-600">
-                        Assignmentlər Turnitin-dən keçirilməli, IV (Daxili Yoxlama) edilməli və CTH-ə göndərilməlidir.
-                    </p>
-                </div>
-            </div>
         </div>
     );
 }
