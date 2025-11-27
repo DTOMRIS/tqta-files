@@ -5,6 +5,7 @@ import 'dotenv/config';
 import bcrypt from 'bcryptjs';
 import { db } from '../src/lib/db';
 import { users } from '../src/lib/schema';
+import { eq } from 'drizzle-orm';
 
 
 async function createAdmin() {
@@ -13,6 +14,15 @@ async function createAdmin() {
 
         // Şifrəni hash et
         const hashedPassword = await bcrypt.hash('admin123', 10);
+
+        // Check if admin already exists
+        const existingAdmin = await db.select().from(users).where(eq(users.email, 'admin@tqta.az'));
+
+        if (existingAdmin.length > 0) {
+            console.log('⚠️  Admin istifadəçi artıq mövcuddur!');
+            console.log('📧 Email: admin@tqta.az');
+            process.exit(0);
+        }
 
         // Admin yarat
         await db.insert(users).values({
