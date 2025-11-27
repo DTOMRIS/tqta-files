@@ -14,6 +14,7 @@ export default function CthPanel() {
         fetch('/api/cth/pending-registrations')
             .then(res => res.json())
             .then(data => {
+                console.log("Gelen Veri:", data); // Konsola yaz
                 setStudents(Array.isArray(data) ? data : []);
                 setLoading(false);
             })
@@ -31,51 +32,53 @@ export default function CthPanel() {
         return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
     };
 
-    // --- CTH EXCEL ROBOTU (Registration Entry Spreadsheet) ---
+    // --- EXCEL İNDİRME FONKSİYONU ---
     const handleExportCTH = () => {
-        if (students.length === 0) return alert("Listede tələbə yoxdur!");
+        // 1. KONTROL: Veri var mı?
+        if (students.length === 0) {
+            alert("⚠️ İndirilecek veri tapılmadı! Listede tələbə yoxdur.");
+            return;
+        }
 
         try {
-            // 1. CTH Sütun Başlıkları (Kılavuza Göre)
-            // Satır 22'den başlaması için üstte boşluk bırakacağız veya template mantığı kuracağız.
-            // Biz "Data Only" verip, kullanıcının Master File'a yapıştırmasını kolaylaştıralım.
-
+            // 2. Veriyi Hazırla
             const cthData = students.map(s => ({
-                "CTH Number": s.cthStudentNumber || "NEW", // Yeni kayıt ise boş veya NEW
-                "Title": "Mr/Ms", // Manuel düzeltilebilir
+                "CTH Number": s.cthStudentNumber || "NEW",
+                "Title": "Mr/Ms",
                 "First Name": s.ad,
                 "Surname": s.soyad,
-                "Gender": "M/F", // Veritabanında varsa çekilir
+                "Gender": "M/F",
                 "DOB (dd/mm/yyyy)": s.dogumTarihi ? new Date(s.dogumTarihi).toLocaleDateString('en-GB') : "",
                 "Email": s.email || "",
-                "Course": "Culinary L2" // Kurs adını dinamik de alabiliriz
+                "Course": "Culinary L2"
             }));
 
-            // 2. Excel Sayfasını Oluştur
-            // CTH Kılavuzu: "Headings start on row 22" 
-            // Bu yüzden üst kısma 21 tane boş satır ekliyoruz.
-
-            const emptyRows = Array(21).fill({});
+            // 3. Excel Sayfasını Oluştur (Header Boşluğu ile)
+            const emptyRows = Array(21).fill({}); // 21 Satır boşluk
             const finalData = [...emptyRows, ...cthData];
 
-            const ws = XLSX.utils.json_to_sheet(finalData, { skipHeader: true }); // Header'ı biz kontrol edelim
+            const ws = XLSX.utils.json_to_sheet(finalData, { skipHeader: true });
 
-            // Manuel Header Ekleme (Tam 22. Satıra)
+            // Başlıkları 22. Satıra Ekle
             XLSX.utils.sheet_add_aoa(ws, [[
                 "CTH Number", "Title", "First Name", "Surname", "Gender", "DOB", "Email", "Course"
             ]], { origin: "A22" });
 
-            // Veriyi Header'ın altına (Satır 23'e) başlat
+            // Verileri 23. Satırdan Başlat
             XLSX.utils.sheet_add_json(ws, cthData, { origin: "A23", skipHeader: true });
 
-            // 3. Dosyayı İndir
+            // 4. Dosyayı Oluştur ve İndir
             const wb = XLSX.utils.book_new();
             XLSX.utils.book_append_sheet(wb, ws, "Registration Entry");
-            XLSX.writeFile(wb, `CTH_Registration_Upload_${new Date().toISOString().slice(0, 10)}.xlsx`);
+
+            const fileName = `CTH_Upload_${new Date().toISOString().slice(0, 10)}.xlsx`;
+            XLSX.writeFile(wb, fileName);
+
+            alert("✅ Excel uğurla endirildi!");
 
         } catch (error) {
             console.error("Excel hatası:", error);
-            alert("Excel oluşturulamadı.");
+            alert("❌ Xəta baş verdi: " + error.message);
         }
     };
 
@@ -89,7 +92,7 @@ export default function CthPanel() {
                     <p className="text-purple-600">London CTH Kayıt ve Sertifikasyon Takibi</p>
                 </div>
 
-                {/* EXCEL ROBOTU BUTONU */}
+                {/* BUTON */}
                 <Button
                     onClick={handleExportCTH}
                     className="bg-green-600 hover:bg-green-700 text-white gap-2 shadow-lg"
@@ -99,7 +102,7 @@ export default function CthPanel() {
                 </Button>
             </div>
 
-            {/* 1. ACİL DURUM LİSTESİ */}
+            {/* LİSTE GÖRÜNÜMÜ */}
             <Card className="border-t-4 border-t-purple-600 shadow-md">
                 <CardHeader>
                     <CardTitle className="flex items-center gap-2">
