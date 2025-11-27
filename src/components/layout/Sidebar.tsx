@@ -2,7 +2,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { cn } from "@/lib/utils";
-import { LayoutDashboard, Users, FileText, Settings, LogOut, ChefHat, Building2, Globe, FileWarning, ScrollText, BookOpen } from 'lucide-react';
+import { LayoutDashboard, Users, FileText, Settings, LogOut, ChefHat, Building2, Globe, FileWarning, ScrollText, BookOpen, Award } from 'lucide-react';
 
 const sidebarSections = [
   {
@@ -22,6 +22,7 @@ const sidebarSections = [
   {
     title: "CTH (Beynəlxalq)",
     items: [
+      { title: "CTH Operasyon", href: "/cth-panel", icon: Award },
       { title: "Sınav Merkezi", href: "/sinav-merkezi/degerlendirme", icon: Globe },
       { title: "Kalite Güvence (IV)", href: "/kalite-kontrol", icon: FileText },
       { title: "Sənədlər və Formlar", href: "/formlar", icon: FileText }, // CTH Belgeleri

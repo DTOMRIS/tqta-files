@@ -225,3 +225,30 @@ export const internalVerification = pgTable('internal_verification', {
 
     createdAt: timestamp('created_at').defaultNow().notNull(),
 });
+
+// ========================================
+// YENİ TABLO: KURSLAR
+// ========================================
+export const kurslar = pgTable('kurslar', {
+    id: serial('id').primaryKey(),
+    ad: text('ad').notNull(),
+    kategori_id: text('kategori_id').notNull(),
+    tip: text('tip').default('STANDART'),
+    is_active: boolean('is_active').default(true),
+    price_azn: integer('price_azn').default(0),
+    cost_gbp: integer('cost_gbp').default(0),
+    total_hours: integer('total_hours'),
+    meta_data: jsonb('meta_data'),
+    created_at: timestamp('created_at').defaultNow()
+});
+
+// ========================================
+// YENİ TABLO: DMA TABEL
+// ========================================
+export const dma_tabel = pgTable('dma_tabel', {
+    id: serial('id').primaryKey(),
+    kurs_id: text('kurs_id'),
+    ogrenci_id: integer('ogrenci_id'),
+    tarih: text('tarih').notNull(),
+    durum: text('durum').notNull(),
+});
