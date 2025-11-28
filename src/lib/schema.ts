@@ -1,126 +1,107 @@
-import { pgTable, serial, text, timestamp, boolean, jsonb, integer } from 'drizzle-orm/pg-core';
+import { pgTable, serial, text, boolean, integer, jsonb, timestamp, date } from 'drizzle-orm/pg-core';
 
 // ========================================
 // İSTİFADƏÇİLƏR TABLOSU (Authentication)
 // ========================================
 export const users = pgTable('users', {
     id: serial('id').primaryKey(),
-
-    // Login məlumatları
-    email: text('email').notNull().unique(),
-    password: text('password').notNull(), // Hashed (bcrypt)
-
-    // Şəxsi məlumatlar
     ad: text('ad').notNull(),
     soyad: text('soyad').notNull(),
-
-    // Rol: 'admin' və ya 'teacher'
-    role: text('role').notNull().default('teacher'),
-
-    // Status
-    aktif: boolean('aktif').default(true).notNull(),
-
-    // Tarixlər
-    createdAt: timestamp('created_at').defaultNow().notNull(),
-    lastLogin: timestamp('last_login'),
+    email: text('email').notNull().unique(),
+    password: text('password').notNull(),
+    role: text('role').default('user'),
+    aktif: boolean('aktif').default(true),
+    createdAt: timestamp('created_at').defaultNow()
 });
 
 // ========================================
-// TƏLƏBƏLƏR TABLOSU
+// TƏLƏBƏLƏR TABLOSU (Tam TQTA Formuna Uyğun)
 // ========================================
-
 export const students = pgTable('students', {
     id: serial('id').primaryKey(),
 
-    // Şəxsi Məlumatlar
+    // Şəxsi
     ad: text('ad').notNull(),
     soyad: text('soyad').notNull(),
     ataAdi: text('ata_adi'),
-    email: text('email').notNull(),
-    telefon: text('telefon').notNull(),
-    dogumTarixi: text('dogum_tarixi'), // YYYY-MM-DD format
-    cinsiyet: text('cinsiyet'),
+    email: text('email'),
+    telefon: text('telefon'),
     whatsapp: text('whatsapp'),
+    dogumTarihi: text('dogum_tarihi'), // YYYY-MM-DD
+    cinsiyet: text('cinsiyet'), // Kisi/Qadin
     evUnvani: text('ev_unvani'),
 
-    // Təhsil və İş
+    // Kimlik
+    senedNovu: text('sened_novu'),
+    finKod: text('fin_kod'),
+    seriyaNo: text('seriya_no'),
+
+    // Təhsil/İş
     tehsilSeviyyesi: text('tehsil_seviyyesi'),
     ixtisas: text('ixtisas'),
     isYeri: text('is_yeri'),
     stajYeri: text('staj_yeri'),
     xariciDil: text('xarici_dil'),
 
-    // Vəli Məlumatları (JSON)
-    veliMelumatlari: jsonb('veli_melumatlari'),
+    // CTH & Kurs
+    cthStudentNumber: text('cth_student_number'),
+    cohortId: text('cohort_id'),
+    enrollmentDate: timestamp('enrollment_date').defaultNow(),
+    englishLevel: text('english_level'),
 
-    // Sənəd
-    senedNovu: text('sened_novu'),
-    finKod: text('fin_kod'),
-    seriyaNo: text('seriya_no'),
-
-    // Kurs
-    kursId: text('kurs_id').notNull(),
+    // Kurs Detayları
+    kursId: text('kurs_id'),
     anaKategoriya: text('ana_kategoriya'),
-    tehsilFormati: text('tehsil_formati'),
+    tehsilFormati: text('tehsil_formati'), // Eyni/Online
     telimDili: text('telim_dili'),
     baslamaTarixi: text('baslama_tarixi'),
 
-    // Sağlıq
-    saglikMelumatlari: jsonb('saglik_melumatlari'),
-
-    // Sertifikatlar
-    sertifikatlar: jsonb('sertifikatlar'),
-
     // Ödəniş
-    odenisNovu: text('odenis_novu'),
-    finalPrice: integer('final_price'),
-    odenisDetaylari: jsonb('odenis_detaylari'),
+    odenisNovu: text('odenis_novu'), // Hisseli/Tam
+    finalPrice: integer('final_price').default(0),
+
+    // JSONB Columns (Kompleks Verilər üçün)
+    veliMelumatlari: jsonb('veli_melumatlari'), // Valideyn info
+    saglikMelumatlari: jsonb('saglik_melumatlari'), // Qan qrupu, xestelik
+    sertifikatlar: jsonb('sertifikatlar'), // Hansi sertifikatlar istenilir
+    odenisDetaylari: jsonb('odenis_detaylari'), // Endirim, taksit planı
+    detaylar: jsonb('detaylar'), // Digər meta datalar
 
     // Müqavilə
     muqavileTipi: text('muqavile_tipi'),
 
-    // ========================================
-    // CTH ÖZEL ALANLARI (Accreditation)
-    // ========================================
-
-    // CTH Student Number - Ömürlük numara
-    cthStudentNumber: text('cth_student_number'),
-
-    // Cohort ID - Hangi dönem (March 2025, September 2025 vb.)
-    cohortId: text('cohort_id'),
-
-    // Enrollment Date - Dərsə başlama tarixi (2 həftə qaydası üçün KRİTİK!)
-    enrollmentDate: timestamp('enrollment_date'),
-
-    // CTH Registration Date - CTH-ə qeydiyyat tarixi
-    cthRegistrationDate: timestamp('cth_registration_date'),
-
-    // ADMISSION REQUIREMENTS (Qəbul Şərtləri)
-    // İngilis dili səviyyəsi (IELTS 5.5, 6.0 və ya A2, B1, B2, C1)
-    englishLevel: text('english_level'),
-
-    // Təhsil səviyyəsi (Lise, Üniversite vb.)
-    educationLevel: text('education_level'),
-
-    // EVIDENCE TRACKING (Sənəd İzləmə)
-    // Neçə tarif yükləndi? (Recipe Log Count)
-    recipeLogCount: integer('recipe_log_count').default(0),
-
-    // Neçə ilərləmə görüşməsi edildi? (Progress Tutorials)
-    progressTutorialsCount: integer('progress_tutorials_count').default(0),
-
-    // Video sayısı (Praktik sınav videoları)
-    videoCount: integer('video_count').default(0),
-
-    // Assignment sayısı
-    assignmentCount: integer('assignment_count').default(0),
-
     // Sistem
-    kayitTarihi: timestamp('kayit_tarihi').defaultNow().notNull(),
-    aktif: boolean('aktif').default(true).notNull(),
+    aktif: boolean('aktif').default(true),
+    kayitTarihi: timestamp('kayit_tarihi').defaultNow(),
+});
 
-    // Əlavə detaylar
-    detaylar: jsonb('detaylar'),
+// ========================================
+// TUTORIALS TABLOSU
+// ========================================
+export const tutorials = pgTable('tutorials', {
+    id: serial('id').primaryKey(),
+    studentId: integer('student_id').references(() => students.id),
+    unitCode: text('unit_code'),
+    topic: text('topic'),
+    feedback: text('feedback'),
+    date: timestamp('date').defaultNow(),
+    ivChecked: boolean('iv_checked').default(false)
+});
+
+// ========================================
+// KURSLAR TABLOSU
+// ========================================
+export const kurslar = pgTable('kurslar', {
+    id: serial('id').primaryKey(),
+    ad: text('ad').notNull(),
+    kategori_id: text('kategori_id').notNull(),
+    tip: text('tip').default('STANDART'),
+    is_active: boolean('is_active').default(true),
+    price_azn: integer('price_azn').default(0),
+    cost_gbp: integer('cost_gbp').default(0),
+    total_hours: integer('total_hours'),
+    meta_data: jsonb('meta_data'),
+    created_at: timestamp('created_at').defaultNow()
 });
 
 // ========================================
@@ -224,22 +205,6 @@ export const internalVerification = pgTable('internal_verification', {
     submissionDate: timestamp('submission_date'),
 
     createdAt: timestamp('created_at').defaultNow().notNull(),
-});
-
-// ========================================
-// YENİ TABLO: KURSLAR
-// ========================================
-export const kurslar = pgTable('kurslar', {
-    id: serial('id').primaryKey(),
-    ad: text('ad').notNull(),
-    kategori_id: text('kategori_id').notNull(),
-    tip: text('tip').default('STANDART'),
-    is_active: boolean('is_active').default(true),
-    price_azn: integer('price_azn').default(0),
-    cost_gbp: integer('cost_gbp').default(0),
-    total_hours: integer('total_hours'),
-    meta_data: jsonb('meta_data'),
-    created_at: timestamp('created_at').defaultNow()
 });
 
 // ========================================

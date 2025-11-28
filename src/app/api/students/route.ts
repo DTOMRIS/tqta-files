@@ -1,7 +1,6 @@
-// src/app/api/students/route.ts
 import { NextResponse } from 'next/server';
 import { db } from '@/lib/db';
-import { students } from '@/lib/schema';
+import { students } from '@/lib/db/schema'; // DÜZƏLİŞ: Yol '@/lib/schema' yox, '@/lib/db/schema' olmalıdır
 import { sql, like, or, and, eq, desc } from 'drizzle-orm';
 
 // GET - Tələbə siyahısı (axtarış, filtr, pagination)
@@ -35,7 +34,7 @@ export async function GET(req: Request) {
             conditions.push(eq(students.kursId, kursId));
         }
 
-        // Aktif tələbələr
+        // Aktif tələbələr (Silinmişləri gətirmə)
         conditions.push(eq(students.aktif, true));
 
         // Query
@@ -51,21 +50,10 @@ export async function GET(req: Request) {
 
         // Tələbələr
         const studentsList = await db
-            .select({
-                id: students.id,
-                ad: students.ad,
-                soyad: students.soyad,
-                email: students.email,
-                telefon: students.telefon,
-                kursId: students.kursId,
-                anaKategoriya: students.anaKategoriya,
-                kayitTarihi: students.kayitTarihi,
-                finalPrice: students.finalPrice,
-                odenisNovu: students.odenisNovu
-            })
+            .select()
             .from(students)
             .where(whereClause)
-            .orderBy(desc(students.kayitTarihi))
+            .orderBy(desc(students.kayitTarihi)) // En son qeydiyyat ən üstdə
             .limit(limit)
             .offset(offset);
 
@@ -96,10 +84,9 @@ export async function POST(req: Request) {
     try {
         const body = await req.json();
 
-        // Gelen veriyi kontrol et (Log)
         console.log("Kayıt isteği geldi:", body);
 
-        // Vəli məlumatlarını hazırla (əgər varsa)
+        // Vəli məlumatlarını hazırla (JSON formatında saxlanacaq)
         const veliMelumatlari = body.veliAdSoyad ? {
             adSoyad: body.veliAdSoyad,
             yaxinliq: body.veliYaxinliq,
@@ -146,8 +133,8 @@ export async function POST(req: Request) {
             soyad: body.soyad,
             ataAdi: body.ataAdi,
             email: body.email,
-            telefon: body.mobilTelefon,
-            dogumTarixi: body.dogumTarixi,
+            telefon: body.mobilTelefon, // Front-end'den gelen ad 'mobilTelefon' ise
+            dogumTarihi: body.dogumTarixi, // Schema'da 'dogumTarihi' istifadə olunur
             cinsiyet: body.cinsiyet,
             whatsapp: body.whatsappNomresi,
             evUnvani: body.evUnvani,
@@ -159,8 +146,8 @@ export async function POST(req: Request) {
             stajYeri: body.stajYeri,
             xariciDil: body.xariciDil,
 
-            // Vəli
-            veliMelumatlari,
+            // Vəli (JSON)
+            veliMelumatlari: veliMelumatlari,
 
             // Sənəd
             senedNovu: body.senedNovu,
@@ -174,22 +161,21 @@ export async function POST(req: Request) {
             telimDili: body.telimDili,
             baslamaTarixi: body.baslamaTarixi,
 
-            // Sağlıq
-            saglikMelumatlari,
+            // JSON Sahələr
+            saglikMelumatlari: saglikMelumatlari,
+            sertifikatlar: sertifikatlar,
+            odenisDetaylari: odenisDetaylari,
 
-            // Sertifikatlar
-            sertifikatlar,
-
-            // Ödəniş
+            // Ödəniş (Ana Sahələr)
             odenisNovu: body.odenisNovu,
-            finalPrice: body.finalPrice || 0,
-            odenisDetaylari,
+            finalPrice: body.finalPrice ? parseInt(body.finalPrice) : 0,
 
             // Müqavilə
             muqavileTipi: body.muqavileTipi,
 
             // Sistem
             aktif: true,
+            kayitTarihi: new Date(), // İndiki zaman
 
             // Əlavə detaylar
             detaylar: {
