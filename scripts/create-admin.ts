@@ -1,51 +1,58 @@
-// Admin istifadəçi yaratmaq üçün script
-// Çalıştır: npx tsx scripts/create-admin.ts
-
 import 'dotenv/config';
-import bcrypt from 'bcryptjs';
-import { db } from '../src/lib/db';
-import { users } from '../src/lib/schema';
+import { neon } from '@neondatabase/serverless';
+import { drizzle } from 'drizzle-orm/neon-http';
 import { eq } from 'drizzle-orm';
+import * as bcrypt from 'bcryptjs';
+import { pgTable, serial, text, boolean, timestamp } from 'drizzle-orm/pg-core';
 
+// 1. Veritabanı Bağlantısı
+if (!process.env.DATABASE_URL) throw new Error('DATABASE_URL tapılmadı! .env faylını yoxlayın.');
+const sql = neon(process.env.DATABASE_URL);
+const db = drizzle(sql);
 
-async function createAdmin() {
-    try {
-        console.log('🔐 Admin istifadəçi yaradılır...');
+// 2. USERS TABLOSUNU BURADA TANIMLIYORUZ (Import hatasını atlamak için)
+const users = pgTable('users', {
+  id: serial('id').primaryKey(),
+  ad: text('ad').notNull(),
+  soyad: text('soyad').notNull(),
+  email: text('email').notNull().unique(),
+  password: text('password').notNull(),
+  role: text('role').default('user'),
+  aktif: boolean('aktif').default(true),
+  createdAt: timestamp('created_at').defaultNow()
+});
 
-        // Şifrəni hash et
-        const hashedPassword = await bcrypt.hash('admin123', 10);
+async function main() {
+  const email = 'admin@tqta.com';
+  const password = '123456'; 
 
-        // Check if admin already exists
-        const existingAdmin = await db.select().from(users).where(eq(users.email, 'admin@tqta.az'));
+  console.log(`🔄 Admin hesabı sıfırlanır: ${email}`);
 
-        if (existingAdmin.length > 0) {
-            console.log('⚠️  Admin istifadəçi artıq mövcuddur!');
-            console.log('📧 Email: admin@tqta.az');
-            process.exit(0);
-        }
+  try {
+    // 1. Eski admini sil
+    // (users nesnesi artık burada tanımlı olduğu için "undefined" hatası vermez)
+    await db.delete(users).where(eq(users.email, email));
+    
+    // 2. Şifreyi şifrele
+    const hashedPassword = await bcrypt.hash(password, 10);
 
-        // Admin yarat
-        await db.insert(users).values({
-            email: 'admin@tqta.az',
-            password: hashedPassword,
-            ad: 'Admin',
-            soyad: 'İstifadəçi',
-            role: 'admin',
-            aktif: true,
-        });
+    // 3. Yeni admini oluştur
+    await db.insert(users).values({
+      ad: 'System',
+      soyad: 'Admin',
+      email: email,
+      password: hashedPassword,
+      role: 'admin',
+      aktif: true,
+    });
 
-        console.log('✅ Admin uğurla yaradıldı!');
-        console.log('');
-        console.log('📧 Email: admin@tqta.az');
-        console.log('🔑 Şifrə: admin123');
-        console.log('');
-        console.log('⚠️  İLK GİRİŞDƏN SONRA ŞİFRƏNİ DƏYİŞDİRİN!');
-
-        process.exit(0);
-    } catch (error) {
-        console.error('❌ Xəta:', error);
-        process.exit(1);
-    }
+    console.log('✅ BAŞARILI! Admin yaradıldı.');
+    console.log(`👉 Email: ${email}`);
+    console.log(`👉 Şifre: ${password}`);
+    
+  } catch (err) {
+    console.error('❌ Xəta:', err);
+  }
 }
 
-createAdmin();
+main();
