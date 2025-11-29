@@ -2,6 +2,7 @@
 import "./globals.css";
 import { Sidebar } from "@/components/layout/Sidebar";
 import { Providers } from "@/components/Providers";
+import { Toaster } from "sonner";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -26,6 +27,7 @@ export default function RootLayout({ children }) {
               </div>
             </main>
           </Providers>
+          <Toaster position="top-right" richColors />
         </div>
       </body>
     </html>
