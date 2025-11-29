@@ -36,6 +36,7 @@ export async function POST(req: Request) {
             konu: body.konu,
             not: body.not,
             puan: body.puan ? parseInt(body.puan) : 0,
+            attachmentUrl: body.attachmentUrl || null,
         }).returning();
 
         return NextResponse.json({ success: true, data: newNote[0] });

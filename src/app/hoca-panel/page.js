@@ -3,6 +3,8 @@
 
 import { useState, useEffect } from "react";
 import { toast } from "sonner";
+import { UploadButton } from "@/components/UploadButton";
+import "@uploadthing/react/styles.css";
 
 export default function HocaPanel() {
     // State'ler
@@ -13,7 +15,7 @@ export default function HocaPanel() {
     const [submitting, setSubmitting] = useState(false);
 
     // Form
-    const [formData, setFormData] = useState({ konu: "", not: "", puan: "" });
+    const [formData, setFormData] = useState({ konu: "", not: "", puan: "", attachmentUrl: "" });
 
     // 1. Sayfa açılınca öğrencileri çek
     useEffect(() => {
@@ -69,7 +71,7 @@ export default function HocaPanel() {
 
             if (res.ok) {
                 toast.success("Ders notu kaydedildi! ✅");
-                setFormData({ konu: "", not: "", puan: "" }); // Formu temizle
+                setFormData({ konu: "", not: "", puan: "", attachmentUrl: "" }); // Formu temizle
                 fetchNotes(selectedStudent.id); // Listeyi yenile
             } else {
                 toast.error("Kaydedilemedi ❌");
@@ -114,8 +116,8 @@ export default function HocaPanel() {
                                     key={student.id}
                                     onClick={() => setSelectedStudent(student)}
                                     className={`p-4 rounded-xl cursor-pointer transition-all border ${selectedStudent?.id === student.id
-                                            ? "bg-blue-50 border-blue-200 shadow-sm"
-                                            : "bg-white border-transparent hover:bg-gray-50 hover:border-gray-200"
+                                        ? "bg-blue-50 border-blue-200 shadow-sm"
+                                        : "bg-white border-transparent hover:bg-gray-50 hover:border-gray-200"
                                         }`}
                                 >
                                     <div className="flex justify-between items-start">
@@ -177,6 +179,30 @@ export default function HocaPanel() {
                                     ></textarea>
                                 </div>
 
+                                <div className="mb-4">
+                                    <label className="text-xs font-semibold text-gray-500 uppercase ml-1 mb-2 block">Fotoğraf / Dosya Ekle</label>
+                                    <div className="flex items-center gap-4">
+                                        <UploadButton
+                                            endpoint="imageUploader"
+                                            onClientUploadComplete={(res) => {
+                                                if (res && res[0]) {
+                                                    setFormData({ ...formData, attachmentUrl: res[0].url });
+                                                    toast.success("Dosya yüklendi! 📎");
+                                                }
+                                            }}
+                                            onUploadError={(error) => {
+                                                toast.error(`Yükleme hatası: ${error.message}`);
+                                            }}
+                                        />
+                                        {formData.attachmentUrl && (
+                                            <div className="text-sm text-green-600 flex items-center gap-1">
+                                                ✅ Dosya Hazır
+                                                <a href={formData.attachmentUrl} target="_blank" className="underline text-blue-500 ml-2">Görüntüle</a>
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>
+
                                 <div className="flex justify-end">
                                     <button
                                         onClick={handleSave}
@@ -212,6 +238,18 @@ export default function HocaPanel() {
                                                 )}
                                             </div>
                                             <p className="text-gray-600 text-sm leading-relaxed">{note.not}</p>
+
+                                            {note.attachmentUrl && (
+                                                <div className="mt-3">
+                                                    <img
+                                                        src={note.attachmentUrl}
+                                                        alt="Ek"
+                                                        className="h-32 rounded-lg border border-gray-200 object-cover hover:scale-105 transition cursor-pointer"
+                                                        onClick={() => window.open(note.attachmentUrl, '_blank')}
+                                                    />
+                                                </div>
+                                            )}
+
                                             <div className="mt-3 pt-3 border-t flex items-center gap-2 text-xs text-gray-400">
                                                 <span>👨‍🏫 {note.instructor}</span>
                                             </div>
