@@ -156,10 +156,33 @@ export default function HocaPanel() {
                         </div>
                         <div className="overflow-y-auto flex-1 p-2 space-y-2">
                             {students.map((student) => (
-                                <div key={student.id} onClick={() => setSelectedStudent(student)}
-                                    className={`p-4 rounded-xl cursor-pointer border transition ${selectedStudent?.id === student.id ? "bg-blue-50 border-blue-200" : "bg-white border-transparent hover:bg-gray-50"}`}>
-                                    <h3 className="font-semibold text-gray-800">{student.ad} {student.soyad}</h3>
-                                    <span className="text-xs text-gray-500 bg-gray-100 px-2 rounded">{student.kursId}</span>
+                                <div
+                                    key={student.id}
+                                    className={`p-4 rounded-xl border transition flex justify-between items-center group ${selectedStudent?.id === student.id
+                                            ? "bg-blue-50 border-blue-200"
+                                            : "bg-white border-transparent hover:bg-gray-50"
+                                        }`}
+                                >
+                                    {/* Öğrenci İsmi - Tıklayınca Not Seçimi Yapar */}
+                                    <div
+                                        onClick={() => setSelectedStudent(student)}
+                                        className="cursor-pointer flex-1"
+                                    >
+                                        <h3 className="font-semibold text-gray-800">{student.ad} {student.soyad}</h3>
+                                        <span className="text-xs text-gray-500 bg-gray-100 px-2 rounded">
+                                            {student.kursId || "Genel"}
+                                        </span>
+                                    </div>
+
+                                    {/* YENİ EKLENEN: Profil Butonu (👁️) */}
+                                    <a
+                                        href={`/telebeler/${student.id}`}
+                                        target="_blank"
+                                        className="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-100 rounded-full transition"
+                                        title="Detaylı Profili Gör"
+                                    >
+                                        👁️
+                                    </a>
                                 </div>
                             ))}
                         </div>
@@ -249,8 +272,8 @@ export default function HocaPanel() {
                                     key={student.id}
                                     onClick={() => toggleAttendance(student.id)}
                                     className={`p-4 rounded-xl border-2 cursor-pointer transition flex justify-between items-center select-none ${isPresent
-                                            ? "bg-white border-green-100 hover:border-green-300 shadow-sm"
-                                            : "bg-red-50 border-red-200 hover:border-red-300"
+                                        ? "bg-white border-green-100 hover:border-green-300 shadow-sm"
+                                        : "bg-red-50 border-red-200 hover:border-red-300"
                                         }`}
                                 >
                                     <div className="flex items-center gap-3">

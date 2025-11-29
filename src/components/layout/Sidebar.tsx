@@ -2,7 +2,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { cn } from "@/lib/utils";
-import { LayoutDashboard, Users, FileText, Settings, LogOut, ChefHat, Building2, Globe, FileWarning, ScrollText, BookOpen, Award } from 'lucide-react';
+import { LayoutDashboard, Users, FileText, Settings, LogOut, ChefHat, Building2, Globe, FileWarning, ScrollText, BookOpen, Award, GraduationCap } from 'lucide-react';
 
 const sidebarSections = [
   {
@@ -10,6 +10,8 @@ const sidebarSections = [
     items: [
       { title: "Ana Panel", href: "/", icon: LayoutDashboard },
       { title: "Tələbə Qeydiyyat", href: "/telebe-qeydiyyat", icon: Users }, // Sözleşmeli Kayıt
+      { title: "Tələbələr", href: "/telebeler", icon: Users }, // Tüm Öğrenciler
+      { title: "Hoca Paneli", href: "/hoca-panel", icon: GraduationCap },
       { title: "Kurslar və Qiymətlər", href: "/kurslar", icon: BookOpen }, // Fiyat Listesi
     ]
   },
