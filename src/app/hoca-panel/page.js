@@ -1,153 +1,232 @@
 'use client';
-import { useState } from 'react';
-import { Button } from "@/components/ui/button";
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { FileText, Download, UserCheck } from 'lucide-react';
-import { Document, Packer, Paragraph, Table, TableCell, TableRow, WidthType, TextRun, HeadingLevel, AlignmentType } from "docx";
-import { saveAs } from "file-saver";
+'use client';
+
+import { useState, useEffect } from "react";
+import { toast } from "sonner";
 
 export default function HocaPanel() {
-    // Örnek Ders Verisi (Normalde Veritabanından Gelecek)
-    const [courseData, setCourseData] = useState({
-        qualification: "CTH Level 2 Award in Culinary Skills",
-        academicYear: "2025 - 2026",
-        unitCode: "PKP, BVSD, BMPFD, BCPBB",
-        instructor: "Ramin Hezizade",
-        totalHours: "80 Hours (20 Theory / 60 Practical)",
+    // State'ler
+    const [students, setStudents] = useState([]);
+    const [selectedStudent, setSelectedStudent] = useState(null);
+    const [notes, setNotes] = useState([]); // Geçmiş notlar
+    const [loading, setLoading] = useState(true);
+    const [submitting, setSubmitting] = useState(false);
 
-        // 27 Günlük Ders Planı (Senin Excel'deki veriler)
-        sessions: [
-            { no: 1, topic: "Kitchen Practices & Hygiene (Intro)", dishes: "Personal hygiene, uniform check...", assessment: "Q&A" },
-            { no: 2, topic: "Knife Skills & Station Setup", dishes: "Knife handling, basic cuts...", assessment: "Observation" },
-            { no: 3, topic: "Kitchen Operations & Closing", dishes: "Opening/closing procedures...", assessment: "Checklist" },
-            { no: 4, topic: "Vegetable Prep: Stocks & Sauces", dishes: "White/Brown Chicken Stock...", assessment: "Practical Task" },
-            // ... Diğer günler buraya otomatik eklenebilir veya hoca düzenleyebilir
-        ]
-    });
+    // Form
+    const [formData, setFormData] = useState({ konu: "", not: "", puan: "" });
 
-    // --- WORD BELGESİ OLUŞTURUCU (DOCX ENGINE) ---
-    const generateWordDocument = () => {
-        // 1. Tablo Başlıkları
-        const tableHeader = new TableRow({
-            children: [
-                new TableCell({ children: [new Paragraph({ text: "Session", bold: true })], width: { size: 10, type: WidthType.PERCENTAGE } }),
-                new TableCell({ children: [new Paragraph({ text: "Topic / Unit", bold: true })], width: { size: 30, type: WidthType.PERCENTAGE } }),
-                new TableCell({ children: [new Paragraph({ text: "Dishes Produced", bold: true })], width: { size: 40, type: WidthType.PERCENTAGE } }),
-                new TableCell({ children: [new Paragraph({ text: "Assessment", bold: true })], width: { size: 20, type: WidthType.PERCENTAGE } }),
-            ],
-        });
+    // 1. Sayfa açılınca öğrencileri çek
+    useEffect(() => {
+        fetchStudents();
+    }, []);
 
-        // 2. Ders Satırları
-        const dataRows = courseData.sessions.map(session =>
-            new TableRow({
-                children: [
-                    new TableCell({ children: [new Paragraph(session.no.toString())] }),
-                    new TableCell({ children: [new Paragraph(session.topic)] }),
-                    new TableCell({ children: [new Paragraph(session.dishes)] }),
-                    new TableCell({ children: [new Paragraph(session.assessment)] }),
-                ],
-            })
-        );
+    // 2. Öğrenci seçilince geçmiş notlarını çek
+    useEffect(() => {
+        if (selectedStudent) {
+            fetchNotes(selectedStudent.id);
+        }
+    }, [selectedStudent]);
 
-        // 3. Belgeyi Oluştur
-        const doc = new Document({
-            sections: [{
-                properties: {},
-                children: [
-                    new Paragraph({ text: "Scheme of Work for Culinary", heading: HeadingLevel.HEADING_1, alignment: AlignmentType.CENTER }),
-                    new Paragraph({ text: "(Template Based on TQTA Standards)", alignment: AlignmentType.CENTER, spacing: { after: 300 } }),
+    const fetchStudents = async () => {
+        try {
+            const res = await fetch("/api/students?limit=100");
+            const data = await res.json();
+            if (data.success) setStudents(data.data.students);
+        } catch (error) {
+            toast.error("Öğrenci listesi alınamadı");
+        } finally {
+            setLoading(false);
+        }
+    };
 
-                    // Bölüm 1: Genel Bilgiler
-                    new Paragraph({ text: `Qualification: ${courseData.qualification}`, bold: true }),
-                    new Paragraph({ text: `Instructor: ${courseData.instructor}` }),
-                    new Paragraph({ text: `Academic Year: ${courseData.academicYear}`, spacing: { after: 200 } }),
+    const fetchNotes = async (studentId) => {
+        try {
+            const res = await fetch(`/api/notes?studentId=${studentId}`);
+            const data = await res.json();
+            if (data.success) setNotes(data.data);
+        } catch (error) {
+            console.error(error);
+        }
+    };
 
-                    // Bölüm 2: Tablo
-                    new Table({
-                        rows: [tableHeader, ...dataRows],
-                        width: { size: 100, type: WidthType.PERCENTAGE },
-                    }),
+    const handleSave = async () => {
+        if (!selectedStudent || !formData.konu || !formData.not) {
+            toast.warning("Lütfen konu ve not alanlarını doldurun.");
+            return;
+        }
 
-                    new Paragraph({ text: "\nSigned by Instructor: ___________________", spacing: { before: 500 } }),
-                ],
-            }],
-        });
+        setSubmitting(true);
+        try {
+            const res = await fetch("/api/notes", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    studentId: selectedStudent.id,
+                    ...formData,
+                    instructor: "Şef Eğitmen" // Şimdilik sabit
+                })
+            });
 
-        // 4. İndir
-        Packer.toBlob(doc).then(blob => {
-            saveAs(blob, "Culinary_Scheme_of_Work.docx");
-            alert("✅ Word Sənədi Hazırlandı!");
-        });
+            if (res.ok) {
+                toast.success("Ders notu kaydedildi! ✅");
+                setFormData({ konu: "", not: "", puan: "" }); // Formu temizle
+                fetchNotes(selectedStudent.id); // Listeyi yenile
+            } else {
+                toast.error("Kaydedilemedi ❌");
+            }
+        } catch (error) {
+            toast.error("Bir hata oluştu.");
+        } finally {
+            setSubmitting(false);
+        }
     };
 
     return (
-        <div className="p-6 bg-slate-50 min-h-screen space-y-6">
-            <div className="flex justify-between items-center">
+        <div className="min-h-screen bg-gray-50 p-4 md:p-8 font-sans">
+            <header className="mb-8 flex justify-between items-center">
                 <div>
-                    <h1 className="text-3xl font-bold text-slate-900">Eğitmen Paneli (Hoca)</h1>
-                    <p className="text-slate-500">Xoş gəldiniz, {courseData.instructor}</p>
+                    <h1 className="text-3xl font-bold text-gray-800">👨‍🍳 Eğitmen Paneli</h1>
+                    <p className="text-gray-500">Öğrenci takibi ve ders notları</p>
                 </div>
-                <Button variant="outline" className="gap-2 bg-white">
-                    <UserCheck size={18} /> Profilim
-                </Button>
-            </div>
+                <div className="bg-white px-4 py-2 rounded-full shadow-sm text-sm font-medium text-blue-600 border border-blue-100">
+                    {students.length} Kayıtlı Öğrenci
+                </div>
+            </header>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 h-[80vh]">
 
-                {/* SOL: DERS DETAYLARI */}
-                <Card>
-                    <CardHeader>
-                        <CardTitle className="flex items-center gap-2">
-                            <FileText className="text-blue-600" /> Aktiv Ders Programı
-                        </CardTitle>
-                    </CardHeader>
-                    <CardContent className="space-y-4">
-                        <div className="grid grid-cols-2 gap-4">
-                            <div>
-                                <label className="text-xs font-bold text-slate-500">Kurs Adı</label>
-                                <Input value={courseData.qualification} readOnly />
-                            </div>
-                            <div>
-                                <label className="text-xs font-bold text-slate-500">Akademik İl</label>
-                                <Input value={courseData.academicYear} readOnly />
-                            </div>
-                        </div>
+                {/* SOL: ÖĞRENCİ LİSTESİ (4 birim genişlik) */}
+                <div className="lg:col-span-4 bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden flex flex-col">
+                    <div className="p-4 border-b bg-gray-50">
+                        <input
+                            type="text"
+                            placeholder="🔍 Öğrenci Ara..."
+                            className="w-full bg-white border border-gray-200 rounded-lg px-4 py-2 text-sm outline-none focus:border-blue-500 transition"
+                        />
+                    </div>
 
-                        <div className="bg-blue-50 p-4 rounded border border-blue-100">
-                            <h3 className="font-bold text-blue-800 mb-2">Scheme of Work (Ders Planı)</h3>
-                            <p className="text-sm text-slate-600 mb-4">
-                                TQTA standartlarına uyğun 27 günlük ders planı sistemdə yüklüdür.
-                                Hər tələbə üçün ayrı çıxarmaq əvəzinə, qrup üçün tək sənəd yarada bilərsiniz.
-                            </p>
-                            <Button onClick={generateWordDocument} className="w-full bg-blue-600 hover:bg-blue-700 gap-2">
-                                <Download size={18} />
-                                Scheme of Work İndir (.docx)
-                            </Button>
-                        </div>
-                    </CardContent>
-                </Card>
-
-                {/* SAĞ: ÖĞRENCİ LİSTESİ (Sadece Görüntüleme) */}
-                <Card>
-                    <CardHeader>
-                        <CardTitle>Qrup Tələbələri</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                        <div className="space-y-2">
-                            {["Orxan Məmmədov", "Aysel Əliyeva", "Nihad Quliyev"].map((student, i) => (
-                                <div key={i} className="flex justify-between items-center p-3 bg-white border rounded shadow-sm">
-                                    <span className="font-medium">{student}</span>
-                                    <div className="flex gap-2">
-                                        <Button size="sm" variant="outline" className="text-xs h-7">Yoklama</Button>
-                                        <Button size="sm" variant="outline" className="text-xs h-7">Not Ver</Button>
+                    <div className="overflow-y-auto flex-1 p-2 space-y-2">
+                        {loading ? (
+                            <p className="text-center text-gray-400 mt-10">Yükleniyor...</p>
+                        ) : (
+                            students.map((student) => (
+                                <div
+                                    key={student.id}
+                                    onClick={() => setSelectedStudent(student)}
+                                    className={`p-4 rounded-xl cursor-pointer transition-all border ${selectedStudent?.id === student.id
+                                            ? "bg-blue-50 border-blue-200 shadow-sm"
+                                            : "bg-white border-transparent hover:bg-gray-50 hover:border-gray-200"
+                                        }`}
+                                >
+                                    <div className="flex justify-between items-start">
+                                        <div>
+                                            <h3 className="font-semibold text-gray-800">{student.ad} {student.soyad}</h3>
+                                            <span className="text-xs text-gray-500 bg-gray-100 px-2 py-0.5 rounded mt-1 inline-block">
+                                                {student.kursId || "Genel"}
+                                            </span>
+                                        </div>
+                                        <div className={`w-2 h-2 rounded-full mt-2 ${student.aktif ? 'bg-green-500' : 'bg-red-300'}`}></div>
                                     </div>
                                 </div>
-                            ))}
-                        </div>
-                    </CardContent>
-                </Card>
+                            ))
+                        )}
+                    </div>
+                </div>
 
+                {/* SAĞ: DETAY VE İŞLEM (8 birim genişlik) */}
+                <div className="lg:col-span-8 space-y-6 overflow-y-auto pr-2">
+                    {selectedStudent ? (
+                        <>
+                            {/* Giriş Formu */}
+                            <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                                <h2 className="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
+                                    📝 Yeni Not Gir: <span className="text-blue-600">{selectedStudent.ad} {selectedStudent.soyad}</span>
+                                </h2>
+
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                                    <div>
+                                        <label className="text-xs font-semibold text-gray-500 uppercase ml-1">Konu / Ders</label>
+                                        <input
+                                            type="text"
+                                            value={formData.konu}
+                                            onChange={(e) => setFormData({ ...formData, konu: e.target.value })}
+                                            placeholder="Örn: Temel Kesim Teknikleri"
+                                            className="w-full mt-1 p-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition"
+                                        />
+                                    </div>
+                                    <div>
+                                        <label className="text-xs font-semibold text-gray-500 uppercase ml-1">Puan (1-100)</label>
+                                        <input
+                                            type="number"
+                                            value={formData.puan}
+                                            onChange={(e) => setFormData({ ...formData, puan: e.target.value })}
+                                            placeholder="85"
+                                            className="w-full mt-1 p-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition"
+                                        />
+                                    </div>
+                                </div>
+
+                                <div className="mb-4">
+                                    <label className="text-xs font-semibold text-gray-500 uppercase ml-1">Eğitmen Gözlemi</label>
+                                    <textarea
+                                        rows={4}
+                                        value={formData.not}
+                                        onChange={(e) => setFormData({ ...formData, not: e.target.value })}
+                                        placeholder="Öğrencinin bugünkü performansı, eksikleri ve artıları..."
+                                        className="w-full mt-1 p-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition resize-none"
+                                    ></textarea>
+                                </div>
+
+                                <div className="flex justify-end">
+                                    <button
+                                        onClick={handleSave}
+                                        disabled={submitting}
+                                        className="bg-blue-600 text-white px-8 py-3 rounded-xl font-semibold hover:bg-blue-700 active:scale-95 transition shadow-lg shadow-blue-200 disabled:opacity-50"
+                                    >
+                                        {submitting ? "Kaydediliyor..." : "Kaydet ve Bitir"}
+                                    </button>
+                                </div>
+                            </div>
+
+                            {/* Geçmiş Notlar */}
+                            <h3 className="text-lg font-bold text-gray-700 ml-2">📋 Geçmiş Kayıtlar</h3>
+                            <div className="space-y-4">
+                                {notes.length === 0 ? (
+                                    <div className="text-center p-8 text-gray-400 bg-white rounded-2xl border border-dashed">
+                                        Henüz not girilmemiş.
+                                    </div>
+                                ) : (
+                                    notes.map((note) => (
+                                        <div key={note.id} className="bg-white p-5 rounded-2xl border border-gray-100 hover:shadow-md transition">
+                                            <div className="flex justify-between items-start mb-2">
+                                                <div>
+                                                    <h4 className="font-bold text-gray-800">{note.konu}</h4>
+                                                    <p className="text-xs text-gray-400">
+                                                        {new Date(note.tarih).toLocaleDateString("tr-TR", { day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit' })}
+                                                    </p>
+                                                </div>
+                                                {note.puan && (
+                                                    <div className="bg-green-100 text-green-700 font-bold px-3 py-1 rounded-lg">
+                                                        {note.puan} Puan
+                                                    </div>
+                                                )}
+                                            </div>
+                                            <p className="text-gray-600 text-sm leading-relaxed">{note.not}</p>
+                                            <div className="mt-3 pt-3 border-t flex items-center gap-2 text-xs text-gray-400">
+                                                <span>👨‍🏫 {note.instructor}</span>
+                                            </div>
+                                        </div>
+                                    ))
+                                )}
+                            </div>
+                        </>
+                    ) : (
+                        <div className="h-full flex flex-col items-center justify-center text-gray-400 bg-white rounded-2xl border border-gray-100">
+                            <span className="text-6xl mb-4">👈</span>
+                            <p className="text-lg font-medium">İşlem yapmak için soldan öğrenci seçin</p>
+                        </div>
+                    )}
+                </div>
             </div>
         </div>
     );

@@ -1,8 +1,5 @@
-import { pgTable, serial, text, boolean, integer, jsonb, timestamp, date } from 'drizzle-orm/pg-core';
+import { pgTable, serial, text, boolean, timestamp, jsonb, integer, varchar } from 'drizzle-orm/pg-core';
 
-// ========================================
-// İSTİFADƏÇİLƏR TABLOSU (Authentication)
-// ========================================
 export const users = pgTable('users', {
     id: serial('id').primaryKey(),
     ad: text('ad').notNull(),
@@ -11,7 +8,8 @@ export const users = pgTable('users', {
     password: text('password').notNull(),
     role: text('role').default('user'),
     aktif: boolean('aktif').default(true),
-    createdAt: timestamp('created_at').defaultNow()
+    createdAt: timestamp('created_at').defaultNow(),
+    lastLogin: timestamp('last_login')
 });
 
 // ========================================
@@ -66,26 +64,6 @@ export const students = pgTable('students', {
     sertifikatlar: jsonb('sertifikatlar'), // Hansi sertifikatlar istenilir
     odenisDetaylari: jsonb('odenis_detaylari'), // Endirim, taksit planı
     detaylar: jsonb('detaylar'), // Digər meta datalar
-
-    // Müqavilə
-    muqavileTipi: text('muqavile_tipi'),
-
-    // Sistem
-    aktif: boolean('aktif').default(true),
-    kayitTarihi: timestamp('kayit_tarihi').defaultNow(),
-});
-
-// ========================================
-// TUTORIALS TABLOSU
-// ========================================
-export const tutorials = pgTable('tutorials', {
-    id: serial('id').primaryKey(),
-    studentId: integer('student_id').references(() => students.id),
-    unitCode: text('unit_code'),
-    topic: text('topic'),
-    feedback: text('feedback'),
-    date: timestamp('date').defaultNow(),
-    ivChecked: boolean('iv_checked').default(false)
 });
 
 // ========================================
@@ -216,4 +194,14 @@ export const dma_tabel = pgTable('dma_tabel', {
     ogrenci_id: integer('ogrenci_id'),
     tarih: text('tarih').notNull(),
     durum: text('durum').notNull(),
+});
+
+export const studentNotes = pgTable("student_notes", {
+    id: serial("id").primaryKey(),
+    studentId: integer("student_id").references(() => students.id), // Hangi öğrenci?
+    instructor: varchar("instructor", { length: 255 }), // Hangi hoca? (Şimdilik isim gireceğiz)
+    konu: varchar("konu", { length: 255 }), // Ders konusu (Bıçak kullanımı vb.)
+    not: text("not"), // Hoca'nın yazdığı uzun yorum
+    puan: integer("puan"), // 1-100 arası puan (Opsiyonel)
+    tarih: timestamp("tarih").defaultNow(), // Ne zaman girildi?
 });
