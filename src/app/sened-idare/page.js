@@ -51,6 +51,36 @@ export default function SenedIdarePage() {
       alert("Excel oluşturulurken hata çıktı: " + error.message);
     }
   };
+
+  const handleDownloadInvoice = () => {
+    if (!selectedKurs) return;
+
+    // Basit bir fatura oluştur (Excel olarak)
+    try {
+      const ws = XLSX.utils.aoa_to_sheet([
+        ["INVOICE / QİYMƏT TƏKLİFİ"],
+        ["CTH (Confederation of Tourism and Hospitality)"],
+        [],
+        ["Tələbə:", "Nümunə Tələbə"],
+        ["Kurs:", selectedKurs.ad],
+        ["Tarix:", new Date().toLocaleDateString('az-AZ')],
+        [],
+        ["Xidmət", "Məbləğ (£)"],
+        ["Registration Fee", selectedKurs.cth?.feeGBP || 135],
+        [],
+        ["Total:", `£${selectedKurs.cth?.feeGBP || 135}`]
+      ]);
+
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, "Invoice");
+      XLSX.writeFile(wb, `Invoice_${selectedKurs.code}_${new Date().toISOString().split('T')[0]}.xlsx`);
+
+      alert("Fatura yükləndi! ✅");
+    } catch (error) {
+      console.error("Invoice error:", error);
+      alert("Fatura yaradılarkən xəta baş verdi.");
+    }
+  };
   // ------------------------------------------
 
   return (
@@ -70,14 +100,14 @@ export default function SenedIdarePage() {
                 key={kurs.id}
                 onClick={() => setSelectedKurs(kurs)}
                 className={`p-3 rounded-md cursor-pointer border transition-all ${selectedKurs?.id === kurs.id
-                    ? 'bg-blue-50 border-blue-500 shadow-sm'
-                    : 'hover:bg-gray-50 border-transparent'
+                  ? 'bg-blue-50 border-blue-500 shadow-sm'
+                  : 'hover:bg-gray-50 border-transparent'
                   }`}
               >
                 <div className="font-medium text-sm">{kurs.ad}</div>
                 <div className="flex gap-2 mt-1">
                   <span className={`text-[10px] px-2 py-0.5 rounded font-bold ${kurs.tip === 'DMA' ? 'bg-blue-100 text-blue-700' :
-                      kurs.tip === 'CTH' ? 'bg-purple-100 text-purple-700' : 'bg-gray-100'
+                    kurs.tip === 'CTH' ? 'bg-purple-100 text-purple-700' : 'bg-gray-100'
                     }`}>
                     {kurs.tip}
                   </span>
@@ -128,7 +158,7 @@ export default function SenedIdarePage() {
                       <FileText size={18} /> CTH (London) Paketi
                     </h4>
                     <div className="space-y-3">
-                      <Button type="button" className="w-full justify-start h-12 text-md" variant="default">
+                      <Button type="button" onClick={handleDownloadInvoice} className="w-full justify-start h-12 text-md" variant="default">
                         <Download className="mr-2 h-5 w-5" /> Registration Invoice (£{selectedKurs.cth?.feeGBP})
                       </Button>
                     </div>
