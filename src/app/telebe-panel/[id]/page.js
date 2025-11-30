@@ -140,113 +140,139 @@ export default function StudentDetailPage() {
                 <div>
                     <div className="flex items-center gap-3">
                         <h1 className="text-3xl font-bold text-slate-900">{student?.ad} {student?.soyad}</h1>
-                        <div className="mt-4 space-y-2">
-                            {evidence.recipeLogs.map((file, i) => (
-                                <div key={i} className="flex justify-between items-center text-sm p-2 bg-slate-50 rounded border">
-                                    <span className="truncate max-w-[200px]">{file.name}</span>
-                                    <button onClick={() => removeFile('recipeLogs', i)} className="text-red-500 hover:text-red-700"><Trash2 size={14} /></button>
-                                </div>
-                            ))}
-                        </div>
-                    </CardContent>
-                </Card>
+                        <Badge variant="outline" className="bg-purple-100 text-purple-700 border-purple-200">
+                            {student?.bolum}
+                        </Badge>
+                    </div>
+                    <p className="text-slate-500 mt-1">CTH Evidence & Portfolio Management System</p>
+                </div>
+                <Button onClick={handleGenerateZip} className="bg-green-600 hover:bg-green-700 gap-2 shadow-md">
+                    <FolderArchive size={18} />
+                    CTH ZIP İndir
+                </Button>
+            </div>
 
-                {/* DEVAMSIZLIK KARTI */}
-                <Card className="border-t-4 border-t-blue-600 h-fit">
-                    <CardHeader>
-                        <CardTitle className="text-lg flex items-center gap-2">
-                            <Clock className="text-blue-600" /> Devamsızlık Durumu
-                        </CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                        <div className="flex justify-between items-center mb-2">
-                            <span className="text-gray-600">Toplam Ders:</span>
-                            <span className="font-bold">{attendanceStats.total}</span>
-                        </div>
-                        <div className="flex justify-between items-center mb-2">
-                            <span className="text-gray-600">Katılım:</span>
-                            <span className="font-bold text-green-600">{attendanceStats.present}</span>
-                        </div>
-                        <div className="flex justify-between items-center">
-                            <span className="text-gray-600">Devamsızlık:</span>
-                            <span className="font-bold text-red-600">{attendanceStats.absent}</span>
-                        </div>
-                    </CardContent>
-                </Card>
+            {/* Folder 1: Recipe Log */}
+            <Card>
+                <CardHeader>
+                    <CardTitle className="flex items-center justify-between">
+                        <span className="flex items-center gap-2"><FileText size={18} className="text-blue-500" /> Folder 1 - Recipe Log</span>
+                        <span className="text-xs font-normal text-slate-400">{evidence.recipeLogs.length} fayl</span>
+                    </CardTitle>
+                    <CardDescription>Tələbənin hazırladığı yeməklərin fotosu və resept kartları.</CardDescription>
+                </CardHeader>
+                <CardContent>
+                    <div className="border-2 border-dashed border-slate-200 rounded-lg p-6 text-center hover:bg-slate-50 transition-colors relative">
+                        <input type="file" multiple accept="image/*,.pdf" onChange={(e) => handleFileChange('recipeLogs', e)} className="absolute inset-0 w-full h-full opacity-0 cursor-pointer" />
+                        <UploadCloud className="mx-auto h-8 w-8 text-slate-400 mb-2" />
+                        <p className="text-sm text-slate-600">Faylları bura sürüşdürün və ya seçin</p>
+                    </div>
+                    {/* Dosya Listesi */}
+                    <div className="mt-4 space-y-2">
+                        {evidence.recipeLogs.map((file, i) => (
+                            <div key={i} className="flex justify-between items-center text-sm p-2 bg-slate-50 rounded border">
+                                <span className="truncate max-w-[200px]">{file.name}</span>
+                                <button onClick={() => removeFile('recipeLogs', i)} className="text-red-500 hover:text-red-700"><Trash2 size={14} /></button>
+                            </div>
+                        ))}
+                    </div>
+                </CardContent>
+            </Card>
 
-                {/* Folder 2: Time Plans */}
+            {/* DEVAMSIZLIK KARTI */}
+            <Card className="border-t-4 border-t-blue-600 h-fit">
+                <CardHeader>
+                    <CardTitle className="text-lg flex items-center gap-2">
+                        <Clock className="text-blue-600" /> Devamsızlık Durumu
+                    </CardTitle>
+                </CardHeader>
+                <CardContent>
+                    <div className="flex justify-between items-center mb-2">
+                        <span className="text-gray-600">Toplam Ders:</span>
+                        <span className="font-bold">{attendanceStats.total}</span>
+                    </div>
+                    <div className="flex justify-between items-center mb-2">
+                        <span className="text-gray-600">Katılım:</span>
+                        <span className="font-bold text-green-600">{attendanceStats.present}</span>
+                    </div>
+                    <div className="flex justify-between items-center">
+                        <span className="text-gray-600">Devamsızlık:</span>
+                        <span className="font-bold text-red-600">{attendanceStats.absent}</span>
+                    </div>
+                </CardContent>
+            </Card>
+
+            {/* Folder 2: Time Plans */}
+            <Card>
+                <CardHeader className="pb-3">
+                    <CardTitle className="text-base flex justify-between">
+                        <span className="flex items-center gap-2"><Clock size={18} className="text-orange-500" /> Folder 2 - Time Plans</span>
+                        <span className="text-xs font-normal text-slate-400">{evidence.timePlans.length} fayl</span>
+                    </CardTitle>
+                </CardHeader>
+                <CardContent>
+                    <div className="border-2 border-dashed border-slate-200 rounded-lg p-4 text-center hover:bg-slate-50 relative">
+                        <input type="file" multiple accept=".pdf,.doc,.docx,.xls,.xlsx" onChange={(e) => handleFileChange('timePlans', e)} className="absolute inset-0 w-full h-full opacity-0 cursor-pointer" />
+                        <p className="text-sm text-slate-500">+ Zaman planı və maliyyət sənədləri</p>
+                    </div>
+                    <div className="mt-2 space-y-1">
+                        {evidence.timePlans.map((file, i) => (
+                            <div key={i} className="flex justify-between text-xs p-1 px-2 bg-slate-50 rounded">
+                                <span>{file.name}</span>
+                                <button onClick={() => removeFile('timePlans', i)} className="text-red-500">x</button>
+                            </div>
+                        ))}
+                    </div>
+                </CardContent>
+            </Card>
+
+            {/* Folder 3 & 4: Assignments & Videos */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <Card>
                     <CardHeader className="pb-3">
-                        <CardTitle className="text-base flex justify-between">
-                            <span className="flex items-center gap-2"><Clock size={18} className="text-orange-500" /> Folder 2 - Time Plans</span>
-                            <span className="text-xs font-normal text-slate-400">{evidence.timePlans.length} fayl</span>
+                        <CardTitle className="text-base flex items-center gap-2">
+                            <FileText size={18} className="text-green-500" /> Folder 3 - Assignments
                         </CardTitle>
                     </CardHeader>
                     <CardContent>
                         <div className="border-2 border-dashed border-slate-200 rounded-lg p-4 text-center hover:bg-slate-50 relative">
-                            <input type="file" multiple accept=".pdf,.doc,.docx,.xls,.xlsx" onChange={(e) => handleFileChange('timePlans', e)} className="absolute inset-0 w-full h-full opacity-0 cursor-pointer" />
-                            <p className="text-sm text-slate-500">+ Zaman planı və maliyyət sənədləri</p>
+                            <input type="file" multiple accept=".doc,.docx,.pdf" onChange={(e) => handleFileChange('assignments', e)} className="absolute inset-0 w-full h-full opacity-0 cursor-pointer" />
+                            <p className="text-xs text-slate-500">Yazılı tapşırıqlar (Word/PDF)</p>
                         </div>
                         <div className="mt-2 space-y-1">
-                            {evidence.timePlans.map((file, i) => (
+                            {evidence.assignments.map((file, i) => (
                                 <div key={i} className="flex justify-between text-xs p-1 px-2 bg-slate-50 rounded">
                                     <span>{file.name}</span>
-                                    <button onClick={() => removeFile('timePlans', i)} className="text-red-500">x</button>
+                                    <button onClick={() => removeFile('assignments', i)} className="text-red-500">x</button>
                                 </div>
                             ))}
                         </div>
                     </CardContent>
                 </Card>
 
-                {/* Folder 3 & 4: Assignments & Videos */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <Card>
-                        <CardHeader className="pb-3">
-                            <CardTitle className="text-base flex items-center gap-2">
-                                <FileText size={18} className="text-green-500" /> Folder 3 - Assignments
-                            </CardTitle>
-                        </CardHeader>
-                        <CardContent>
-                            <div className="border-2 border-dashed border-slate-200 rounded-lg p-4 text-center hover:bg-slate-50 relative">
-                                <input type="file" multiple accept=".doc,.docx,.pdf" onChange={(e) => handleFileChange('assignments', e)} className="absolute inset-0 w-full h-full opacity-0 cursor-pointer" />
-                                <p className="text-xs text-slate-500">Yazılı tapşırıqlar (Word/PDF)</p>
-                            </div>
-                            <div className="mt-2 space-y-1">
-                                {evidence.assignments.map((file, i) => (
-                                    <div key={i} className="flex justify-between text-xs p-1 px-2 bg-slate-50 rounded">
-                                        <span>{file.name}</span>
-                                        <button onClick={() => removeFile('assignments', i)} className="text-red-500">x</button>
-                                    </div>
-                                ))}
-                            </div>
-                        </CardContent>
-                    </Card>
+                <Card>
+                    <CardHeader className="pb-3">
+                        <CardTitle className="text-base flex items-center gap-2">
+                            <Video size={18} className="text-red-500" /> Folder 4 - Videos
+                        </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                        <div className="border-2 border-dashed border-slate-200 rounded-lg p-4 text-center hover:bg-slate-50 relative">
+                            <input type="file" multiple accept="video/*" onChange={(e) => handleFileChange('videos', e)} className="absolute inset-0 w-full h-full opacity-0 cursor-pointer" />
+                            <p className="text-xs text-slate-500">Praktik imtahan videoları</p>
+                        </div>
+                        <div className="mt-2 space-y-1">
+                            {evidence.videos.map((file, i) => (
+                                <div key={i} className="flex justify-between text-xs p-1 px-2 bg-slate-50 rounded">
+                                    <span>{file.name}</span>
+                                    <button onClick={() => removeFile('videos', i)} className="text-red-500">x</button>
+                                </div>
+                            ))}
+                        </div>
+                    </CardContent>
+                </Card>
+            </div>
 
-                    <Card>
-                        <CardHeader className="pb-3">
-                            <CardTitle className="text-base flex items-center gap-2">
-                                <Video size={18} className="text-red-500" /> Folder 4 - Videos
-                            </CardTitle>
-                        </CardHeader>
-                        <CardContent>
-                            <div className="border-2 border-dashed border-slate-200 rounded-lg p-4 text-center hover:bg-slate-50 relative">
-                                <input type="file" multiple accept="video/*" onChange={(e) => handleFileChange('videos', e)} className="absolute inset-0 w-full h-full opacity-0 cursor-pointer" />
-                                <p className="text-xs text-slate-500">Praktik imtahan videoları</p>
-                            </div>
-                            <div className="mt-2 space-y-1">
-                                {evidence.videos.map((file, i) => (
-                                    <div key={i} className="flex justify-between text-xs p-1 px-2 bg-slate-50 rounded">
-                                        <span>{file.name}</span>
-                                        <button onClick={() => removeFile('videos', i)} className="text-red-500">x</button>
-                                    </div>
-                                ))}
-                            </div>
-                        </CardContent>
-                    </Card>
-                </div>
-
-            </div >
-        </div >
-    </div >
-  );
+        </div>
+    );
 }
