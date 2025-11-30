@@ -2,10 +2,10 @@
 
 import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Loader2, ArrowLeft, User, Phone, Mail, MapPin, Calendar, Clock, CheckCircle, XCircle, AlertTriangle } from 'lucide-react';
+import { Loader2, ArrowLeft, User, Phone, Mail, MapPin, Calendar, Clock, CheckCircle, XCircle, AlertTriangle, FolderArchive, FileText } from 'lucide-react';
 
 export default function StudentProfilePage() {
     const params = useParams();
@@ -108,12 +108,12 @@ export default function StudentProfilePage() {
                             </div>
                             <div className="flex items-center gap-3">
                                 <Calendar className="h-4 w-4 text-gray-400" />
-                                <span className="text-sm">Doğum: {student.dogumTarihi || '-'}</span>
+                                <span className="text-sm">Doğum: {student.dogumTarixi || '-'}</span>
                             </div>
                         </CardContent>
                     </Card>
 
-                    {/* DEVAMSIZLIK KARTI (İSTENEN ÖZELLİK) */}
+                    {/* DEVAMSIZLIK KARTI */}
                     <Card className="border-t-4 border-t-blue-600">
                         <CardHeader>
                             <CardTitle className="text-lg flex items-center gap-2">
@@ -149,7 +149,7 @@ export default function StudentProfilePage() {
                     </Card>
                 </div>
 
-                {/* SAĞ KOLON: Diğer Detaylar (Genişletilebilir) */}
+                {/* SAĞ KOLON: Diğer Detaylar */}
                 <div className="md:col-span-2 space-y-6">
                     <Card>
                         <CardHeader>
@@ -175,10 +175,26 @@ export default function StudentProfilePage() {
                         </CardContent>
                     </Card>
 
-                    {/* Buraya Notlar, Ödemeler vb. eklenebilir */}
-                    <div className="p-8 border-2 border-dashed rounded-lg text-center text-gray-400">
-                        Diğer modüller (Notlar, Ödemeler) buraya eklenecek...
-                    </div>
+                    {/* ÖRNEK FOLDER YAPISI (HATA BURADAYDI, DÜZELTİLDİ) */}
+                    <Card>
+                        <CardHeader>
+                            <CardTitle className="flex items-center gap-2">
+                                <Button variant="ghost" size="icon">
+                                    <FolderArchive size={18} />
+                                </Button>
+                                <span className="flex items-center gap-2">
+                                    <FileText size={18} className="text-blue-500" />
+                                    Portfolio & Recipe Logs
+                                </span>
+                            </CardTitle>
+                            <CardDescription>Tələbənin hazırladığı yeməklərin fotosu və resept kartları.</CardDescription>
+                        </CardHeader>
+                        <CardContent>
+                            <div className="p-4 bg-gray-50 border rounded-lg text-center text-sm text-gray-400">
+                                Henüz dosya yüklenmemiş.
+                            </div>
+                        </CardContent>
+                    </Card>
                 </div>
             </div>
         </div>
