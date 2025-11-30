@@ -115,8 +115,8 @@ export default function Sidebar() {
               key={item.path}
               href={item.path}
               className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group ${isActive
-                  ? "bg-blue-600 text-white shadow-lg shadow-blue-900/20"
-                  : "text-slate-400 hover:bg-slate-800 hover:text-white"
+                ? "bg-blue-600 text-white shadow-lg shadow-blue-900/20"
+                : "text-slate-400 hover:bg-slate-800 hover:text-white"
                 }`}
             >
               <span className={`transition-colors ${isActive ? "text-white" : "text-slate-400 group-hover:text-white"}`}>
@@ -130,6 +130,10 @@ export default function Sidebar() {
 
       {/* ALT KISIM */}
       <div className="p-4 border-t border-slate-800 space-y-2">
+        <Link href="/ayarlar/users" className="flex items-center gap-3 px-4 py-3 w-full text-slate-400 hover:bg-slate-800 hover:text-white rounded-xl transition text-sm">
+          <Users size={18} />
+          <span>İstifadəçilər</span>
+        </Link>
         <button className="flex items-center gap-3 px-4 py-3 w-full text-slate-400 hover:bg-slate-800 hover:text-white rounded-xl transition text-sm">
           <Settings size={18} />
           <span>Tənzimləmələr</span>

@@ -81,6 +81,11 @@ export function MobileNav() {
             title: "Daxili Yoxlama (IV)",
             path: "/iv-panel",
             icon: Search
+        },
+        {
+            title: "İstifadəçilər",
+            path: "/ayarlar/users",
+            icon: Users
         }
     ];
 
