@@ -25,12 +25,22 @@ import { useRouter } from 'next/navigation';
 import { BookOpen, CheckCircle, Clock, AlertCircle, Loader2, ArrowLeft, FileDown } from 'lucide-react';
 import { exportToExcel } from '@/lib/excel';
 
-const CTH_UNITS = [
-    { code: 'CTH-L2-COOK', name: 'CTH Level 2 Cookery' },
-    { code: 'CTH-L2-FOH', name: 'CTH Level 2 Front of House' },
-    { code: 'CTH-L2-PAST', name: 'CTH Level 2 Pastry' },
-    { code: 'CTH-L3-COOK', name: 'CTH Level 3 Cookery' },
-    { code: 'CTH-L3-FOH', name: 'CTH Level 3 Front of House' },
+const ALL_UNITS = [
+    // CTH Units
+    { code: 'CTH-L2-COOK', name: 'CTH Level 2 Cookery', type: 'CTH' },
+    { code: 'CTH-L2-FOH', name: 'CTH Level 2 Front of House', type: 'CTH' },
+    { code: 'CTH-L2-PAST', name: 'CTH Level 2 Pastry', type: 'CTH' },
+    { code: 'CTH-L3-COOK', name: 'CTH Level 3 Cookery', type: 'CTH' },
+    { code: 'CTH-L3-FOH', name: 'CTH Level 3 Front of House', type: 'CTH' },
+    // DMA Units
+    { code: 'DMA-COOK', name: 'DMA Aşpazlıq', type: 'DMA' },
+    { code: 'DMA-PAST', name: 'DMA Qənnadçı', type: 'DMA' },
+    { code: 'DMA-BAR', name: 'DMA Barista', type: 'DMA' },
+    { code: 'DMA-FOH', name: 'DMA Ofisiant', type: 'DMA' },
+    { code: 'DMA-TOUR', name: 'DMA Turoperator', type: 'DMA' },
+    // Other
+    { code: 'GEN-COOK', name: 'Ümumi Aşpazlıq', type: 'General' },
+    { code: 'GEN-PAST', name: 'Ümumi Qənnadçı', type: 'General' },
 ];
 
 export default function AkademikTakipPage() {
@@ -157,7 +167,7 @@ export default function AkademikTakipPage() {
     };
 
     const handleUnitChange = (code) => {
-        const unit = CTH_UNITS.find(u => u.code === code);
+        const unit = ALL_UNITS.find(u => u.code === code);
         setFormData({
             ...formData,
             unitCode: code,
@@ -249,7 +259,7 @@ export default function AkademikTakipPage() {
                                         <SelectValue placeholder="Unit seçin..." />
                                     </SelectTrigger>
                                     <SelectContent>
-                                        {CTH_UNITS.map(unit => (
+                                        {ALL_UNITS.map(unit => (
                                             <SelectItem key={unit.code} value={unit.code}>
                                                 {unit.name}
                                             </SelectItem>
@@ -352,7 +362,7 @@ export default function AkademikTakipPage() {
                                 </SelectTrigger>
                                 <SelectContent>
                                     <SelectItem value="">Hamısı</SelectItem>
-                                    {CTH_UNITS.map(unit => (
+                                    {ALL_UNITS.map(unit => (
                                         <SelectItem key={unit.code} value={unit.code}>
                                             {unit.name}
                                         </SelectItem>

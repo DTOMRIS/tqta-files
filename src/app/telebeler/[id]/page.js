@@ -6,6 +6,7 @@ import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "@/com
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Loader2, ArrowLeft, User, Phone, Mail, MapPin, Calendar, Clock, CheckCircle, XCircle, AlertTriangle, FolderArchive, FileText } from 'lucide-react';
+import { UploadButton } from "@/utils/uploadthing";
 
 export default function StudentProfilePage() {
     const params = useParams();
@@ -192,9 +193,25 @@ export default function StudentProfilePage() {
                                     : 'Tələbənin hazırladığı yeməklərin fotosu və resept kartları.'}
                             </CardDescription>
                         </CardHeader>
-                        <CardContent>
+                        <CardContent className="space-y-4">
                             <div className="p-4 bg-gray-50 border rounded-lg text-center text-sm text-gray-400">
                                 Henüz dosya yüklenmemiş.
+                            </div>
+
+                            <div className="border-t pt-4">
+                                <h4 className="text-sm font-semibold mb-2 text-gray-700">Yeni Dosya Yükle</h4>
+                                <UploadButton
+                                    endpoint="imageUploader"
+                                    onClientUploadComplete={(res) => {
+                                        alert("Fayl uğurla yükləndi!");
+                                    }}
+                                    onUploadError={(error) => {
+                                        alert(`Xəta: ${error.message}`);
+                                    }}
+                                    appearance={{
+                                        button: "bg-blue-600 text-white text-sm px-4 py-2 rounded-lg hover:bg-blue-700 w-full"
+                                    }}
+                                />
                             </div>
                         </CardContent>
                     </Card>
