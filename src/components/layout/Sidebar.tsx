@@ -4,7 +4,7 @@ import { usePathname } from 'next/navigation';
 import { cn } from "@/lib/utils";
 import { LayoutDashboard, Users, FileText, Settings, LogOut, ChefHat, Building2, Globe, FileWarning, ScrollText, BookOpen, Award, GraduationCap } from 'lucide-react';
 
-const sidebarSections = [
+export const sidebarSections = [
   {
     title: "Ümumi İdarəetmə",
     items: [

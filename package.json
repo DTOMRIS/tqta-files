@@ -34,7 +34,7 @@
     "drizzle-orm": "latest",
     "file-saver": "^2.0.5",
     "jszip": "^3.10.1",
-    "lucide-react": "latest",
+    "lucide-react": "^0.555.0",
     "next": "^15.1.7",
     "next-auth": "latest",
     "react": "^19.0.0",
