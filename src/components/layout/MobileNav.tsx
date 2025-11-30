@@ -3,14 +3,19 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Menu, X, ChefHat, Home, Users } from 'lucide-react';
+import {
+    Menu, X, ChefHat,
+    Home, Users, UserPlus, BookOpen, GraduationCap,
+    Star, ClipboardCheck, Globe, Briefcase, FileText,
+    ShieldCheck, Search
+} from 'lucide-react';
 import { cn } from "@/lib/utils";
 
 export function MobileNav() {
     const [isOpen, setIsOpen] = useState(false);
     const pathname = usePathname();
 
-    // SADECE ÇALIŞAN VE GEREKLİ MENÜLER (Sidebar ile aynı)
+    // MOBİL İÇİN DE TÜM MENÜLERİ GERİ GETİRDİM
     const menuItems = [
         {
             title: "Ana Panel",
@@ -27,6 +32,56 @@ export function MobileNav() {
             path: "/hoca-panel",
             icon: ChefHat
         },
+        {
+            title: "Yeni Qeydiyyat",
+            path: "/telebe-qeydiyyat",
+            icon: UserPlus
+        },
+        {
+            title: "Kurslar",
+            path: "/kurslar",
+            icon: BookOpen
+        },
+        {
+            title: "Akademik İzləmə",
+            path: "/akademik-takip",
+            icon: GraduationCap
+        },
+        {
+            title: "Qiymətləndirmə",
+            path: "/qiymetlendirme",
+            icon: Star
+        },
+        {
+            title: "İmtahan Mərkəzi",
+            path: "/sinav-merkezi",
+            icon: ClipboardCheck
+        },
+        {
+            title: "CTH Paneli",
+            path: "/cth-panel",
+            icon: Globe
+        },
+        {
+            title: "DMA İdarəetmə",
+            path: "/dma-idare",
+            icon: Briefcase
+        },
+        {
+            title: "Sənədlər",
+            path: "/sened-idare",
+            icon: FileText
+        },
+        {
+            title: "Keyfiyyətə Nəzarət",
+            path: "/kalite-kontrol",
+            icon: ShieldCheck
+        },
+        {
+            title: "Daxili Yoxlama (IV)",
+            path: "/iv-panel",
+            icon: Search
+        }
     ];
 
     return (

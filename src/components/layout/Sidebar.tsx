@@ -8,32 +8,88 @@ import {
   ChefHat,
   Settings,
   LogOut,
-  FileText
+  BookOpen,
+  GraduationCap,
+  ClipboardCheck,
+  Star,
+  Globe,
+  Briefcase,
+  FileText,
+  ShieldCheck,
+  Search,
+  UserPlus
 } from "lucide-react";
 
 export default function Sidebar() {
   const pathname = usePathname();
 
-  // SADECE ÇALIŞAN VE GEREKLİ MENÜLER
+  // TÜM MENÜLERİ GERİ GETİRDİM (AZERİCE)
   const menuItems = [
     {
-      title: "Ana Panel", // Dashboard
+      title: "Ana Panel",
       path: "/",
       icon: <Home size={20} />
     },
     {
-      title: "Tələbələr", // Öğrenci Listesi
+      title: "Tələbələr",
       path: "/telebeler",
       icon: <Users size={20} />
     },
     {
-      title: "Müəllim Paneli", // Hoca Paneli
+      title: "Müəllim Paneli",
       path: "/hoca-panel",
       icon: <ChefHat size={20} />
     },
-    // Gereksizler kaldırıldı (Sınav Merkezi, Kalite Güvence vb.)
-    // İleride "Sənədlər" modülü gelince buraya ekleriz:
-    // { title: "Sənədlər", path: "/senedler", icon: <FileText size={20} /> },
+    {
+      title: "Yeni Qeydiyyat",
+      path: "/telebe-qeydiyyat",
+      icon: <UserPlus size={20} />
+    },
+    {
+      title: "Kurslar",
+      path: "/kurslar",
+      icon: <BookOpen size={20} />
+    },
+    {
+      title: "Akademik İzləmə",
+      path: "/akademik-takip",
+      icon: <GraduationCap size={20} />
+    },
+    {
+      title: "Qiymətləndirmə",
+      path: "/qiymetlendirme",
+      icon: <Star size={20} />
+    },
+    {
+      title: "İmtahan Mərkəzi",
+      path: "/sinav-merkezi",
+      icon: <ClipboardCheck size={20} />
+    },
+    {
+      title: "CTH Paneli",
+      path: "/cth-panel",
+      icon: <Globe size={20} />
+    },
+    {
+      title: "DMA İdarəetmə",
+      path: "/dma-idare",
+      icon: <Briefcase size={20} />
+    },
+    {
+      title: "Sənədlər",
+      path: "/sened-idare",
+      icon: <FileText size={20} />
+    },
+    {
+      title: "Keyfiyyətə Nəzarət",
+      path: "/kalite-kontrol",
+      icon: <ShieldCheck size={20} />
+    },
+    {
+      title: "Daxili Yoxlama (IV)",
+      path: "/iv-panel",
+      icon: <Search size={20} />
+    }
   ];
 
   return (
