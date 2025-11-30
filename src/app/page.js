@@ -55,7 +55,20 @@ export default function Home() {
       }
 
       if (cthData.success) {
-        setCthPending(cthData.data);
+        // CTH Filtresi: Sadece CTH/FOH veya İctimai İaşə olanları göster
+        const filterCth = (list) => list.filter(s =>
+          (s.kursId && (s.kursId.toLowerCase().includes('cth') || s.kursId.toLowerCase().includes('foh'))) ||
+          (s.anaKategoriya === 'İctimai İaşə')
+        );
+
+        const filteredCthData = {
+          urgent: filterCth(cthData.data.urgent),
+          warning: filterCth(cthData.data.warning),
+          normal: filterCth(cthData.data.normal),
+          total: filterCth(cthData.data.urgent).length + filterCth(cthData.data.warning).length + filterCth(cthData.data.normal).length
+        };
+
+        setCthPending(filteredCthData);
       }
 
     } catch (err) {

@@ -179,15 +179,18 @@ export default function StudentProfilePage() {
                     <Card>
                         <CardHeader>
                             <CardTitle className="flex items-center gap-2">
-                                <Button variant="ghost" size="icon">
-                                    <FolderArchive size={18} />
-                                </Button>
-                                <span className="flex items-center gap-2">
-                                    <FileText size={18} className="text-blue-500" />
-                                    Portfolio & Recipe Logs
+                                <div className="p-2 bg-gray-100 rounded-lg">
+                                    <FolderArchive size={20} className="text-blue-600" />
+                                </div>
+                                <span>
+                                    {student.anaKategoriya === 'Turizm' ? 'Kurs İşləri və Layihələr' : 'Portfolio və Resept Kartları'}
                                 </span>
                             </CardTitle>
-                            <CardDescription>Tələbənin hazırladığı yeməklərin fotosu və resept kartları.</CardDescription>
+                            <CardDescription>
+                                {student.anaKategoriya === 'Turizm'
+                                    ? 'Tələbənin hazırladığı tur paketləri və kurs işləri.'
+                                    : 'Tələbənin hazırladığı yeməklərin fotosu və resept kartları.'}
+                            </CardDescription>
                         </CardHeader>
                         <CardContent>
                             <div className="p-4 bg-gray-50 border rounded-lg text-center text-sm text-gray-400">
