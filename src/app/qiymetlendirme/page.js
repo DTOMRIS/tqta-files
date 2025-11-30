@@ -14,12 +14,22 @@ import {
 import { Input } from "@/components/ui/input";
 import { ClipboardCheck, Loader2 } from 'lucide-react';
 
-const CTH_UNITS = [
-    'CTH-L2-COOK',
-    'CTH-L2-FOH',
-    'CTH-L2-PAST',
-    'CTH-L3-COOK',
-    'CTH-L3-FOH',
+const ALL_UNITS = [
+    // CTH Units
+    { code: 'CTH-L2-COOK', name: 'CTH Level 2 Cookery', type: 'CTH' },
+    { code: 'CTH-L2-FOH', name: 'CTH Level 2 Front of House', type: 'CTH' },
+    { code: 'CTH-L2-PAST', name: 'CTH Level 2 Pastry', type: 'CTH' },
+    { code: 'CTH-L3-COOK', name: 'CTH Level 3 Cookery', type: 'CTH' },
+    { code: 'CTH-L3-FOH', name: 'CTH Level 3 Front of House', type: 'CTH' },
+    // DMA Units
+    { code: 'DMA-COOK', name: 'DMA Aşpazlıq', type: 'DMA' },
+    { code: 'DMA-PAST', name: 'DMA Qənnadçı', type: 'DMA' },
+    { code: 'DMA-BAR', name: 'DMA Barista', type: 'DMA' },
+    { code: 'DMA-FOH', name: 'DMA Ofisiant', type: 'DMA' },
+    { code: 'DMA-TOUR', name: 'DMA Turoperator', type: 'DMA' },
+    // Other
+    { code: 'GEN-COOK', name: 'Ümumi Aşpazlıq', type: 'General' },
+    { code: 'GEN-PAST', name: 'Ümumi Qənnadçı', type: 'General' },
 ];
 
 const GRADES = ['Pass', 'Merit', 'Distinction', 'Fail'];
@@ -155,9 +165,9 @@ export default function QiymetlendirmePage() {
                                         <SelectValue placeholder="Unit seçin..." />
                                     </SelectTrigger>
                                     <SelectContent>
-                                        {CTH_UNITS.map(unit => (
-                                            <SelectItem key={unit} value={unit}>
-                                                {unit}
+                                        {ALL_UNITS.map(unit => (
+                                            <SelectItem key={unit.code} value={unit.code}>
+                                                {unit.name}
                                             </SelectItem>
                                         ))}
                                     </SelectContent>
