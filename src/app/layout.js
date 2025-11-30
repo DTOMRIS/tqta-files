@@ -1,6 +1,6 @@
 ﻿import { Inter } from "next/font/google";
 import "./globals.css";
-import { Sidebar } from "@/components/layout/Sidebar";
+import Sidebar from "@/components/layout/Sidebar";
 import { MobileNav } from "@/components/layout/MobileNav";
 import { Providers } from "@/components/Providers";
 import { Toaster } from "sonner";
