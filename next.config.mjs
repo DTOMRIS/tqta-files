@@ -8,6 +8,10 @@ const nextConfig = {
     eslint: {
         ignoreDuringBuilds: true,
     },
+    env: {
+        NEXTAUTH_URL: 'http://localhost:3000',
+        NEXTAUTH_SECRET: 'tqta-secret-key-2024',
+    },
 };
 
 export default nextConfig;
