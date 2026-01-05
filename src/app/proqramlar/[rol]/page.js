@@ -1,320 +1,249 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
-import { useParams, useRouter } from 'next/navigation';
-import { useSession } from 'next-auth/react';
+import React, { use } from 'react';
 import Link from 'next/link';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Progress } from '@/components/ui/progress';
-import { 
-  Play, 
-  CheckCircle2, 
-  Clock, 
-  BookOpen, 
-  Video, 
-  Award,
-  ArrowRight,
-  ArrowLeft
-} from 'lucide-react';
-import { toast } from 'sonner';
-import { ROLES } from '@/constants/roles';
+import { Button } from "@/components/ui/button";
+import { ArrowLeft, ArrowRight, Clock, Users, Award, CheckCircle } from 'lucide-react';
 
-export default function RolProqramlariPage() {
-  const params = useParams();
-  const router = useRouter();
-  const { data: session } = useSession();
-  const rolKod = params.rol;
-  
-  const [modullar, setModullar] = useState([]);
-  const [irəliləyiş, setIrəliləyiş] = useState({});
-  const [yukleniyor, setYukleniyor] = useState(true);
-  const [rolInfo, setRolInfo] = useState(null);
+// Slug mapping - URL'den gelen slug'ı decode et
+const slugMap = {
+  'aspaz-bacariqlari': 'aspaz-bacariqlari',
+  'aşpaz-bacariqları': 'aspaz-bacariqlari',
+  'barista-bacariqlari': 'barista-bacariqlari',
+  'restoran-xidmeti': 'restoran-xidmeti',
+  'turizm-ve-qonaqlama-ingilisce': 'turizm-ve-qonaqlama-ingilisce',
+};
 
-  useEffect(() => {
-    const rol = ROLES.find(r => r.kod === rolKod);
-    if (!rol) {
-      toast.error('Rol tapılmadı');
-      router.push('/proqramlar');
-      return;
-    }
-    setRolInfo(rol);
-
-    // Rol ID-ni tap
-    fetch('/api/roles')
-      .then(res => res.json())
-      .then(rolesRes => {
-        if (rolesRes.ugur) {
-          const rol = rolesRes.melumat.find(r => r.kod === rolKod);
-          if (rol) {
-            Promise.all([
-              fetch(`/api/modules?rolId=${rol.id}`).then(res => res.json()),
-              session?.user?.id 
-                ? fetch(`/api/student-progress?studentId=${session.user.id}`).then(res => res.json())
-                : Promise.resolve({ ugur: true, melumat: {} }),
-            ])
-              .then(([modulesRes, progressRes]) => {
-                if (modulesRes.ugur) {
-                  // Yalnız bu rol üçün modulları filtrlə
-                  const filteredModules = (modulesRes.melumat || []).filter(m => m.rol?.kod === rolKod);
-                  setModullar(filteredModules);
-                }
-                if (progressRes.ugur) {
-                  const progressMap = {};
-                  (progressRes.melumat || []).forEach(p => {
-                    progressMap[p.modulId] = p;
-                  });
-                  setIrəliləyiş(progressMap);
-                }
-              })
-              .catch(err => {
-                console.error('Məlumat yüklənərkən xəta:', err);
-                toast.error('Məlumat yüklənərkən xəta baş verdi');
-              })
-              .finally(() => setYukleniyor(false));
-          }
-        }
-      })
-      .catch(err => {
-        console.error('Rol məlumatları yüklənərkən xəta:', err);
-        toast.error('Rol məlumatları yüklənərkən xəta baş verdi');
-        setYukleniyor(false);
-      });
-      .then(([modulesRes, progressRes]) => {
-        if (modulesRes.ugur) {
-          setModullar(modulesRes.melumat || []);
-        }
-        if (progressRes.ugur) {
-          const progressMap = {};
-          (progressRes.melumat || []).forEach(p => {
-            progressMap[p.modulId] = p;
-          });
-          setIrəliləyiş(progressMap);
-        }
-      })
-      .catch(err => {
-        console.error('Məlumat yüklənərkən xəta:', err);
-        toast.error('Məlumat yüklənərkən xəta baş verdi');
-      })
-      .catch(err => {
-        console.error('Rol məlumatları yüklənərkən xəta:', err);
-        toast.error('Rol məlumatları yüklənərkən xəta baş verdi');
-        setYukleniyor(false);
-      });
-  }, [rolKod, session, router]);
-
-  if (yukleniyor || !rolInfo) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-amber-600 mx-auto mb-4"></div>
-          <p className="text-slate-600">Yüklənir...</p>
-        </div>
-      </div>
-    );
+// Program verileri (Statik Veri - API hatasını önler)
+const programs = {
+  'aspaz-bacariqlari': {
+    name: "Aşpaz Bacarıqları",
+    level: "CTH Level 2 Award in Cookery Skills",
+    duration: "12 Həftə",
+    image: "https://images.unsplash.com/photo-1556910103-1c02745aae4d?w=1200&q=80",
+    kategori: "Kulinari",
+    desc: "Peşəkar aşpazlıq texnikaları və beynəlxalq standartlarda təhsil",
+    detayliTəsvir: "Bu proqram sizə peşəkar aşpazlıq texnikalarını öyrədir. Bıçaq istifadəsi, yemək hazırlama metodları, porsiya nəzarəti və təqdimat sənəti kimi əsas bacarıqları əhatə edir.",
+    modullar: [
+      "Bıçaq texnikaları və təhlükəsizlik",
+      "Yemək hazırlama metodları",
+      "Porsiya nəzarəti və standartlar",
+      "Təqdimat və plating",
+      "Mətbəx gigiyenası"
+    ],
+    sertifikat: "CTH Level 2 Award in Cookery Skills",
+    qiymet: "Müqavilə əsasında",
+    baslamaTarixi: "Hər ay yeni qrup"
+  },
+  'barista-bacariqlari': {
+    name: "Barista Bacarıqları",
+    level: "CTH Level 2 Award in Barista Skills",
+    duration: "8 Həftə",
+    image: "https://images.unsplash.com/photo-1612203985729-70726954388c?w=1200&q=80",
+    kategori: "Kafe",
+    desc: "Espresso hazırlama, latte art və kofe sənəti",
+    detayliTəsvir: "Professional barista olmaq üçün lazım olan bütün bacarıqları öyrənin. Espresso hazırlama, süd köpürtmə, latte art və müştəri xidməti daxil olmaqla geniş spektrumda təhsil alın.",
+    modullar: [
+      "Qəhvə növləri və xüsusiyyətləri",
+      "Espresso hazırlama texnikaları",
+      "Süd köpürtmə və temperatur nəzarəti",
+      "Latte Art əsasları",
+      "Müştəri xidməti və kommunikasiya"
+    ],
+    sertifikat: "CTH Level 2 Award in Barista Skills",
+    qiymet: "Müqavilə əsasında",
+    baslamaTarixi: "Hər ay yeni qrup"
+  },
+  'restoran-xidmeti': {
+    name: "Restoran Xidməti",
+    level: "CTH Level 2 Certificate in Professional Restaurant Front of House Service",
+    duration: "10 Həftə",
+    image: "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=1200&q=80",
+    kategori: "Restoran",
+    desc: "Qonaq xidməti, restoran idarəetməsi və peşəkar xidmət standartları",
+    detayliTəsvir: "Restoran xidməti sahəsində peşəkar olmaq üçün lazım olan bütün bacarıqları mənimsəyin. Qonaq qarşılama, sifariş qəbulu, masaya xidmət və müştəri məmnuniyyəti kimi əsas məsələləri öyrənin.",
+    modullar: [
+      "Qonaq qarşılama və yönləndirmə",
+      "Sifariş qəbulu və qeydiyyat",
+      "Masaya xidmət texnikaları",
+      "İçki xidməti və məsləhət",
+      "Müştəri məmnuniyyəti və problem həlli"
+    ],
+    sertifikat: "CTH Level 2 Certificate in Professional Restaurant Front of House Service",
+    qiymet: "Müqavilə əsasında",
+    baslamaTarixi: "Hər ay yeni qrup"
+  },
+  'turizm-ve-qonaqlama-ingilisce': {
+    name: "Turizm və Qonaqlama İngiliscəsi",
+    level: "CTH Level 1 Certificate in English for Tourism and Hospitality",
+    duration: "16 Həftə",
+    image: "https://images.unsplash.com/photo-1521737604893-d14cc237f11d?w=1200&q=80",
+    kategori: "Turizm",
+    desc: "Turizm və qonaqlama sənayesi üçün xüsusi İngilis dili təhsili",
+    detayliTəsvir: "Turizm və qonaqlama sənayesində işləmək üçün lazım olan İngilis dili bacarıqlarını inkişaf etdirin. Müştəri xidməti, rezervasiya, şikayət həlli və peşəkar ünsiyyət kimi sahələri əhatə edir.",
+    modullar: [
+      "Əsas söhbət və salamlaşma",
+      "Rezervasiya və yerləşdirmə",
+      "Müştəri xidməti dialoqları",
+      "Şikayət həlli və problem həll",
+      "Peşəkar yazılı kommunikasiya"
+    ],
+    sertifikat: "CTH Level 1 Certificate in English for Tourism and Hospitality",
+    qiymet: "Müqavilə əsasında",
+    baslamaTarixi: "Hər ay yeni qrup"
   }
+};
 
-  const ümumiModul = modullar.length;
-  const tamamlanmışModul = Object.values(irəliləyiş).filter(p => p.tamamlanmaFaizi >= 100).length;
-  const ümumiProgress = ümumiModul > 0 ? (tamamlanmışModul / ümumiModul) * 100 : 0;
+export default function ProgramDetayPage({ params }) {
+  const { slug } = use(params);
+  
+  // Slug'ı decode et ve normalize et
+  let decodedSlug = '';
+  try {
+    decodedSlug = decodeURIComponent(slug || '');
+  } catch (e) {
+    decodedSlug = slug || '';
+  }
+  
+  const normalizedSlug = slugMap[decodedSlug] || 
+                          slugMap[decodedSlug.toLowerCase()] || 
+                          slugMap[slug] ||
+                          slug || 
+                          'aspaz-bacariqlari';
+  
+  const program = programs[normalizedSlug] || programs['aspaz-bacariqlari'];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 py-8 px-6">
-      <div className="max-w-7xl mx-auto">
-        {/* Geri Dön */}
-        <Button
-          variant="ghost"
-          onClick={() => router.push('/proqramlar')}
-          className="mb-6"
-        >
-          <ArrowLeft className="h-4 w-4 mr-2" />
-          Geri
-        </Button>
+    <div className="min-h-screen bg-white">
+      {/* Hero Section */}
+      <section className="relative py-32 bg-slate-900">
+        <div className="absolute inset-0">
+          <div className="absolute inset-0 bg-slate-900/90 z-10" />
+          {/* Next.js Image yerine normal img kullanarak hatayı ekarte ettik */}
+          <img 
+            src={program.image}
+            alt={program.name}
+            className="w-full h-full object-cover"
+          />
+        </div>
 
-        {/* Başlıq */}
-        <div className="mb-8">
-          <div className="flex items-center gap-4 mb-4">
-            <div className="w-16 h-16 bg-gradient-to-br from-amber-500 to-amber-600 rounded-xl flex items-center justify-center shadow-lg">
-              <BookOpen className="h-8 w-8 text-white" />
+        <div className="relative z-20 max-w-6xl mx-auto px-6">
+          <Link href="/landing#programlar" className="inline-flex items-center gap-2 text-white/70 hover:text-white mb-8 transition-colors">
+            <ArrowLeft className="h-4 w-4" />
+            <span>Geri</span>
+          </Link>
+
+          <div className="max-w-3xl">
+            <div className="flex items-center gap-3 mb-4">
+              <span className="px-3 py-1 bg-amber-500/20 text-amber-300 text-sm rounded-full font-medium">
+                {program.kategori}
+              </span>
+              <span className="px-3 py-1 bg-white/10 text-white text-sm rounded-full">
+                {program.level}
+              </span>
             </div>
-            <div>
-              <h1 className="text-4xl md:text-5xl font-bold text-slate-900 mb-2 font-serif">
-                {rolInfo.ad}
-              </h1>
-              <p className="text-slate-600">{rolInfo.təsvir || ''}</p>
+
+            <h1 className="text-4xl md:text-6xl text-white mb-6 leading-tight font-serif">
+              {program.name}
+            </h1>
+
+            <p className="text-xl text-white/70 mb-8 leading-relaxed">
+              {program.desc}
+            </p>
+
+            <div className="flex flex-wrap gap-6 text-white/60">
+              <div className="flex items-center gap-2">
+                <Clock className="h-5 w-5" />
+                <span>{program.duration}</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Award className="h-5 w-5" />
+                <span>{program.sertifikat}</span>
+              </div>
             </div>
           </div>
+        </div>
+      </section>
 
-          {/* Statistika */}
-          <div className="grid md:grid-cols-4 gap-4 mt-6">
-            <Card>
-              <CardContent className="p-4">
-                <div className="text-2xl font-bold text-slate-900 mb-1">
-                  {rolInfo.muddetHefte} Həftə
-                </div>
-                <div className="text-sm text-slate-600">Müddət</div>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardContent className="p-4">
-                <div className="text-2xl font-bold text-slate-900 mb-1">
-                  {rolInfo.videoSayi} Video
-                </div>
-                <div className="text-sm text-slate-600">Ümumi Video</div>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardContent className="p-4">
-                <div className="text-2xl font-bold text-slate-900 mb-1">
-                  {rolInfo.modulSayi} Modul
-                </div>
-                <div className="text-sm text-slate-600">Ümumi Modul</div>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardContent className="p-4">
-                <div className="text-2xl font-bold text-amber-600 mb-1">
-                  {rolInfo.sertifikatlar?.join(', ') || 'TQTA'}
-                </div>
-                <div className="text-sm text-slate-600">Sertifikat</div>
-              </CardContent>
-            </Card>
-          </div>
+      {/* Content Section */}
+      <section className="py-24 bg-white">
+        <div className="max-w-6xl mx-auto px-6">
+          <div className="grid lg:grid-cols-3 gap-12">
+            {/* Main Content */}
+            <div className="lg:col-span-2 space-y-8">
+              <div>
+                <h2 className="text-3xl font-bold text-slate-900 mb-4 font-serif">
+                  Proqram Haqqında
+                </h2>
+                <p className="text-slate-600 leading-relaxed text-lg">
+                  {program.detayliTəsvir}
+                </p>
+              </div>
 
-          {/* Ümumi İrəliləyiş */}
-          {session?.user?.id && (
-            <Card className="mt-6">
-              <CardHeader>
-                <CardTitle>Ümumi İrəliləyiş</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="mb-4">
-                  <div className="flex justify-between items-center mb-2">
-                    <span className="text-sm font-medium text-slate-600">
-                      {tamamlanmışModul} / {ümumiModul} Modul Tamamlandı
-                    </span>
-                    <span className="text-sm font-bold text-amber-600">
-                      {Math.round(ümumiProgress)}%
-                    </span>
+              <div>
+                <h3 className="text-2xl font-bold text-slate-900 mb-6 font-serif">
+                  Proqram Modulları
+                </h3>
+                <div className="space-y-4">
+                  {program.modullar.map((modul, i) => (
+                    <div key={i} className="flex items-start gap-4 p-4 bg-stone-50 rounded-lg border border-stone-200">
+                      <CheckCircle className="h-6 w-6 text-amber-600 flex-shrink-0 mt-0.5" />
+                      <div>
+                        <h4 className="font-semibold text-slate-900 mb-1">{modul}</h4>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Sidebar */}
+            <div className="lg:col-span-1">
+              <div className="sticky top-24 space-y-6">
+                <div className="bg-stone-50 p-6 rounded-lg border border-stone-200">
+                  <h3 className="font-bold text-slate-900 mb-4">Proqram Məlumatları</h3>
+                  <div className="space-y-4">
+                    <div>
+                      <div className="text-sm text-slate-500 mb-1">Müddət</div>
+                      <div className="font-semibold text-slate-900">{program.duration}</div>
+                    </div>
+                    <div>
+                      <div className="text-sm text-slate-500 mb-1">Sertifikat</div>
+                      <div className="font-semibold text-slate-900">{program.sertifikat}</div>
+                    </div>
+                    <div>
+                      <div className="text-sm text-slate-500 mb-1">Başlama Tarixi</div>
+                      <div className="font-semibold text-slate-900">{program.baslamaTarixi}</div>
+                    </div>
+                    <div>
+                      <div className="text-sm text-slate-500 mb-1">Qiymət</div>
+                      <div className="font-semibold text-slate-900">{program.qiymet}</div>
+                    </div>
                   </div>
-                  <Progress value={ümumiProgress} className="h-3" />
                 </div>
-              </CardContent>
-            </Card>
-          )}
-        </div>
 
-        {/* Modullar */}
-        <div className="space-y-6">
-          <h2 className="text-2xl font-bold text-slate-900">Modullar</h2>
-          
-          {modullar.length === 0 ? (
-            <Card>
-              <CardContent className="p-12 text-center">
-                <p className="text-slate-500">Hələ modul əlavə edilməyib</p>
-              </CardContent>
-            </Card>
-          ) : (
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {modullar.map((modul, index) => {
-                const progress = irəliləyiş[modul.id] || { tamamlanmaFaizi: 0, izlənilənVideo: 0 };
-                const tamamlanmış = progress.tamamlanmaFaizi >= 100;
+                <Link href="/telebe-qeydiyyat">
+                  <Button className="w-full py-6 bg-amber-600 text-white font-medium hover:bg-amber-700 transition-colors rounded-lg text-lg">
+                    Qeydiyyatdan Keç
+                    <ArrowRight className="ml-2 h-5 w-5" />
+                  </Button>
+                </Link>
 
-                return (
-                  <Card 
-                    key={modul.id} 
-                    className={`relative overflow-hidden transition-all hover:shadow-xl ${
-                      tamamlanmış ? 'border-2 border-green-500' : ''
-                    }`}
-                  >
-                    {tamamlanmış && (
-                      <div className="absolute top-4 right-4">
-                        <div className="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center">
-                          <CheckCircle2 className="h-6 w-6 text-white" />
-                        </div>
-                      </div>
-                    )}
-
-                    <CardHeader>
-                      <div className="flex items-start justify-between mb-2">
-                        <Badge variant="outline" className="text-xs">
-                          Modul {index + 1}
-                        </Badge>
-                        {modul.sira && (
-                          <span className="text-xs text-slate-500">Sıra: {modul.sira}</span>
-                        )}
-                      </div>
-                      <CardTitle className="text-xl mb-2">{modul.adAz || modul.ad || modul.modul?.adAz || 'Modul'}</CardTitle>
-                      {(modul.təsvirAz || modul.təsvir || modul.modul?.təsvirAz) && (
-                        <p className="text-sm text-slate-600 line-clamp-2">
-                          {modul.təsvirAz || modul.təsvir || modul.modul?.təsvirAz}
-                        </p>
-                      )}
-                    </CardHeader>
-
-                    <CardContent>
-                      <div className="space-y-4">
-                        {/* Müddət və Video */}
-                        <div className="flex items-center justify-between text-sm">
-                          <div className="flex items-center gap-2 text-slate-600">
-                            <Clock className="h-4 w-4" />
-                            <span>{modul.müddətHəftə || 2} Həftə</span>
-                          </div>
-                          <div className="flex items-center gap-2 text-slate-600">
-                            <Video className="h-4 w-4" />
-                            <span>{modul.videoSayi || 0} Video</span>
-                          </div>
-                        </div>
-
-                        {/* İrəliləyiş */}
-                        {session?.user?.id && (
-                          <div>
-                            <div className="flex justify-between items-center mb-2">
-                              <span className="text-xs font-medium text-slate-600">
-                                İrəliləyiş
-                              </span>
-                              <span className="text-xs font-bold text-amber-600">
-                                {Math.round(progress.tamamlanmaFaizi)}%
-                              </span>
-                            </div>
-                            <Progress value={progress.tamamlanmaFaizi} className="h-2" />
-                            <p className="text-xs text-slate-500 mt-1">
-                              {progress.izlənilənVideo || 0} / {modul.videoSayi || 0} video izlənilib
-                            </p>
-                          </div>
-                        )}
-
-                        {/* Düymə */}
-                        <Link href={`/modullar/${modul.id}`}>
-                          <Button 
-                            className="w-full bg-gradient-to-r from-amber-500 via-amber-600 to-amber-500 hover:from-amber-600 hover:via-amber-700 hover:to-amber-600 text-white"
-                            disabled={!modul.aktiv}
-                          >
-                            {tamamlanmış ? (
-                              <>
-                                <Award className="h-4 w-4 mr-2" />
-                                Yenidən Bax
-                              </>
-                            ) : (
-                              <>
-                                <Play className="h-4 w-4 mr-2" />
-                                Başla
-                              </>
-                            )}
-                            <ArrowRight className="h-4 w-4 ml-2" />
-                          </Button>
-                        </Link>
-                      </div>
-                    </CardContent>
-                  </Card>
-                );
-              })}
+                <div className="bg-amber-50 p-6 rounded-lg border border-amber-200">
+                  <h4 className="font-semibold text-amber-900 mb-2">Əlaqə</h4>
+                  <p className="text-sm text-amber-800 mb-3">
+                    Ətraflı məlumat üçün bizimlə əlaqə saxlayın
+                  </p>
+                  <a href="tel:+994517696181" className="text-amber-600 font-medium hover:text-amber-700">
+                    📲 +994 51 769 61 81
+                  </a>
+                </div>
+              </div>
             </div>
-          )}
+          </div>
         </div>
-      </div>
+      </section>
     </div>
   );
 }
-
+// Git update fix
