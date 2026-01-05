@@ -1,179 +1,152 @@
 'use client';
 
-import { useState, useRef, useEffect } from 'react';
-import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+// DÜZELTİLEN SATIR BURASI:
 import { useChat } from '@ai-sdk/react';
-import { MessageSquare, X, Send, Loader2, Sparkles } from 'lucide-react';
-import { toast } from 'sonner';
+import { useState, useRef, useEffect } from 'react';
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Bot, Send, User, X, MessageSquare, Loader2, Sparkles } from 'lucide-react';
+import { cn } from "@/lib/utils";
 
 export default function AIAssistant() {
   const [isOpen, setIsOpen] = useState(false);
-  const messagesEndRef = useRef(null);
+  const scrollRef = useRef(null);
   
   const { messages, input, handleInputChange, handleSubmit, isLoading } = useChat({
-    api: '/api/ai/chat',
+    api: '/api/chat',
     initialMessages: [
       {
         id: 'welcome',
         role: 'assistant',
-        content: 'Salam! Mən "Beledçiniz"əm - TQTA-nın rəhbəriniz. Hangi təhsil proqramı sizə uyğundur, birlikdə baxaq? 🌟'
+        content: 'Salam! Mən TQTA-nın AI asistanıyam. Sizə tədris proqramları, qeydiyyat prosesi və karyera imkanları haqqında necə kömək edə bilərəm?'
       }
-    ],
-    onError: (error) => {
-      console.error('AI Chat error:', error);
-      toast.error('Xəta baş verdi. Zəhmət olmasa yenidən cəhd edin.');
-    }
+    ]
   });
 
-  // Auto scroll to bottom when new message arrives
   useEffect(() => {
-    if (isOpen && messagesEndRef.current) {
-      messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
+    if (scrollRef.current) {
+      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
     }
-  }, [messages, isOpen]);
-
-  const onSubmit = async (e) => {
-    e.preventDefault();
-    if (!input.trim()) return;
-    
-    handleSubmit(e);
-  };
+  }, [messages]);
 
   return (
-    <>
-      {/* Bubble Button (Kapalı durum) */}
-      {!isOpen && (
-        <button
-          onClick={() => setIsOpen(true)}
-          className="fixed bottom-6 right-6 z-50 w-16 h-16 rounded-full bg-gradient-to-br from-amber-500 to-amber-600 shadow-lg hover:shadow-2xl hover:shadow-amber-500/50 hover:scale-110 transition-all duration-300 flex items-center justify-center group animate-pulse"
-          aria-label="Beledçiniz - AI Assistant"
-        >
-          <MessageSquare className="h-7 w-7 text-white" />
-          
-          {/* Tooltip */}
-          <div className="absolute bottom-full right-0 mb-3 hidden group-hover:block animate-in fade-in-0 zoom-in-95 duration-200">
-            <div className="bg-slate-900 text-white px-4 py-2 rounded-lg text-sm whitespace-nowrap shadow-xl relative">
-              Sizə kömək etmək üçün buradayam! 👋
-              <div className="absolute top-full right-4 w-0 h-0 border-l-8 border-r-8 border-t-8 border-transparent border-t-slate-900"></div>
+    <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end pointer-events-none">
+      {/* Chat Penceresi */}
+      <div 
+        className={cn(
+          "bg-white rounded-2xl shadow-2xl border border-stone-200 w-[380px] mb-4 overflow-hidden transition-all duration-300 pointer-events-auto",
+          isOpen ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10 pointer-events-none h-0"
+        )}
+      >
+        {/* Header */}
+        <div className="bg-gradient-to-r from-slate-900 to-slate-800 p-4 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="bg-white/10 p-2 rounded-lg">
+              <Bot className="h-5 w-5 text-amber-400" />
             </div>
-          </div>
-
-          {/* Notification Badge */}
-          <div className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 rounded-full flex items-center justify-center">
-            <Sparkles className="h-3 w-3 text-white" />
-          </div>
-        </button>
-      )}
-
-      {/* Chat Sheet (Açık durum) */}
-      <Sheet open={isOpen} onOpenChange={setIsOpen}>
-        <SheetContent side="right" className="w-full sm:max-w-md p-0 flex flex-col h-full">
-          {/* Header */}
-          <SheetHeader className="bg-gradient-to-r from-amber-500 via-amber-600 to-amber-500 text-white p-4 border-b border-amber-600">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm">
-                  <Sparkles className="h-5 w-5 text-white" />
-                </div>
-                <div>
-                  <SheetTitle className="text-white text-lg font-semibold">Beledçiniz 🧭</SheetTitle>
-                  <p className="text-xs text-amber-100">Sizə kömək etmək üçün buradayam</p>
-                </div>
+            <div>
+              <h3 className="text-white font-medium text-sm">TQTA AI Asistan</h3>
+              <div className="flex items-center gap-1.5">
+                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                <span className="text-white/60 text-xs">Onlayn</span>
               </div>
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={() => setIsOpen(false)}
-                className="text-white hover:bg-white/20 h-8 w-8"
-              >
-                <X className="h-4 w-4" />
-              </Button>
             </div>
-          </SheetHeader>
+          </div>
+          <Button 
+            variant="ghost" 
+            size="icon" 
+            className="text-white/60 hover:text-white hover:bg-white/10 h-8 w-8"
+            onClick={() => setIsOpen(false)}
+          >
+            <X className="h-4 w-4" />
+          </Button>
+        </div>
 
-          {/* Messages Container */}
-          <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-slate-50">
-            {messages.map((msg) => (
-              <div
-                key={msg.id}
-                className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'} animate-in fade-in-0 slide-in-from-bottom-2 duration-300`}
-              >
+        {/* Mesaj Alanı */}
+        <div className="h-[400px] bg-stone-50 relative">
+          <ScrollArea className="h-full p-4" ref={scrollRef}>
+            <div className="space-y-4">
+              {messages.map((m) => (
                 <div
-                  className={`max-w-[80%] rounded-2xl p-4 shadow-sm ${
-                    msg.role === 'user'
-                      ? 'bg-gradient-to-br from-amber-500 to-amber-600 text-white'
-                      : 'bg-white text-slate-900 border border-slate-200'
-                  }`}
+                  key={m.id}
+                  className={cn(
+                    "flex gap-3 text-sm",
+                    m.role === 'user' ? "flex-row-reverse" : "flex-row"
+                  )}
                 >
-                  <div className="flex items-start gap-2">
-                    {msg.role === 'assistant' && (
-                      <div className="w-6 h-6 bg-amber-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                        <Sparkles className="h-3 w-3 text-amber-600" />
-                      </div>
-                    )}
-                    <div className="flex-1">
-                      <p className="text-sm leading-relaxed whitespace-pre-wrap">{msg.content}</p>
-                    </div>
+                  <div className={cn(
+                    "w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0",
+                    m.role === 'user' ? "bg-amber-100 text-amber-700" : "bg-slate-100 text-slate-700"
+                  )}>
+                    {m.role === 'user' ? <User className="h-4 w-4" /> : <Bot className="h-4 w-4" />}
+                  </div>
+                  <div className={cn(
+                    "p-3 rounded-2xl max-w-[80%] shadow-sm",
+                    m.role === 'user' 
+                      ? "bg-amber-600 text-white rounded-tr-none" 
+                      : "bg-white text-slate-700 border border-stone-100 rounded-tl-none"
+                  )}>
+                    {m.content}
                   </div>
                 </div>
-              </div>
-            ))}
-            
-            {/* Loading Indicator */}
-            {isLoading && (
-              <div className="flex justify-start animate-in fade-in-0 slide-in-from-bottom-2">
-                <div className="max-w-[80%] rounded-2xl p-4 bg-white border border-slate-200 shadow-sm">
-                  <div className="flex items-center gap-2">
+              ))}
+              {isLoading && (
+                <div className="flex gap-3">
+                  <div className="w-8 h-8 rounded-full bg-slate-100 text-slate-700 flex items-center justify-center">
+                    <Bot className="h-4 w-4" />
+                  </div>
+                  <div className="bg-white p-3 rounded-2xl rounded-tl-none border border-stone-100 shadow-sm flex items-center gap-2">
                     <Loader2 className="h-4 w-4 animate-spin text-amber-600" />
-                    <span className="text-sm text-slate-500">Cavab yazılır...</span>
+                    <span className="text-xs text-slate-500">Yazır...</span>
                   </div>
                 </div>
-              </div>
-            )}
-            
-            <div ref={messagesEndRef} />
-          </div>
-
-          {/* Input Area */}
-          <form onSubmit={onSubmit} className="p-4 border-t border-slate-200 bg-white">
-            <div className="flex gap-2">
-              <Input
-                value={input}
-                onChange={handleInputChange}
-                placeholder="Mesajınızı yazın..."
-                disabled={isLoading}
-                className="flex-1 h-12 border-slate-300 focus:border-amber-500 focus:ring-amber-500 rounded-full px-4"
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter' && !e.shiftKey) {
-                    e.preventDefault();
-                    onSubmit(e);
-                  }
-                }}
-              />
-              <Button
-                type="submit"
-                disabled={isLoading || !input.trim()}
-                className="h-12 w-12 rounded-full bg-gradient-to-br from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white shadow-lg hover:shadow-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                {isLoading ? (
-                  <Loader2 className="h-5 w-5 animate-spin" />
-                ) : (
-                  <Send className="h-5 w-5" />
-                )}
-              </Button>
+              )}
             </div>
-            <p className="text-xs text-slate-500 mt-2 text-center">
-              💡 Məsələn: "Aşpaz proqramı haqqında məlumat verin" və ya "Qiymətlər nə qədərdir?"
-            </p>
-          </form>
-        </SheetContent>
-      </Sheet>
-    </>
+          </ScrollArea>
+        </div>
+
+        {/* Input Alanı */}
+        <form onSubmit={handleSubmit} className="p-4 bg-white border-t border-stone-100">
+          <div className="flex gap-2">
+            <Input
+              value={input}
+              onChange={handleInputChange}
+              placeholder="Sualınızı yazın..."
+              className="flex-1 focus-visible:ring-amber-500"
+            />
+            <Button 
+              type="submit" 
+              disabled={isLoading || !input.trim()}
+              className="bg-amber-600 hover:bg-amber-700 text-white"
+            >
+              <Send className="h-4 w-4" />
+            </Button>
+          </div>
+          <div className="mt-2 flex items-center justify-center gap-1.5 text-[10px] text-slate-400">
+            <Sparkles className="h-3 w-3" />
+            <span>AI powered by Vercel SDK</span>
+          </div>
+        </form>
+      </div>
+
+      {/* Toggle Button */}
+      <Button
+        onClick={() => setIsOpen(!isOpen)}
+        size="lg"
+        className={cn(
+          "h-14 w-14 rounded-full shadow-lg transition-all duration-300 pointer-events-auto",
+          isOpen 
+            ? "bg-amber-600 rotate-90 scale-0 opacity-0" 
+            : "bg-slate-900 hover:bg-slate-800 scale-100 opacity-100"
+        )}
+      >
+        <MessageSquare className="h-6 w-6 text-white" />
+        <span className="absolute -top-1 -right-1 flex h-3 w-3">
+          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
+          <span className="relative inline-flex rounded-full h-3 w-3 bg-amber-500"></span>
+        </span>
+      </Button>
+    </div>
   );
 }
-
-
-
-
