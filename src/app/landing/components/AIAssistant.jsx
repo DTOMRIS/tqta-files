@@ -4,7 +4,7 @@ import { useState, useRef, useEffect } from 'react';
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { useChat } from 'ai/react';
+import { useChat } from '@ai-sdk/react';
 import { MessageSquare, X, Send, Loader2, Sparkles } from 'lucide-react';
 import { toast } from 'sonner';
 
