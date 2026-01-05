@@ -1,11 +1,10 @@
 'use client';
 
-// DÜZELTİLEN SATIR BURASI:
 import { useChat } from '@ai-sdk/react';
 import { useState, useRef, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { ScrollArea } from "@/components/ui/scroll-area";
+// ScrollArea importu SILINDI
 import { Bot, Send, User, X, MessageSquare, Loader2, Sparkles } from 'lucide-react';
 import { cn } from "@/lib/utils";
 
@@ -63,9 +62,9 @@ export default function AIAssistant() {
           </Button>
         </div>
 
-        {/* Mesaj Alanı */}
+        {/* Mesaj Alanı - DUZELTME BURADA YAPILDI */}
         <div className="h-[400px] bg-stone-50 relative">
-          <ScrollArea className="h-full p-4" ref={scrollRef}>
+          <div className="h-full overflow-y-auto p-4 custom-scrollbar" ref={scrollRef}>
             <div className="space-y-4">
               {messages.map((m) => (
                 <div
@@ -103,7 +102,7 @@ export default function AIAssistant() {
                 </div>
               )}
             </div>
-          </ScrollArea>
+          </div>
         </div>
 
         {/* Input Alanı */}
