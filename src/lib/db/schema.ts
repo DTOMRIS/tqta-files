@@ -6,6 +6,7 @@ export const notes = pgTable('notes', {
   content: text('content').notNull(),
   createdAt: timestamp('created_at').defaultNow().notNull(),
 });
+
 // Students tablosu
 export const students = pgTable('students', {
   id: serial('id').primaryKey(),
@@ -34,17 +35,6 @@ export const dma_tabel = pgTable('dma_tabel', {
   notes: text('notes'),
   approvedBy: varchar('approved_by', { length: 255 }),
   approvedAt: timestamp('approved_at'),
-  createdAt: timestamp('created_at').defaultNow().notNull(),
-  updatedAt: timestamp('updated_at').defaultNow().notNull(),
-});
-
-// Notes tablosu (daha önce eksikti)
-export const notes = pgTable('notes', {
-  id: serial('id').primaryKey(),
-  userId: varchar('user_id', { length: 255 }).notNull(),
-  courseId: integer('course_id').references(() => courses.id),
-  lessonId: integer('lesson_id').references(() => lessons.id),
-  content: text('content').notNull(),
   createdAt: timestamp('created_at').defaultNow().notNull(),
   updatedAt: timestamp('updated_at').defaultNow().notNull(),
 });
