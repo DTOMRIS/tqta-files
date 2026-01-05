@@ -116,7 +116,7 @@ export default function AIAssistant() {
             />
             <Button 
               type="submit" 
-              disabled={isLoading || !input.trim()}
+              disabled={isLoading || !(input && input.trim())}
               className="bg-amber-600 hover:bg-amber-700 text-white"
             >
               <Send className="h-4 w-4" />
