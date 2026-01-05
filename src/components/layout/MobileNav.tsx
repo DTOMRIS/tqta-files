@@ -7,7 +7,7 @@ import {
     Menu, X, ChefHat,
     Home, Users, UserPlus, BookOpen, GraduationCap,
     Star, ClipboardCheck, Globe, Briefcase, FileText,
-    ShieldCheck, Search
+    ShieldCheck, Search, Bot
 } from 'lucide-react';
 import { cn } from "@/lib/utils";
 
@@ -86,6 +86,11 @@ export function MobileNav() {
             title: "İstifadəçilər",
             path: "/ayarlar/users",
             icon: Users
+        },
+        {
+            title: "AI Studio",
+            path: "/ai-studio",
+            icon: Bot
         }
     ];
 

@@ -1,0 +1,7 @@
+{
+  "name": "TQTA - Turan Gastro Turizm Akademiyası",
+  "description": "Azerbaycan'ın lider kulinariya və qonaqpərvərlik akademiyası. Professional təhsil, beynəlxalq sertifikatlar və AI dəstəkli mətbəx köməkçisi.",
+  "requestFramePermissions": [
+    "microphone"
+  ]
+}

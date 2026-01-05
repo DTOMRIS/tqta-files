@@ -2,10 +2,91 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Landing Page Premium Animations */
+@keyframes blob {
+  0% {
+    transform: translate(0px, 0px) scale(1);
+  }
+  33% {
+    transform: translate(30px, -50px) scale(1.1);
+  }
+  66% {
+    transform: translate(-20px, 20px) scale(0.9);
+  }
+  100% {
+    transform: translate(0px, 0px) scale(1);
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+@keyframes shine {
+  0% {
+    transform: translateX(-100%) translateY(-100%) rotate(45deg);
+  }
+  100% {
+    transform: translateX(100%) translateY(100%) rotate(45deg);
+  }
+}
+
+@keyframes gradient {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+.animate-blob {
+  animation: blob 7s infinite;
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+@keyframes chat-glow {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(197, 160, 34, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(197, 160, 34, 0.6);
+  }
+}
+
+.chat-glow {
+  animation: chat-glow 2s ease-in-out infinite;
+}
+
+.animate-shine {
+  animation: shine 3s infinite;
+}
+
+.animate-gradient {
+  background-size: 200% 200%;
+  animation: gradient 3s ease infinite;
+}
+
+.animation-delay-2000 {
+  animation-delay: 2s;
+}
+
+.animation-delay-4000 {
+  animation-delay: 4s;
+}
+
 @layer base {
     :root {
-        /* Premium Light Theme (Slate/Blue) */
-        --background: 210 40% 98%;
+        /* Modern Light Theme - Blueprint Design */
+        --background: 0 0% 100%;
         --foreground: 222.2 84% 4.9%;
 
         --card: 0 0% 100%;
@@ -14,11 +95,13 @@
         --popover: 0 0% 100%;
         --popover-foreground: 222.2 84% 4.9%;
 
-        --primary: 221.2 83.2% 53.3%;
-        --primary-foreground: 210 40% 98%;
+        /* Primary - Modern Blue (#0ea5e9) */
+        --primary: 199 89% 48%;
+        --primary-foreground: 0 0% 100%;
 
-        --secondary: 210 40% 96.1%;
-        --secondary-foreground: 222.2 47.4% 11.2%;
+        /* Secondary - Purple (#a855f7) */
+        --secondary: 270 91% 65%;
+        --secondary-foreground: 0 0% 100%;
 
         --muted: 210 40% 96.1%;
         --muted-foreground: 215.4 16.3% 46.9%;
@@ -27,17 +110,27 @@
         --accent-foreground: 222.2 47.4% 11.2%;
 
         --destructive: 0 84.2% 60.2%;
-        --destructive-foreground: 210 40% 98%;
+        --destructive-foreground: 0 0% 100%;
 
         --border: 214.3 31.8% 91.4%;
         --input: 214.3 31.8% 91.4%;
-        --ring: 221.2 83.2% 53.3%;
+        --ring: 199 89% 48%;
 
         --radius: 0.75rem;
+
+        /* Additional Colors */
+        --success: 142 76% 36%;
+        --warning: 38 92% 50%;
+        --error: 0 84.2% 60.2%;
+        --info: 217 91% 60%;
+
+        /* Background Variants */
+        --bg-secondary: 210 40% 98%;
+        --bg-tertiary: 210 40% 96.1%;
     }
 
     .dark {
-        /* Premium Dark Theme */
+        /* Modern Dark Theme */
         --background: 222.2 84% 4.9%;
         --foreground: 210 40% 98%;
 
@@ -47,11 +140,11 @@
         --popover: 222.2 84% 4.9%;
         --popover-foreground: 210 40% 98%;
 
-        --primary: 217.2 91.2% 59.8%;
-        --primary-foreground: 222.2 47.4% 11.2%;
+        --primary: 199 89% 48%;
+        --primary-foreground: 0 0% 100%;
 
-        --secondary: 217.2 32.6% 17.5%;
-        --secondary-foreground: 210 40% 98%;
+        --secondary: 270 91% 65%;
+        --secondary-foreground: 0 0% 100%;
 
         --muted: 217.2 32.6% 17.5%;
         --muted-foreground: 215 20.2% 65.1%;
@@ -64,7 +157,10 @@
 
         --border: 217.2 32.6% 17.5%;
         --input: 217.2 32.6% 17.5%;
-        --ring: 212.7 26.8% 83.9%;
+        --ring: 199 89% 48%;
+
+        --bg-secondary: 217.2 32.6% 17.5%;
+        --bg-tertiary: 222.2 47.4% 11.2%;
     }
 }
 
@@ -76,4 +172,40 @@
     body {
         @apply bg-background text-foreground antialiased;
     }
+}
+
+/* Blueprint Design - Utility Classes */
+@layer utilities {
+    /* Hover Lift Effect */
+    .hover-lift {
+        transition: transform 200ms cubic-bezier(0, 0, 0.2, 1), 
+                    box-shadow 200ms cubic-bezier(0, 0, 0.2, 1);
+    }
+    
+    .hover-lift:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Card Elevated */
+    .card-elevated {
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 
+                    0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        transition: box-shadow 200ms cubic-bezier(0, 0, 0.2, 1);
+    }
+    
+    .card-elevated:hover {
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 
+                    0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    }
+
+    /* Smooth Transitions */
+    .transition-smooth {
+        transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1);
+    }
+}
+
+/* Playfair Display Font Variable */
+:root {
+    --font-playfair: 'Playfair Display', Georgia, serif;
 }

@@ -1,38 +1,33 @@
-﻿import { Inter } from "next/font/google";
+﻿import { Inter, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import Sidebar from "@/components/layout/Sidebar";
 import { MobileNav } from "@/components/layout/MobileNav";
 import { Providers } from "@/components/Providers";
 import { Toaster } from "sonner";
+import ConditionalLayout from "@/components/layout/ConditionalLayout";
 
 const inter = Inter({ subsets: ["latin"] });
+const playfair = Playfair_Display({ 
+  subsets: ["latin"],
+  weight: ["600", "700"],
+  variable: "--font-playfair"
+});
 
 export const metadata = {
-  title: "Turan Gastro Akademi",
-  description: "Eğitim Yönetim Sistemi",
+  title: "TQTA - Turan Qastro Turizm Akademiyası",
+  description: "CTH Akreditasiya Sertifikatlı Kulinariya və Turizm Təhsil Portalı",
 };
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="tr">
-      <body className={inter.className}>
-        <div className="flex h-screen bg-gray-50 overflow-hidden">
-          <Providers>
-            {/* Mobil Menü (Sadece mobilde görünür) */}
-            <MobileNav />
-
-            {/* Sol Menü (Masaüstünde görünür) */}
-            <Sidebar />
-
-            {/* Ana İçerik Alanı */}
-            <main className="flex-1 md:ml-72 overflow-y-auto h-screen pt-16 md:pt-0">
-              <div className="p-4 md:p-8 max-w-7xl mx-auto">
-                {children}
-              </div>
-            </main>
-          </Providers>
+    <html lang="az">
+      <body className={`${inter.className} ${playfair.variable}`}>
+        <Providers>
+          <ConditionalLayout>
+            {children}
+          </ConditionalLayout>
           <Toaster position="top-right" richColors />
-        </div>
+        </Providers>
       </body>
     </html>
   );
