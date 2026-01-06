@@ -1,16 +1,24 @@
 import { GraduationCap, Award, Globe, BookOpen, Clock, Users, ChefHat, Coffee, Utensils } from "lucide-react";
 
-// NAV LINKS
+// --- RENK PALETİ (EKSİK OLAN KISIM) ---
+export const GOLD = "#C5A022";
+export const GOLD_BG = "rgba(197, 160, 34, 0.1)";
+export const NAVY_BLUE = "#0A192F";
+export const TEAL = "#0097A7";
+export const TEAL_BG = "rgba(0, 151, 167, 0.1)";
+
+// --- NAV LİNKLERİ ---
 export const NAV_LINKS = [
   { label: "Ana Səhifə", href: "#home" },
   { label: "Haqqımızda", href: "#about" },
   { label: "Proqramlar", href: "#courses" },
   { label: "Atölyələr", href: "#workshops" },
+  { label: "Karyera Testi", href: "#assessment" },
   { label: "İnvestisiya", href: "#investment" },
   { label: "Əlaqə", href: "#contact" },
 ];
 
-// WORKSHOPS (Hatanın Sebebi Burasıydı - Şimdi Ekliyoruz!)
+// --- WORKSHOPS ---
 export const WORKSHOPS = [
   {
     id: 1,
@@ -47,7 +55,7 @@ export const WORKSHOPS = [
   }
 ];
 
-// COURSES
+// --- COURSES ---
 export const COURSES = [
   {
     id: "pro-chef",
@@ -84,7 +92,7 @@ export const COURSES = [
   }
 ];
 
-// INSTRUCTORS
+// --- INSTRUCTORS ---
 export const INSTRUCTORS = [
   {
     id: 1,
@@ -112,7 +120,7 @@ export const INSTRUCTORS = [
   }
 ];
 
-// TESTIMONIALS
+// --- TESTIMONIALS ---
 export const TESTIMONIALS = [
   {
     id: 1,
@@ -128,4 +136,44 @@ export const TESTIMONIALS = [
     content: "Burada aldığım beynəlxalq sertifikat sayəsində qlobal otellərdə iş tapmaq çox asan oldu.",
     image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80"
   }
+];
+
+// --- KARYERA TESTİ SORULARI (EKSİK OLAN KISIM) ---
+export const ASSESSMENT_QUESTIONS = [
+  {
+    id: 1,
+    text: "Mətbəxdə ən çox nəyi sevirsiniz?",
+    options: [
+      { text: "Yeni dadlar yaratmağı", score: { creative: 2, technical: 1 } },
+      { text: "Dəqiqliyi və nizamı", score: { creative: 0, technical: 2 } },
+      { text: "Komanda ilə işləməyi", score: { leadership: 2, social: 2 } }
+    ]
+  },
+  {
+    id: 2,
+    text: "Stressli anlarda necə davranırsınız?",
+    options: [
+      { text: "Sakit qalıb həll yolu axtarıram", score: { leadership: 2 } },
+      { text: "Hərəkətə keçib işi bitirirəm", score: { practical: 2 } },
+      { text: "Digərlərinə kömək edirəm", score: { social: 2 } }
+    ]
+  },
+  {
+    id: 3,
+    text: "Gələcəkdə özünüzü harada görürsünüz?",
+    options: [
+      { text: "Öz restoranımda", score: { entrepreneur: 3 } },
+      { text: "5 ulduzlu oteldə şef kimi", score: { professional: 2 } },
+      { text: "Dünyanı gəzərkən", score: { explorer: 2 } }
+    ]
+  }
+];
+
+// --- BAŞARI SİMÜLATÖRÜ VERİLERİ (EKSİK OLAN KISIM) ---
+export const MOCK_TRAJECTORIES = [
+  { year: 1, salary: 500, role: "Stajyer" },
+  { year: 2, salary: 800, role: "Commis Chef" },
+  { year: 3, salary: 1200, role: "Demi Chef" },
+  { year: 4, salary: 1800, role: "Chef de Partie" },
+  { year: 5, salary: 2500, role: "Sous Chef" }
 ];
