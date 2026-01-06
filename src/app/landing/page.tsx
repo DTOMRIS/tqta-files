@@ -3,21 +3,18 @@
 import React, { useState } from 'react';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
-import CourseCatalog from './components/CourseCatalog';
+// import CourseCatalog from './components/CourseCatalog';
 import InvestmentBridge from './components/InvestmentBridge';
-import StudentDashboard from './components/StudentDashboard';
+// import StudentDashboard from './components/StudentDashboard';
 import AboutSection from './components/AboutSection';
-import WorkshopsSection from './components/WorkshopsSection';
-import Instructors from './components/Instructors';
-import Testimonials from './components/Testimonials';
+// import WorkshopsSection from './components/WorkshopsSection';
+// import Instructors from './components/Instructors';
+// import Testimonials from './components/Testimonials';
 import ContactSection from './components/ContactSection';
 import CareerAssessment from './components/CareerAssessment';
 import SuccessSimulator from './components/SuccessSimulator';
 import Footer from './components/Footer';
 import LeadCaptureModal from './components/LeadCaptureModal';
-// AI Bileşenlerini geçici olarak kapatıyoruz
-// import AISousChef from './components/AISousChef';
-// import Beledchiniz from './components/Beledchiniz';
 import { Section } from './types';
 
 export default function LandingPage() {
@@ -53,35 +50,39 @@ export default function LandingPage() {
           <SuccessSimulator />
         </section>
 
-        {/* Atölyeler */}
-        <section id="workshops" className="py-24 bg-slate-50">
+        {/* RİSKLİ BÖLÜMLER GEÇİCİ OLARAK KAPALI 
+            Site açıldıktan sonra bunları tek tek açacağız.
+        */}
+
+        {/* <section id="workshops" className="py-24 bg-slate-50">
           <WorkshopsSection />
         </section>
+        */}
 
-        {/* Eğitmenler */}
-        <section className="py-24 bg-white border-t border-slate-100">
+        {/* <section className="py-24 bg-white border-t border-slate-100">
           <Instructors />
         </section>
+        */}
 
-        {/* Kurs Kataloğu */}
-        <section id="courses" className="py-24 bg-slate-50">
+        {/* <section id="courses" className="py-24 bg-slate-50">
           <CourseCatalog />
         </section>
+        */}
 
-        {/* Yatırımcı Köprüsü */}
+        {/* Yatırımcı Köprüsü - Bu çalışabilir */}
         <section id="investment" className="py-24 bg-[#0A192F] text-white relative">
           <InvestmentBridge />
         </section>
 
-        {/* Öğrenci Yorumları */}
-        <section className="py-24 bg-[#0A192F] text-white border-t border-slate-700">
+        {/* <section className="py-24 bg-[#0A192F] text-white border-t border-slate-700">
           <Testimonials />
         </section>
+        */}
 
-        {/* Öğrenci Paneli Önizleme */}
-        <section id="dashboard" className="py-24 bg-white">
+        {/* <section id="dashboard" className="py-24 bg-white">
           <StudentDashboard />
         </section>
+        */}
 
         {/* İletişim */}
         <section id="contact" className="py-24 bg-slate-50 border-t border-slate-200">
@@ -98,10 +99,6 @@ export default function LandingPage() {
         onClose={() => setIsLeadModalOpen(false)}
       />
       
-      {/* AI Asistanlar - Geçici olarak devre dışı
-      <AISousChef />
-      <Beledchiniz />
-      */}
     </div>
   );
 }
