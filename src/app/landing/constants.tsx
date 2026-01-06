@@ -1,105 +1,131 @@
+import { GraduationCap, Award, Globe, BookOpen, Clock, Users, ChefHat, Coffee, Utensils } from "lucide-react";
 
-import { Course, Module, BlogPost, AgentTrajectory, AssessmentQuestion, StudentProfile } from './types';
+// NAV LINKS
+export const NAV_LINKS = [
+  { label: "Ana Səhifə", href: "#home" },
+  { label: "Haqqımızda", href: "#about" },
+  { label: "Proqramlar", href: "#courses" },
+  { label: "Atölyələr", href: "#workshops" },
+  { label: "İnvestisiya", href: "#investment" },
+  { label: "Əlaqə", href: "#contact" },
+];
 
-export const NAVY_BLUE = 'bg-[#0A192F]';
-export const TEAL = 'text-[#0097A7]';
-export const TEAL_BG = 'bg-[#0097A7]';
-export const GOLD = 'text-[#C5A022]';
-export const GOLD_BG = 'bg-[#C5A022]';
-
-export const COURSES: (Course & { category: string })[] = [
+// WORKSHOPS (Hatanın Sebebi Burasıydı - Şimdi Ekliyoruz!)
+export const WORKSHOPS = [
   {
-    id: 'c1',
-    category: 'Kulinariya',
-    title: 'Peşəkar Aşpazlıq Proqramı',
-    level: 'Professional',
-    duration: '2-7 Ay',
-    description: 'Mətbəx təhlükəsizliyi, kulinariya texnikaları, Türk və Dünya mətbəxi.',
-    certification: 'CTH Level 3',
-    image: 'https://images.unsplash.com/photo-1577214282222-03478d206217?auto=format&fit=crop&q=80&w=600',
-    price: 1200
+    id: 1,
+    title: "Milli Mətbəx Sirləri",
+    description: "Azərbaycan mətbəxinin incəliklərini peşəkar şeflərdən öyrənin.",
+    duration: "3 Gün",
+    level: "Başlanğıc",
+    instructor: "Şef Elvin",
+    price: 150,
+    image: "https://images.unsplash.com/photo-1626804475297-411dbe6314c9?auto=format&fit=crop&q=80&w=800",
+    category: "Kulinariya"
   },
   {
-    id: 'm1',
-    category: 'İdarəetmə',
-    title: 'Restoran İdarəçiliyi',
-    level: 'Liderlik',
-    duration: '1 Ay',
-    description: 'Maliyyə, marketing və personal idarəetməsi strategiyaları.',
-    certification: 'Management Diploma',
-    image: 'https://images.unsplash.com/photo-1552566626-52f8b828add9?auto=format&fit=crop&q=80&w=600',
-    price: 850
+    id: 2,
+    title: "Barista Sənəti 101",
+    description: "Qəhvə növləri, qovurma üsulları və mükəmməl espresso hazırlama.",
+    duration: "2 Gün",
+    level: "Orta",
+    instructor: "Barista Leyla",
+    price: 120,
+    image: "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&q=80&w=800",
+    category: "İçki"
+  },
+  {
+    id: 3,
+    title: "Restoran İdarəçiliyi",
+    description: "Uğurlu restoran biznesi qurmaq üçün lazım olan təməl biliklər.",
+    duration: "1 Həftə",
+    level: "İrəli",
+    instructor: "Mehmet Bəy",
+    price: 300,
+    image: "https://images.unsplash.com/photo-1552566626-52f8b828add9?auto=format&fit=crop&q=80&w=800",
+    category: "Biznes"
   }
 ];
 
-export const STUDENT_CURRICULUM: Module[] = [
+// COURSES
+export const COURSES = [
   {
-    id: 'mod1',
-    title: 'Giriş və Təhlükəsizlik',
-    lessons: [
-      { id: 'l1', title: 'Mətbəxdə İş Sağlamlığı', duration: '45 dəq', completed: true },
-      { id: 'l2', title: 'Bıçaq Texnikaları', duration: '60 dəq', completed: true },
-    ]
+    id: "pro-chef",
+    title: "Professional Aşpazlıq",
+    level: "CTH Level 2",
+    duration: "6 Ay",
+    description: "Beynəlxalq standartlarda professional aşpazlıq təhsili.",
+    image: "https://images.unsplash.com/photo-1577219491135-ce391730fb2c?auto=format&fit=crop&q=80",
+    modules: 12,
+    students: 150,
+    rating: 4.9
   },
   {
-    id: 'mod2',
-    title: 'Fransız Sousları',
-    lessons: [
-      { id: 'l3', title: 'Beşamel və Veloute', duration: '90 dəq', completed: false },
-      { id: 'l4', title: 'Hollandaise Sirləri', duration: '75 dəq', completed: false },
-    ]
+    id: "pastry",
+    title: "Şirniyyat Sənəti",
+    level: "CTH Level 2",
+    duration: "4 Ay",
+    description: "Modern və klassik şirniyyatların hazırlanması.",
+    image: "https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&q=80",
+    modules: 8,
+    students: 120,
+    rating: 4.8
+  },
+  {
+    id: "service",
+    title: "Restoran Xidməti",
+    level: "CTH Level 2",
+    duration: "3 Ay",
+    description: "Yüksək səviyyəli restoran xidməti və qonaqpərvərlik.",
+    image: "https://images.unsplash.com/photo-1600565193348-f74bd3c7ccdf?auto=format&fit=crop&q=80",
+    modules: 6,
+    students: 200,
+    rating: 4.9
   }
 ];
 
-export const BLOG_POSTS: BlogPost[] = [
+// INSTRUCTORS
+export const INSTRUCTORS = [
   {
-    id: 'b1',
-    title: '2025 Kulinariya Trendləri',
-    slug: '2025-trends',
-    excerpt: 'Molekulyar qastronomiya və yerli məhsulların harmoniyası...',
-    content: 'Tam mətn burada yerləşəcək...',
-    image: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&q=80&w=600',
-    date: '15 Yanvar 2025',
-    category: 'Trendlər'
+    id: 1,
+    name: "Cihan Bıçakçı",
+    role: "Baş Şef & Təsisçi",
+    image: "https://images.unsplash.com/photo-1583394838336-acd977736f90?auto=format&fit=crop&q=80",
+    bio: "20 illik beynəlxalq təcrübəyə malik Michelin ulduzlu restoran təcrübəsi.",
+    specialties: ["Modern Mətbəx", "Restoran İdarəçiliyi"]
   },
   {
-    id: 'b2',
-    title: 'CTH Sertifikatının Üstünlükləri',
-    slug: 'cth-benefits',
-    excerpt: 'Beynəlxalq arenada iş tapmağın ən qısa yolu...',
-    content: 'Tam mətn burada yerləşəcək...',
-    image: 'https://images.unsplash.com/photo-1523240715639-99a8088fb972?auto=format&fit=crop&q=80&w=600',
-    date: '10 Yanvar 2025',
-    category: 'Təhsil'
+    id: 2,
+    name: "Fırat Dursun",
+    role: "Master Şef",
+    image: "https://images.unsplash.com/photo-1581299894007-aaa50297cf16?auto=format&fit=crop&q=80",
+    bio: "Türk və Osmanlı mətbəxinin incəlikləri üzrə mütəxəssis.",
+    specialties: ["Türk Mətbəx", "Ət Texnologiyaları"]
+  },
+  {
+    id: 3,
+    name: "Mehmet Arif",
+    role: "Kulinariya Direktoru",
+    image: "https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&q=80",
+    bio: "Beynəlxalq qida təhlükəsizliyi və menyu planlama eksperti.",
+    specialties: ["Qida Təhlükəsizliyi", "Menyu Mühəndisliyi"]
   }
 ];
 
-export const MOCK_TRAJECTORIES: AgentTrajectory[] = [
+// TESTIMONIALS
+export const TESTIMONIALS = [
   {
-    id: 'tr-1',
-    intent: 'Karyera dəyişikliyi',
-    path: ['Hero', 'Courses', 'Chat'],
-    decisionNodes: ['Trust', 'International Certification'],
-    outcome: 'Converted',
-    reasoning: 'Beynəlxalq tanınma istifadəçini qərar verməyə sövq etdi.',
-    probability: 0.92
+    id: 1,
+    name: "Aysel Məmmədova",
+    role: "Məzun - 2024",
+    content: "TQTA mənə sadəcə yemək bişirməyi yox, bu işin fəlsəfəsini öyrətdi. İndi öz restoranımı idarə edirəm.",
+    image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80"
   },
   {
-    id: 'tr-2',
-    intent: 'Qiymət araşdırması',
-    path: ['Courses', 'Simulator'],
-    decisionNodes: ['Price Sensitivity'],
-    outcome: 'Dropped',
-    reasoning: 'Maliyyə şərtləri büdcəyə uyğun gəlmədi.',
-    probability: 0.22
+    id: 2,
+    name: "Rəşad Əliyev",
+    role: "Sous Chef @ Hilton",
+    content: "Burada aldığım beynəlxalq sertifikat sayəsində qlobal otellərdə iş tapmaq çox asan oldu.",
+    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80"
   }
-];
-
-export const ASSESSMENT_QUESTIONS: AssessmentQuestion[] = [
-  { id: 1, category: 'Community', text: 'Komanda ilə işləmək mənə enerji verir', image: 'https://images.unsplash.com/photo-1556910110-a5a63dfd393c?auto=format&fit=crop&q=80&w=600' },
-  { id: 2, category: 'Craftsmanship', text: 'Mətbəxdə hər şeyin mükəmməl və nizamlı olması vacibdir', image: 'https://images.unsplash.com/photo-1581299894007-aaa50297cf16?auto=format&fit=crop&q=80&w=600' }
-];
-
-export const MOCK_STUDENTS: StudentProfile[] = [
-  { name: "Aysel Məmmədova", course: "Professional Cookery", gpa: "4.8", specialization: "Pastry", graduationYear: "2024" }
 ];
