@@ -3,37 +3,50 @@
 import React, { useState } from 'react';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
+import AboutSection from './components/AboutSection';
 import CourseCatalog from './components/CourseCatalog';
 import ContactSection from './components/ContactSection';
 import Footer from './components/Footer';
-import { Section } from './types';
+import LeadCaptureModal from './components/LeadCaptureModal';
 
 export default function LandingPage() {
-  const [activeSection, setActiveSection] = useState<Section>(Section.HERO);
+  const [activeSection, setActiveSection] = useState('home');
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   return (
-    <div className="min-h-screen flex flex-col bg-slate-50 font-sans text-slate-900 overflow-x-hidden">
-      
-      {/* Navbar artık çalışacak */}
+    <div className="min-h-screen bg-white">
       <Navbar onNavigate={setActiveSection} activeSection={activeSection} />
 
-      <main className="flex-grow pt-10">
-        
-        <Hero onStart={() => {}} onInvest={() => {}} />
+      <main>
+        {/* Hero Section */}
+        <Hero 
+          onStart={() => setIsModalOpen(true)} 
+          onInvest={() => setIsModalOpen(true)} 
+        />
 
-        {/* Premium Kurslar */}
+        {/* About Section */}
+        <section id="about" className="py-24 bg-white">
+          <AboutSection />
+        </section>
+
+        {/* Courses Section */}
         <section id="courses" className="py-24 bg-slate-50">
           <CourseCatalog />
         </section>
 
-        <section id="contact" className="py-24 bg-slate-50 border-t border-slate-200">
+        {/* Contact Section */}
+        <section id="contact" className="py-24 bg-white">
           <ContactSection />
         </section>
-
       </main>
 
-      {/* Footer artık çalışacak */}
       <Footer />
+
+      {/* Lead Capture Modal */}
+      <LeadCaptureModal 
+        isOpen={isModalOpen} 
+        onClose={() => setIsModalOpen(false)} 
+      />
     </div>
   );
 }

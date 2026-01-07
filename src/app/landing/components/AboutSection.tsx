@@ -1,7 +1,7 @@
+'use client';
 
 import React from 'react';
 import { Target, Compass, ShieldCheck, Globe } from 'lucide-react';
-import { GOLD } from '../constants';
 
 const AboutSection: React.FC = () => {
   return (
@@ -33,7 +33,7 @@ const AboutSection: React.FC = () => {
         </div>
       </div>
 
-      <div id="workshops" className="bg-[#0A192F] rounded-[3rem] p-12 text-white relative overflow-hidden">
+      <div className="bg-[#0A192F] rounded-[3rem] p-12 text-white relative overflow-hidden">
         <div className="absolute top-0 right-0 w-64 h-64 bg-[#C5A022] opacity-5 -translate-y-1/2 translate-x-1/2 rounded-full"></div>
         <div className="relative z-10">
           <h3 className="text-3xl font-bold mb-8 text-center">Niyə TQTA Seçilməlidir?</h3>

@@ -1,7 +1,7 @@
+'use client';
 
 import React from 'react';
 import { ArrowRight, Star, ShieldCheck, Award, Globe } from 'lucide-react';
-import { GOLD_BG } from '../constants';
 
 interface HeroProps {
   onStart: () => void;
@@ -45,7 +45,7 @@ const Hero: React.FC<HeroProps> = ({ onStart, onInvest }) => {
           <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-6 mb-16">
             <button 
               onClick={onStart}
-              className={`${GOLD_BG} text-white px-10 py-5 rounded-2xl font-bold flex items-center justify-center transition-all btn-glow text-lg`}
+              className="bg-[#C5A022] hover:bg-[#b89520] text-white px-10 py-5 rounded-2xl font-bold flex items-center justify-center transition-all shadow-xl hover:shadow-2xl text-lg"
             >
               Eğitimi Başla <ArrowRight className="ml-2" size={22} />
             </button>

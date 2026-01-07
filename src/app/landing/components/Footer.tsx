@@ -1,16 +1,16 @@
+'use client';
 
 import React from 'react';
 import { ChefHat, Facebook, Instagram, Linkedin, MapPin, Phone, Mail } from 'lucide-react';
-import { NAVY_BLUE, GOLD } from '../constants';
 
 const Footer: React.FC = () => {
   return (
-    <footer className={`${NAVY_BLUE} text-white pt-20 pb-10 border-t border-slate-800`}>
+    <footer className="bg-[#0A192F] text-white pt-20 pb-10 border-t border-slate-800">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
           <div className="col-span-1 md:col-span-1">
             <div className="flex items-center space-x-2 mb-6">
-              <div className={`p-2 bg-slate-800 rounded-lg ${GOLD}`}>
+              <div className="p-2 bg-slate-800 rounded-lg text-[#C5A022]">
                 <ChefHat size={24} />
               </div>
               <span className="text-xl font-bold tracking-tight">TQTA</span>
@@ -49,15 +49,15 @@ const Footer: React.FC = () => {
             <h4 className="text-sm font-bold uppercase tracking-widest mb-6">Əlaqə</h4>
             <ul className="space-y-4 text-slate-400 text-sm">
               <li className="flex items-start">
-                <MapPin size={18} className={`mr-3 ${GOLD} shrink-0`} />
+                <MapPin size={18} className="mr-3 text-[#C5A022] shrink-0" />
                 <span>Baku, Azerbaijan <br /> 28 May Street, Landmark III</span>
               </li>
               <li className="flex items-center">
-                <Phone size={18} className={`mr-3 ${GOLD} shrink-0`} />
+                <Phone size={18} className="mr-3 text-[#C5A022] shrink-0" />
                 <span>+994 50 123 45 67</span>
               </li>
               <li className="flex items-center">
-                <Mail size={18} className={`mr-3 ${GOLD} shrink-0`} />
+                <Mail size={18} className="mr-3 text-[#C5A022] shrink-0" />
                 <span>info@tqta.az</span>
               </li>
             </ul>

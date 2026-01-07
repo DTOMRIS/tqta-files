@@ -1,7 +1,7 @@
+'use client';
 
 import React, { useState } from 'react';
 import { X, CheckCircle2, Send, ChefHat } from 'lucide-react';
-import { GOLD_BG, NAVY_BLUE } from '../constants';
 
 interface LeadCaptureModalProps {
   isOpen: boolean;
@@ -16,7 +16,6 @@ const LeadCaptureModal: React.FC<LeadCaptureModalProps> = ({ isOpen, onClose }) 
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Simulate API call
     console.log('Lead Captured:', formData);
     setSubmitted(true);
     setTimeout(() => {
@@ -83,7 +82,7 @@ const LeadCaptureModal: React.FC<LeadCaptureModalProps> = ({ isOpen, onClose }) 
               </div>
               <button 
                 type="submit"
-                className={`w-full ${GOLD_BG} text-white font-bold py-5 rounded-2xl shadow-xl hover:shadow-amber-500/30 transition-all transform hover:-translate-y-1 flex items-center justify-center space-x-2`}
+                className="w-full bg-[#C5A022] hover:bg-[#b89520] text-white font-bold py-5 rounded-2xl shadow-xl hover:shadow-amber-500/30 transition-all transform hover:-translate-y-1 flex items-center justify-center space-x-2"
               >
                 <span>Mənimlə Əlaqə Saxlayın</span>
                 <Send size={18} />
