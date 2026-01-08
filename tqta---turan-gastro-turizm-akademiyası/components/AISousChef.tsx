@@ -1,7 +1,7 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import { Mic, X, ChefHat, Volume2, Globe, Sparkles, Play } from 'lucide-react';
-import { GoogleGenAI, LiveServerMessage, Modality } from '@google/genai';
+// Server proxy will handle GenAI calls; avoid using client-side API key in production.
 import { GOLD, NAVY_BLUE, GOLD_BG } from '../constants';
 
 // --- Encoding/Decoding Helpers ---
@@ -82,72 +82,35 @@ const AISousChef: React.FC = () => {
   };
 
   const startSession = async () => {
+    // Secure flow: call server-side proxy (Vercel) which holds the GEMINI key.
     try {
       setIsDemo(false);
-      setIsActive(true);
       setIsProcessing(true);
-      
-      const apiKey = process.env.API_KEY;
-      if (!apiKey) throw new Error("API Key missing");
 
-      const ai = new GoogleGenAI({ apiKey });
-      
-      audioContextRef.current = new (window.AudioContext || (window as any).webkitAudioContext)({ sampleRate: 16000 });
-      outputAudioContextRef.current = new (window.AudioContext || (window as any).webkitAudioContext)({ sampleRate: 24000 });
+      // Vite will replace process.env.PROXY_URL at build-time via vite.config.ts
+      // For production set PROXY_URL to your Vercel app root, e.g. "https://my-app.vercel.app"
+      const proxyRoot = (process.env.PROXY_URL as unknown as string) || '';
+      if (!proxyRoot) {
+        console.warn('PROXY_URL not configured — falling back to demo.');
+        startDemo();
+        return;
+      }
 
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-
-      sessionPromiseRef.current = ai.live.connect({
-        model: 'gemini-2.5-flash-native-audio-preview-09-2025',
-        config: {
-          responseModalities: [Modality.AUDIO],
-          speechConfig: {
-            voiceConfig: { prebuiltVoiceConfig: { voiceName: 'Kore' } },
-          },
-          systemInstruction: 'Siz Turan Gastro Turizm Akademiyası (TQTA) üçün peşəkar AI Sous-Chefsiz. Tələbələrə reseptlərdə addım-addım kömək edir və kulinariya terminlərini (məsələn Fransız dilindən) Azərbaycan dilinə tərcümə edirsiniz.',
-          inputAudioTranscription: {},
-          outputAudioTranscription: {},
-        },
-        callbacks: {
-          onopen: () => {
-            setIsProcessing(false);
-            const source = audioContextRef.current!.createMediaStreamSource(stream);
-            const scriptProcessor = audioContextRef.current!.createScriptProcessor(4096, 1, 1);
-            
-            scriptProcessor.onaudioprocess = (e) => {
-              const inputData = e.inputBuffer.getChannelData(0);
-              const pcmBlob = createBlob(inputData);
-              sessionPromiseRef.current?.then((session) => {
-                session.sendRealtimeInput({ media: pcmBlob });
-              });
-            };
-
-            source.connect(scriptProcessor);
-            scriptProcessor.connect(audioContextRef.current!.destination);
-          },
-          onmessage: async (message: LiveServerMessage) => {
-            const base64Audio = message.serverContent?.modelTurn?.parts?.[0]?.inlineData?.data;
-            if (base64Audio) {
-              const ctx = outputAudioContextRef.current!;
-              nextStartTimeRef.current = Math.max(nextStartTimeRef.current, ctx.currentTime);
-              const buffer = await decodeAudioData(decode(base64Audio), ctx, 24000, 1);
-              const source = ctx.createBufferSource();
-              source.buffer = buffer;
-              source.connect(ctx.destination);
-              source.start(nextStartTimeRef.current);
-              nextStartTimeRef.current += buffer.duration;
-              sourcesRef.current.add(source);
-            }
-            if (message.serverContent?.inputTranscription) setTranscription(message.serverContent.inputTranscription.text);
-            if (message.serverContent?.outputTranscription) setModelResponse(message.serverContent.outputTranscription.text);
-          },
-          onerror: (e) => console.error('Gemini Error:', e),
-          onclose: () => stopSession(),
-        },
+      const input = 'Mise en place nə deməkdir?';
+      const res = await fetch(`${proxyRoot}/api/gemini`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ input }),
       });
+      const data = await res.json();
+
+      setTranscription(input);
+      setModelResponse(data?.output || 'Xəta: cavab alınamadı');
+      setIsActive(true);
+      setIsProcessing(false);
     } catch (err) {
       console.error(err);
-      setIsActive(false);
+      startDemo();
     }
   };
 

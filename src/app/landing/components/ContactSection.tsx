@@ -1,81 +1,63 @@
+'use client';
 
 import React from 'react';
-import { MapPin, Phone, Mail, Send } from 'lucide-react';
-import { GOLD_BG, NAVY_BLUE } from '../constants';
+import { Target, Compass, ShieldCheck, Globe } from 'lucide-react';
 
-const ContactSection: React.FC = () => {
+const AboutSection: React.FC = () => {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div className="text-center mb-16">
-        <h2 className="text-4xl font-bold text-[#0A192F] mb-4">Bizimlə Əlaqə</h2>
+        <h2 className="text-4xl font-bold text-[#0A192F] mb-4">TQTA | Peşəkar Karyeranızın Başlanğıcı</h2>
         <div className="w-24 h-1 bg-[#C5A022] mx-auto mb-6"></div>
-        <p className="text-slate-500 max-w-xl mx-auto">Bizimlə əlaqə saxlayın və ya akademiyamızı ziyarət edin.</p>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <div className={`${NAVY_BLUE} p-10 rounded-3xl text-white lg:col-span-1`}>
-          <h3 className="text-2xl font-bold mb-8">Əlaqə Məlumatları</h3>
-          <div className="space-y-8">
-            <div className="flex items-start">
-              <MapPin className="text-[#C5A022] mr-4 shrink-0" size={24} />
-              <div>
-                <p className="font-bold">Ünvan</p>
-                <p className="text-slate-400 text-sm">Baku, Azerbaijan, 28 May Street, Landmark III</p>
-              </div>
-            </div>
-            <div className="flex items-start">
-              <Phone className="text-[#C5A022] mr-4 shrink-0" size={24} />
-              <div>
-                <p className="font-bold">Telefon</p>
-                <p className="text-slate-400 text-sm">+994 50 123 45 67</p>
-              </div>
-            </div>
-            <div className="flex items-start">
-              <Mail className="text-[#C5A022] mr-4 shrink-0" size={24} />
-              <div>
-                <p className="font-bold">E-poçt</p>
-                <p className="text-slate-400 text-sm">info@tqta.az</p>
-              </div>
-            </div>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start mb-20">
+        <div className="bg-white p-10 rounded-3xl shadow-xl border-l-8 border-[#0A192F]">
+          <div className="flex items-center mb-6">
+            <Target className="text-[#C5A022] mr-4" size={32} />
+            <h3 className="text-2xl font-bold text-[#0A192F]">Missiyamız</h3>
           </div>
-
-          <div className="mt-12 h-48 bg-slate-800 rounded-2xl overflow-hidden grayscale opacity-50 relative">
-            <div className="absolute inset-0 flex items-center justify-center">
-               <MapPin className="text-white opacity-20" size={48} />
-               <span className="text-[10px] uppercase tracking-widest font-bold">Xəritə Tezliklə</span>
-            </div>
-          </div>
+          <p className="text-slate-600 leading-relaxed text-lg">
+            Azərbaycan kulinariya mədəniyyətini beynəlxalq səviyyədə təbliğ etmək, işsiz gənclərin peşə bacarıqlarını inkişaf etdirmək və onları sənayenin tələblərinə cavab verən ixtisaslı kadrlar kimi əmək bazarına hazırlamaqdır.
+          </p>
         </div>
 
-        <div className="bg-white p-10 rounded-3xl shadow-xl border border-slate-100 lg:col-span-2">
-          <h3 className="text-2xl font-bold text-[#0A192F] mb-8">Sualınız var?</h3>
-          <form className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <label className="block text-xs font-bold uppercase tracking-widest text-slate-400 mb-2">Adınız</label>
-              <input type="text" className="w-full bg-slate-50 border-none rounded-xl py-4 px-4 focus:ring-2 focus:ring-[#C5A022] outline-none transition-all" placeholder="Adınız" />
+        <div className="bg-white p-10 rounded-3xl shadow-xl border-l-8 border-[#0097A7]">
+          <div className="flex items-center mb-6">
+            <Compass className="text-[#C5A022] mr-4" size={32} />
+            <h3 className="text-2xl font-bold text-[#0A192F]">Vizyonumuz</h3>
+          </div>
+          <p className="text-slate-600 leading-relaxed text-lg">
+            Yerli kulinariya irsini qoruyub saxlamaqla yanaşı, beynəlxalq standartlara cavab verən peşəkar təhsili ilə tanınan, Azərbaycanda qastro-turizm sahəsində lider təhsil müəssisəsi olmaqdır.
+          </p>
+        </div>
+      </div>
+
+      <div className="bg-[#0A192F] rounded-[3rem] p-12 text-white relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-64 h-64 bg-[#C5A022] opacity-5 -translate-y-1/2 translate-x-1/2 rounded-full"></div>
+        <div className="relative z-10">
+          <h3 className="text-3xl font-bold mb-8 text-center">Niyə TQTA Seçilməlidir?</h3>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="text-center">
+              <ShieldCheck className="mx-auto mb-4 text-[#C5A022]" size={40} />
+              <h4 className="font-bold mb-2">CTH & DMA Sertifikatlı</h4>
+              <p className="text-sm text-slate-400">Beynəlxalq standartlar və Dövlət Məşğulluq Agentliyi tərəfindən tanınan diplomlar.</p>
             </div>
-            <div>
-              <label className="block text-xs font-bold uppercase tracking-widest text-slate-400 mb-2">Soyadınız</label>
-              <input type="text" className="w-full bg-slate-50 border-none rounded-xl py-4 px-4 focus:ring-2 focus:ring-[#C5A022] outline-none transition-all" placeholder="Soyadınız" />
+            <div className="text-center">
+              <Globe className="mx-auto mb-4 text-[#0097A7]" size={40} />
+              <h4 className="font-bold mb-2">Qlobal Karyera</h4>
+              <p className="text-sm text-slate-400">Türkiyənin aparıcı universitetləri və otelləri ilə sıx əməkdaşlıq.</p>
             </div>
-            <div className="md:col-span-2">
-              <label className="block text-xs font-bold uppercase tracking-widest text-slate-400 mb-2">E-poçt</label>
-              <input type="email" className="w-full bg-slate-50 border-none rounded-xl py-4 px-4 focus:ring-2 focus:ring-[#C5A022] outline-none transition-all" placeholder="email@example.com" />
+            <div className="text-center">
+              <div className="mx-auto mb-4 w-10 h-10 border-2 border-[#C5A022] flex items-center justify-center font-bold rounded-lg text-[#C5A022]">90%</div>
+              <h4 className="font-bold mb-2">İşlə Təminat</h4>
+              <p className="text-sm text-slate-400">Məzunlarımızın böyük hissəsi dərhal professional karyeraya başlayır.</p>
             </div>
-            <div className="md:col-span-2">
-              <label className="block text-xs font-bold uppercase tracking-widest text-slate-400 mb-2">Mesajınız</label>
-              <textarea rows={5} className="w-full bg-slate-50 border-none rounded-xl py-4 px-4 focus:ring-2 focus:ring-[#C5A022] outline-none transition-all" placeholder="Necə kömək edə bilərik?"></textarea>
-            </div>
-            <div className="md:col-span-2">
-              <button type="submit" className={`w-full ${GOLD_BG} text-white font-bold py-4 rounded-xl shadow-lg hover:shadow-2xl transition-all flex items-center justify-center transform hover:-translate-y-0.5 active:translate-y-0`}>
-                Göndər <Send size={18} className="ml-2" />
-              </button>
-            </div>
-          </form>
+          </div>
         </div>
       </div>
     </div>
   );
 };
 
-export default ContactSection;
+export default AboutSection;
