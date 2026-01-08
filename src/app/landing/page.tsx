@@ -98,19 +98,4 @@ export default function LandingPage() {
     </div>
   );
 }
-                </button>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {/* Footer */}
-      <footer className="bg-[#0A192F] text-white py-12">
-        <div className="max-w-7xl mx-auto px-6 text-center">
-          <p className="text-sm">© 2024 TQTA. Bütün hüquqlar qorunur.</p>
-        </div>
-      </footer>
-    </div>
-  );
-}
+  }
