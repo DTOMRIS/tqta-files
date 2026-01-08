@@ -3,8 +3,7 @@ import { db } from '@/lib/db';
 import { badges, studentBadges, students } from '@/lib/schema';
 import { eq, and } from 'drizzle-orm';
 import { handleApiError, successResponse, createError } from '@/lib/api-error-handler';
-import { getServerSession } from 'next-auth/next';
-import { authOptions } from '@/app/api/auth/[...nextauth]/route';
+import { auth as getServerSession } from '@/app/api/auth/[...nextauth]/route';
 
 /**
  * GET /api/gamification/badges
