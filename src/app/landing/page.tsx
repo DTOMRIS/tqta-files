@@ -1,53 +1,103 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
+import Navbar from '@/components/landing/Navbar';
+import Hero from '@/components/landing/Hero';
+import CourseCatalog from '@/components/landing/CourseCatalog';
+import InvestmentBridge from '@/components/landing/InvestmentBridge';
+import StudentDashboard from '@/components/landing/StudentDashboard';
+import AboutSection from '@/components/landing/AboutSection';
+import WorkshopsSection from '@/components/landing/WorkshopsSection';
+import Instructors from '@/components/landing/Instructors';
+import Testimonials from '@/components/landing/Testimonials';
+import ContactSection from '@/components/landing/ContactSection';
+import CareerAssessment from '@/components/landing/CareerAssessment';
+import SuccessSimulator from '@/components/landing/SuccessSimulator';
+import Footer from '@/components/landing/Footer';
+import AISousChef from '@/components/landing/AISousChef';
+import LeadCaptureModal from '@/components/landing/LeadCaptureModal';
+
+enum Section {
+  HERO = 'hero',
+  ABOUT = 'about',
+  ASSESSMENT = 'assessment',
+  SIMULATOR = 'simulator',
+  WORKSHOPS = 'workshops',
+  COURSES = 'courses',
+  INVESTMENT = 'investment',
+  CONTACT = 'contact',
+}
 
 export default function LandingPage() {
+  const [activeSection, setActiveSection] = useState<Section>(Section.HERO);
+  const [isLeadModalOpen, setIsLeadModalOpen] = useState(false);
+
+  const triggerLeadModal = () => setIsLeadModalOpen(true);
+
   return (
-    <div className="min-h-screen bg-white">
-      {/* Navbar */}
-      <nav className="bg-[#0A192F] text-white sticky top-0 z-50 py-6">
-        <div className="max-w-7xl mx-auto px-6 flex justify-between items-center">
-          <div className="text-2xl font-bold">TQTA</div>
-          <button className="bg-[#C5A022] px-6 py-2 rounded-lg font-bold">
-            Qeydiyyat
-          </button>
-        </div>
-      </nav>
+    <div className="min-h-screen flex flex-col scroll-smooth">
+      <Navbar onNavigate={setActiveSection} activeSection={activeSection} />
+      
+      <main className="flex-grow">
+        <Hero 
+          onStart={triggerLeadModal} 
+          onInvest={triggerLeadModal} 
+        />
+        
+        <section id="about" className="py-24 bg-slate-50">
+          <AboutSection />
+        </section>
 
-      {/* Hero */}
-      <div className="relative h-screen flex items-center bg-[#0A192F] text-white">
-        <div className="max-w-7xl mx-auto px-6">
-          <h1 className="text-7xl font-bold mb-6">
-            Azərbaycan'dan <br />
-            <span className="text-[#C5A022]">Dünyaya Açılan</span> <br />
-            Ləzzət Qapısı
-          </h1>
-          <p className="text-xl mb-10 max-w-2xl">
-            TQTA ilə qonaqpərvərlik sənətinin zirvəsinə yüksəlin.
-          </p>
-          <button className="bg-[#C5A022] px-10 py-5 rounded-2xl font-bold text-lg">
-            Eğitimi Başla →
-          </button>
-        </div>
-      </div>
+        <section id="assessment" className="py-24 bg-white">
+          <CareerAssessment />
+        </section>
 
-      {/* Courses */}
-      <div className="py-24 bg-slate-50">
-        <div className="max-w-7xl mx-auto px-6">
-          <h2 className="text-4xl font-bold text-center mb-16">Təhsil Proqramları</h2>
-          
-          <div className="grid md:grid-cols-3 gap-8">
-            {[
-              { title: 'Professional Aşpazlıq', duration: '6 Ay' },
-              { title: 'Şirniyyat Sənəti', duration: '4 Ay' },
-              { title: 'Restoran Xidməti', duration: '3 Ay' }
-            ].map((course, i) => (
-              <div key={i} className="bg-white p-8 rounded-2xl shadow-lg">
-                <h3 className="text-2xl font-bold mb-4">{course.title}</h3>
-                <p className="text-slate-500 mb-6">{course.duration}</p>
-                <button className="w-full bg-[#0A192F] text-white py-3 rounded-lg font-bold">
-                  Qeydiyyat
+        <section id="simulator" className="py-24 bg-slate-50 border-y border-slate-100">
+          <SuccessSimulator />
+        </section>
+
+        <section id="workshops" className="py-24 bg-white">
+          <WorkshopsSection />
+        </section>
+
+        <section className="py-24 bg-slate-50">
+          <Instructors />
+        </section>
+
+        <section id="courses" className="py-24 bg-white">
+          <CourseCatalog />
+        </section>
+
+        <section id="investment" className="py-24 bg-slate-50">
+          <InvestmentBridge />
+        </section>
+
+        <section className="py-24 bg-[#0A192F] text-white">
+          <Testimonials />
+        </section>
+
+        <section id="dashboard" className="py-24 bg-white border-t border-slate-100">
+          <StudentDashboard />
+        </section>
+
+        <section id="contact" className="py-24 bg-slate-50">
+          <ContactSection />
+        </section>
+      </main>
+
+      <Footer />
+      
+      {/* Sales Lead Capture */}
+      <LeadCaptureModal 
+        isOpen={isLeadModalOpen} 
+        onClose={() => setIsLeadModalOpen(false)} 
+      />
+
+      {/* AI Agents */}
+      <AISousChef />
+    </div>
+  );
+}
                 </button>
               </div>
             ))}
