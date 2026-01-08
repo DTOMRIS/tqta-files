@@ -3,7 +3,7 @@ import { db } from '@/lib/db';
 import { leaderboard, xpPoints, students } from '@/lib/schema';
 import { eq, desc, and, sql } from 'drizzle-orm';
 import { handleApiError, successResponse, createError } from '@/lib/api-error-handler';
-import { getServerSession } from 'next-auth';
+import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import { LEADERBOARD_TYPES } from '@/constants/gamification';
 
