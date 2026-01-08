@@ -32,6 +32,33 @@ export const COURSES: (Course & { category: string })[] = [
   }
 ];
 
+export const WORKSHOPS = [
+  {
+    id: 'w1',
+    month: 'Fevral',
+    title: 'Peçenye və Pasta Ustası',
+    description: 'Peçenye, xəmirlər və dekorasiya texnikaları — praktik workshop.',
+    age: '16+',
+    price: '29 AZN'
+  },
+  {
+    id: 'w2',
+    month: 'Mart',
+    title: 'Soslar və Sous Texnikaları',
+    description: 'Klassik və modern souslar — emulsiya və reduksiya üsulları.',
+    age: '18+',
+    price: '35 AZN'
+  },
+  {
+    id: 'w3',
+    month: 'May',
+    title: 'Qida Təqdimatı və Plating',
+    description: 'Restoran səviyyəsində plating və kompozisiya dərsləri.',
+    age: '16+',
+    price: '40 AZN'
+  }
+];
+
 export const STUDENT_CURRICULUM: Module[] = [
   {
     id: 'mod1',
