@@ -1,8 +1,8 @@
 
 import React, { useState } from 'react';
 import { Sparkles, Check, X, RefreshCw, Award, TrendingUp, Users, Heart, Star } from 'lucide-react';
-import { ASSESSMENT_QUESTIONS, NAVY_BLUE, GOLD, GOLD_BG } from '../constants';
-import { AssessmentScores } from '../types';
+import { ASSESSMENT_QUESTIONS, NAVY_BLUE, GOLD, GOLD_BG } from './landing-constants';
+import { AssessmentScores } from './landing-types';
 
 const CareerAssessment: React.FC = () => {
   const [started, setStarted] = useState(false);

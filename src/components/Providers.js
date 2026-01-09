@@ -1,14 +1,6 @@
 'use client';
 
-import { SessionProvider } from "next-auth/react";
-
 export function Providers({ children }) {
-    return (
-        <SessionProvider 
-            basePath="/api/auth"
-            refetchInterval={0}
-        >
-            {children}
-        </SessionProvider>
-    );
+  // Şimdilik sadece children'ı döndür (landing için yeterli)
+  return children;
 }

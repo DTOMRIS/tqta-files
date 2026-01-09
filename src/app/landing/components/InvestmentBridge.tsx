@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import { Briefcase, Landmark, Handshake, Mail, User, ShieldCheck, Phone } from 'lucide-react';
-import { NAVY_BLUE, GOLD, GOLD_BG } from '../constants';
+import { NAVY_BLUE, GOLD, GOLD_BG } from './landing-constants';
 
 const InvestmentBridge: React.FC = () => {
   const [activeForm, setActiveForm] = useState<'hire' | 'partner'>('hire');

@@ -2,7 +2,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { MessageCircle, X, Send, Sparkles, User, ChefHat, BrainCircuit } from 'lucide-react';
 import { GoogleGenAI } from '@google/genai';
-import { COURSES, WORKSHOPS, GOLD_BG, NAVY_BLUE } from '../constants';
+import { COURSES, WORKSHOPS, GOLD_BG, NAVY_BLUE } from './landing-constants';
 
 const Beledchiniz: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);

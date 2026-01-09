@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Calendar, Tag, UserPlus, Star } from 'lucide-react';
-import { WORKSHOPS, GOLD, NAVY_BLUE, TEAL_BG } from '../constants';
+import { WORKSHOPS, GOLD, NAVY_BLUE, TEAL_BG } from './landing-constants';
 
 const WorkshopsSection: React.FC = () => {
   return (

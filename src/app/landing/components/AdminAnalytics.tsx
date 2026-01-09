@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { BarChart3, TrendingUp, Users, ArrowUpRight, ArrowDownRight, Target, MousePointer2, CreditCard } from 'lucide-react';
-import { NAVY_BLUE, GOLD } from '../constants';
+import { NAVY_BLUE, GOLD } from './landing-constants';
 
 const AdminAnalytics: React.FC = () => {
   const stats = [

@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { LayoutDashboard, Calendar, Utensils, Award, BookOpen, Clock } from 'lucide-react';
-import { NAVY_BLUE, GOLD } from '../constants';
+import { NAVY_BLUE, GOLD } from './landing-constants';
 
 const StudentDashboard: React.FC = () => {
   return (

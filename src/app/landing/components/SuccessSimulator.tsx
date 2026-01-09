@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import { Network, TrendingUp, HelpCircle, Zap, ArrowRight, BrainCircuit, BarChart3, Settings2 } from 'lucide-react';
-import { MOCK_TRAJECTORIES, GOLD, NAVY_BLUE, GOLD_BG } from '../constants';
+import { MOCK_TRAJECTORIES, GOLD, NAVY_BLUE, GOLD_BG } from './landing-constants';
 import { GoogleGenAI } from '@google/genai';
 
 const SuccessSimulator: React.FC = () => {

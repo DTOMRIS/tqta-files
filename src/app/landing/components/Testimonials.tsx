@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Quote, Star } from 'lucide-react';
-import { GOLD } from '../constants';
+import { GOLD } from './landing-constants';
 
 const TESTIMONIALS = [
   {
