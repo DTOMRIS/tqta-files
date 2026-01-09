@@ -4,13 +4,11 @@ import React, { useState, useEffect } from 'react';
 import { Menu, X } from 'lucide-react';
 
 const NAV_LINKS = [
-  { label: 'Ana Səhifə', href: '#home' },
-  { label: 'Haqqımızda', href: '#about' },
-  { label: 'Proqramlar', href: '#courses' },
-  { label: 'Workshoplar', href: '#workshops' },
-  { label: 'Ankət', href: '#assessment' },
-  { label: 'Əlaqə', href: '#contact' },
-  { label: 'Tələbə Portalı', href: '/portal/student' },
+  { label: 'Ana Səhifə', id: 'home' },
+  { label: 'Haqqımızda', id: 'about' },
+  { label: 'Proqramlar', id: 'courses' },
+  { label: 'Workshoplar', id: 'workshops' },
+  { label: 'Əlaqə', id: 'contact' },
 ];
 
 export default function Navbar({ onNavigate, activeSection }: any) {
@@ -23,13 +21,13 @@ export default function Navbar({ onNavigate, activeSection }: any) {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const handleNav = (href: string, e?: React.MouseEvent) => {
+  const handleNav = (id: string, e?: React.MouseEvent) => {
     if (e) e.preventDefault();
+    const href = `#${id}`;
     if (!href.startsWith('#')) {
       window.location.href = href;
       return;
     }
-    const id = href.replace('#', '');
     onNavigate?.(id);
 
     // əvvəlcə birbaşa href ilə axtarırıq (#workshops), tapmasa id ilə (#workshops yenə eyni)
@@ -47,7 +45,7 @@ export default function Navbar({ onNavigate, activeSection }: any) {
       <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
         {/* Logo (square mark + word) */}
         <button
-          onClick={() => handleNav('#home')}
+          onClick={() => handleNav('home')}
           className="flex items-center gap-3 text-left"
           aria-label="TQTA Ana Səhifə"
         >
@@ -72,8 +70,8 @@ export default function Navbar({ onNavigate, activeSection }: any) {
         <div className="hidden lg:flex items-center gap-8">
           {NAV_LINKS.map((link) => (
             <button
-              key={link.href}
-              onClick={(e) => handleNav(link.href, e)}
+              key={link.id}
+              onClick={(e) => handleNav(link.id, e)}
               className={`text-sm font-semibold transition-colors hover:text-[#C5A022] ${
                 isScrolled ? 'text-slate-700' : 'text-white'
               }`}
@@ -87,7 +85,7 @@ export default function Navbar({ onNavigate, activeSection }: any) {
         <div className="hidden lg:flex items-center">
           <button
             onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
-            className="bg-[#C5A022] text-white px-6 py-2.5 rounded-full text-sm font-bold hover:bg-[#b89520] hover:shadow-lg transition-all"
+            className="bg-[#C5A022] text-white px-6 py-2.5 rounded-lg text-xs font-bold transition-all hover:bg-[#B38E1A] shadow-lg"
           >
             Qeydiyyatdan Keç
           </button>
@@ -111,8 +109,8 @@ export default function Navbar({ onNavigate, activeSection }: any) {
           <div className="px-6 py-6 space-y-2">
             {NAV_LINKS.map((link) => (
               <button
-                key={link.href}
-                onClick={(e) => handleNav(link.href, e)}
+                key={link.id}
+                onClick={(e) => handleNav(link.id, e)}
                 className="w-full text-left block text-lg font-semibold text-slate-800 py-3 border-b border-slate-100 hover:text-[#C5A022] transition-colors"
               >
                 {link.label}
@@ -121,7 +119,7 @@ export default function Navbar({ onNavigate, activeSection }: any) {
             <div className="pt-4">
               <button
                 onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
-                className="w-full bg-[#C5A022] text-white py-3 rounded-full font-bold hover:bg-[#b89520] transition-all"
+                className="w-full bg-[#C5A022] text-white py-3 rounded-lg font-bold text-xs hover:bg-[#B38E1A] shadow-lg transition-all"
               >
                 Qeydiyyatdan Keç
               </button>

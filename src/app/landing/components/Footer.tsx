@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { ChefHat, Facebook, Instagram, Linkedin, MapPin, Phone, Mail } from 'lucide-react';
 import { NAVY_BLUE, GOLD } from './landing-constants';
@@ -46,26 +45,19 @@ const Footer: React.FC = () => {
           </div>
 
           <div>
-            <h4 className="text-sm font-bold uppercase tracking-widest mb-6">Əlaqə</h4>
-            <ul className="space-y-4 text-slate-400 text-sm">
-              <li className="flex items-start">
-                <MapPin size={18} className={`mr-3 ${GOLD} shrink-0`} />
-                <span>Baku, Azerbaijan <br /> 28 May Street, Landmark III</span>
-              </li>
-              <li className="flex items-center">
-                <Phone size={18} className={`mr-3 ${GOLD} shrink-0`} />
-                <span>+994 50 123 45 67</span>
-              </li>
-              <li className="flex items-center">
-                <Mail size={18} className={`mr-3 ${GOLD} shrink-0`} />
-                <span>info@tqta.az</span>
-              </li>
-            </ul>
+            <h4 className="text-white font-bold mb-4">Əlaqə</h4>
+            <div className="space-y-2 text-slate-300 text-sm">
+              <div>📍 Sumqayıt ş., Səməd Vurğun küçəsi 84</div>
+              <div>📲 +994 51 769 61 81</div>
+              <div>📧 info@tqta.az</div>
+            </div>
           </div>
         </div>
 
         <div className="pt-8 border-t border-slate-800 flex flex-col md:flex-row justify-between items-center text-slate-500 text-[10px] uppercase tracking-widest">
-          <p>© 2024 Turan Gastro Turizm Akademiyası. Bütün hüquqlar qorunur.</p>
+          <div className="text-center text-slate-400 text-sm">
+            © 2026 TQTA — Turan Qastro Turizm MMC. Bütün hüquqlar qorunur.
+          </div>
           <div className="flex space-x-6 mt-4 md:mt-0">
             <a href="#" className="hover:text-white">Məxfilik Siyasəti</a>
             <a href="#" className="hover:text-white">İstifadə Şərtləri</a>

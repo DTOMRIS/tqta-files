@@ -6,7 +6,6 @@ import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
 import CourseCatalog from "./components/CourseCatalog";
 import InvestmentBridge from "./components/InvestmentBridge";
-import StudentDashboard from "./components/StudentDashboard";
 import AboutSection from "./components/AboutSection";
 import WorkshopsSection from "./components/WorkshopsSection";
 import Instructors from "./components/Instructors";
@@ -77,11 +76,6 @@ export default function LandingPage() {
         <section className="py-24 bg-[#0A192F] text-white">
           <Testimonials />
         </section>
-
-        {/* DASHBOARD (navbar linki yoxdursa belə qala bilər) */}
-        {/* <section id="dashboard" className="py-24 bg-white border-t border-slate-100">
-          <StudentDashboard />
-        </section> */}
 
         {/* CONTACT */}
         <section id="contact" className="py-24 bg-slate-50">

@@ -33,31 +33,26 @@ export default function Hero({ onStart, onInvest }: any) {
 
           {/* Subheading */}
           <p className="text-xl md:text-2xl text-slate-300 mb-12 max-w-2xl leading-relaxed">
-            CTH tərəfindən akkreditə olunmuş proqramlarla beynəlxalq karyeranızı qurun.
-            Qonaqpərvərlik sənətində peşəkar səviyyəyə yüksəlin.
+            CTH tərəfindən akkreditə olunmuş kulinariya, turizm və qonaqpərvərlik proqramları ilə beynəlxalq karyeranızı qurun.
           </p>
 
           {/* CTA Buttons */}
-          {/* CTA Buttons */}
-<div className="flex flex-col sm:flex-row gap-4 mb-16">
-  <button
-    onClick={onStart}
-    className="group px-10 py-5 bg-gradient-to-r from-[#C5A022] via-[#D4AF37] to-[#C5A022] bg-size-200 bg-pos-0 hover:bg-pos-100 text-white font-bold rounded-2xl shadow-2xl hover:shadow-amber-500/50 transition-all duration-500 transform hover:-translate-y-1 flex items-center justify-center gap-3"
-  >
-    <span className="text-lg">Təhsilə başla</span>
-    <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-  </button>
+          <div className="flex flex-col sm:flex-row gap-4 mb-16">
+            <button
+              onClick={onStart}
+              className="group px-10 py-5 bg-gradient-to-r from-[#C5A022] via-[#D4AF37] to-[#C5A022] bg-size-200 bg-pos-0 hover:bg-pos-100 text-white font-bold rounded-2xl shadow-2xl hover:shadow-amber-500/50 transition-all duration-500 transform hover:-translate-y-1 flex items-center justify-center gap-3"
+            >
+              <span className="text-lg">Təhsilə başla</span>
+              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+            </button>
 
-  <button
-    onClick={() => {
-      document.getElementById('courses')?.scrollIntoView({ behavior: 'smooth' });
-    }}
-    className="px-10 py-5 bg-white/10 backdrop-blur-md border-2 border-white/30 text-white font-bold rounded-2xl hover:bg-white/20 hover:border-white/50 transition-all flex items-center justify-center gap-3"
-  >
-    <span className="text-lg">Proqramlara bax</span>
-  </button>
-</div>
-
+            <button
+              onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
+              className="bg-[#C5A022] text-white px-6 py-2.5 rounded-lg text-xs font-bold transition-all hover:bg-[#B38E1A] shadow-lg flex items-center justify-center"
+            >
+              Qeydiyyatdan Keç
+            </button>
+          </div>
 
           {/* Trust Bar */}
           <div className="flex flex-col gap-6">
