@@ -5,7 +5,7 @@ export const KURSLAR: KursTam[] = [
     // --- CTH KURSLARI ---
     {
         id: 'cth-foh-l2',
-        ad: 'Level 2 Certificate in Professional Restaurant Front of House Service CTH',
+        ad: 'Professional Restoran Ön Xidmət L2 CTH',
         kategoriId: 'ictimai-iase',
         tip: 'CTH',
         aktif: true,
@@ -19,7 +19,7 @@ export const KURSLAR: KursTam[] = [
     },
     {
         id: 'cth-barista-l2',
-        ad: 'Level 2 Award in Barista Skills cth',
+        ad: 'Barista Bacarıqları L2 CTH',
         kategoriId: 'ictimai-iase',
         tip: 'CTH',
         aktif: true,
@@ -33,7 +33,7 @@ export const KURSLAR: KursTam[] = [
     },
     {
         id: 'cth-cookery-l2',
-        ad: 'Aşpaz Level 2 CTH',
+        ad: 'Professional Aşpazlıq L2 CTH',
         kategoriId: 'ictimai-iase',
         tip: 'CTH',
         aktif: true,
@@ -44,6 +44,20 @@ export const KURSLAR: KursTam[] = [
             dersProgrami: { nezeriyye: 20, praktika: 60 }
         },
         cth: { level: 'Level 2', tqt: 80, glh: 80, feeGBP: 135 }
+    },
+    {
+        id: 'cth-english-l1',
+        ad: 'Turizm və Qonaqpərvərlik İngilis Dili L1 CTH',
+        kategoriId: 'ictimai-iase',
+        tip: 'CTH',
+        aktif: true,
+        qiymet: { satisAZN: 800, maliyetGBP: 100, dmaOdenissiz: false },
+        muddet: {
+            toplamGun: 20,
+            toplamSaat: 60,
+            dersProgrami: { nezeriyye: 30, praktika: 30 }
+        },
+        cth: { level: 'Level 1', tqt: 60, glh: 60, feeGBP: 100 }
     },
 
     // --- DMA KURSLARI ---
@@ -342,6 +356,19 @@ export const KURSLAR: KursTam[] = [
             toplamGun: 5,
             toplamSaat: 24,
             dersProgrami: { nezeriyye: 12, praktika: 12 }
+        }
+    },
+    {
+        id: 'std-qennadci',
+        ad: 'Qənnadçı-Şirniyyatçı Hazırlığı',
+        kategoriId: 'ictimai-iase',
+        tip: 'STANDART',
+        aktif: true,
+        qiymet: { satisAZN: 1200, dmaOdenissiz: false },
+        muddet: {
+            toplamGun: 30,
+            toplamSaat: 120,
+            dersProgrami: { nezeriyye: 30, praktika: 90 }
         }
     }
 ];

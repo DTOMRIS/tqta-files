@@ -1,9 +1,9 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Navbar } from '@/components/landing/Navbar';
-import { Footer } from '@/components/landing/Footer';
-import { LeadCaptureModal } from '@/components/landing/LeadCaptureModal';
+import Navbar from '@/app/landing/components/Navbar';
+import Footer from '@/app/landing/components/Footer';
+import LeadCaptureModal from '@/app/landing/components/LeadCaptureModal';
 import { CheckCircle, Phone, MapPin, Clock, Users, Award, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 

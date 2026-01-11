@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { MapPin, Phone, Mail, Send } from 'lucide-react';
 import { GOLD_BG, NAVY_BLUE } from './landing-constants';
@@ -15,26 +14,32 @@ const ContactSection: React.FC = () => {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div className={`${NAVY_BLUE} p-10 rounded-3xl text-white lg:col-span-1`}>
           <h3 className="text-2xl font-bold mb-8">Əlaqə Məlumatları</h3>
-          <div className="space-y-8">
-            <div className="flex items-start">
-              <MapPin className="text-[#C5A022] mr-4 shrink-0" size={24} />
+          <div className="space-y-4">
+            <div className="flex items-start gap-3">
+              <MapPin className="w-5 h-5 text-[#C5A022] flex-shrink-0 mt-1" />
               <div>
-                <p className="font-bold">Ünvan</p>
-                <p className="text-slate-400 text-sm">Baku, Azerbaijan, 28 May Street, Landmark III</p>
+                <div className="font-semibold">Ünvan</div>
+                <div className="text-slate-600">Sumqayıt ş., Səməd Vurğun küçəsi 84</div>
               </div>
             </div>
-            <div className="flex items-start">
-              <Phone className="text-[#C5A022] mr-4 shrink-0" size={24} />
+
+            <div className="flex items-start gap-3">
+              <Phone className="w-5 h-5 text-[#C5A022] flex-shrink-0 mt-1" />
               <div>
-                <p className="font-bold">Telefon</p>
-                <p className="text-slate-400 text-sm">+994 50 123 45 67</p>
+                <div className="font-semibold">Telefon</div>
+                <a href="tel:+994517696181" className="text-slate-600 hover:text-[#C5A022]">
+                  +994 51 769 61 81
+                </a>
               </div>
             </div>
-            <div className="flex items-start">
-              <Mail className="text-[#C5A022] mr-4 shrink-0" size={24} />
+
+            <div className="flex items-start gap-3">
+              <Mail className="w-5 h-5 text-[#C5A022] flex-shrink-0 mt-1" />
               <div>
-                <p className="font-bold">E-poçt</p>
-                <p className="text-slate-400 text-sm">info@tqta.az</p>
+                <div className="font-semibold">E-poçt</div>
+                <a href="mailto:info@tqta.az" className="text-slate-600 hover:text-[#C5A022]">
+                  info@tqta.az
+                </a>
               </div>
             </div>
           </div>

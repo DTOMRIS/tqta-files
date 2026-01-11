@@ -5,22 +5,19 @@ import { GOLD } from './landing-constants';
 
 const TESTIMONIALS = [
   {
-    name: "Leyla Əliyeva",
-    role: "Four Seasons Baku, Pastry Chef",
-    text: "TQTA-da aldığım təhsil mənim karyeramda dönüş nöqtəsi oldu. Beynəlxalq sertifikat sayəsində xəyal etdiyim işə qəbul oldum.",
-    image: "https://i.pravatar.cc/150?u=leyla"
+    name: "Rəhimova Xalidə",
+    role: "Emirgan Sütiş Restoranı",
+    text: "TQTA-da aldığım təhsil mənim karyeramda dönüş nöqtəsi oldu. Xəyal etdiyim işə qəbul oldum."
   },
   {
-    name: "Kamran Həsənov",
-    role: "Restoran Sahibi, 'Lezzet' Bistro",
-    text: "Akademiyanın investisiya proqramı sayəsində öz restoranımı açmaq üçün lazım olan həm biliyi, həm də dəstəyi tapdım.",
-    image: "https://i.pravatar.cc/150?u=kamran"
+    name: "İbrahimli Aytən",
+    role: "Emirgan Sütiş Restoranı",
+    text: "Akademiyada aldığım nəzəri dərslər sayəsində yeni başladığım işimdə yüksəlmə imkanım oldu. Hər kəsə sertifikat almağı tövsiyə edirəm."
   },
   {
-    name: "Nigar Sultanova",
-    role: "Məzun, Head of Service",
-    text: "Müəllimlərin peşəkarlığı və AI köməkçisi dərsləri daha maraqlı və effektiv edirdi. Hər kəsə tövsiyə edirəm!",
-    image: "https://i.pravatar.cc/150?u=nigar"
+    name: "İmanova Nuranə",
+    role: "Emirgan Sütiş Restoranı",
+    text: "Aldığım təhsil sayəsində heç inanmayacağım yerdə işə başladım. Akademiya mənə özümə inanmağı və özümü peşəyə aid hiss etməyi öyrətdi."
   }
 ];
 
@@ -40,7 +37,9 @@ const Testimonials: React.FC = () => {
             </div>
             <p className="text-slate-600 italic mb-8 leading-relaxed">"{t.text}"</p>
             <div className="flex items-center">
-              <img src={t.image} alt={t.name} className="w-12 h-12 rounded-full mr-4 border-2 border-[#C5A022]" />
+              <div className="w-12 h-12 rounded-full mr-4 border-2 border-[#C5A022] bg-gradient-to-br from-[#C5A022]/20 to-[#0097A7]/20 flex items-center justify-center">
+                <span className="text-[#0A192F] font-bold text-lg">{t.name.charAt(0)}</span>
+              </div>
               <div>
                 <h4 className="font-bold text-[#0A192F] text-sm">{t.name}</h4>
                 <p className="text-[10px] text-slate-400 uppercase tracking-widest">{t.role}</p>

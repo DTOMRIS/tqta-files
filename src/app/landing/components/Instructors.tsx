@@ -1,51 +1,57 @@
 
 import React from 'react';
-import { ChefHat, Award, Linkedin } from 'lucide-react';
+import { ChefHat, Award, Users, GraduationCap } from 'lucide-react';
 import { GOLD } from './landing-constants';
-
-const INSTRUCTORS = [
-  {
-    name: "Şef Elnur Əzizov",
-    role: "Kulinariya Direktoru",
-    bio: "20 ildən artıq beynəlxalq təcrübə, Michelin ulduzlu restoranlarda staj.",
-    image: "https://images.unsplash.com/photo-1583394293214-28dea15ee548?auto=format&fit=crop&q=80&w=400"
-  },
-  {
-    name: "Sarah Jenkins",
-    role: "Qonaqpərvərlik Meneceri",
-    bio: "Böyük Britaniyadan dəvət olunmuş mütəxəssis, CTH üzrə baş təlimçi.",
-    image: "https://images.unsplash.com/photo-1595273670150-bd0c3c392e46?auto=format&fit=crop&q=80&w=400"
-  },
-  {
-    name: "Murat Bəy",
-    role: "Master Barista",
-    bio: "Qəhvə mədəniyyəti və miksologiya üzrə regional çempion.",
-    image: "https://images.unsplash.com/photo-1594381898411-846e7d193883?auto=format&fit=crop&q=80&w=400"
-  }
-];
 
 const Instructors: React.FC = () => {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div className="text-center mb-16">
+      <div className="text-center mb-12">
         <h2 className="text-4xl font-bold text-[#0A192F] mb-4">Peşəkar Mentorlarımız</h2>
         <div className="w-24 h-1 bg-[#C5A022] mx-auto"></div>
         <p className="mt-6 text-slate-500">Öz sahəsinin ustalarından sirləri öyrənin.</p>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
-        {INSTRUCTORS.map((ins, idx) => (
-          <div key={idx} className="group text-center">
-            <div className="relative mb-6 mx-auto w-64 h-64 overflow-hidden rounded-full border-4 border-white shadow-2xl">
-              <img src={ins.image} alt={ins.name} className="w-full h-full object-cover transition-transform group-hover:scale-110" />
-              <div className="absolute inset-0 bg-[#0A192F]/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                <Linkedin className="text-white cursor-pointer" size={24} />
-              </div>
-            </div>
-            <h4 className="text-xl font-bold text-[#0A192F]">{ins.name}</h4>
-            <p className={`${GOLD} text-xs font-bold uppercase tracking-widest mb-4`}>{ins.role}</p>
-            <p className="text-slate-500 text-sm max-w-xs mx-auto">{ins.bio}</p>
+
+      {/* Coming Soon Banner */}
+      <div className="bg-gradient-to-r from-[#0A192F] to-[#1a365d] rounded-3xl p-8 md:p-12 text-center text-white relative overflow-hidden">
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute top-10 left-10 w-20 h-20 border-2 border-white rounded-full"></div>
+          <div className="absolute bottom-10 right-10 w-32 h-32 border-2 border-white rounded-full"></div>
+          <div className="absolute top-1/2 left-1/4 w-16 h-16 border-2 border-white rounded-full"></div>
+        </div>
+        
+        <div className="relative z-10">
+          <div className="w-20 h-20 bg-[#C5A022]/20 rounded-full flex items-center justify-center mx-auto mb-6">
+            <Users className="text-[#C5A022]" size={40} />
           </div>
-        ))}
+          
+          <h3 className="text-2xl md:text-3xl font-bold mb-4">Təcrübəli Komandamız</h3>
+          <p className="text-slate-300 max-w-2xl mx-auto mb-8 text-lg">
+            TQTA-da <span className="text-[#C5A022] font-bold">beynəlxalq təcrübəyə</span> malik şeflər, 
+            barmenler və qonaqpərvərlik mütəxəssisləri sizə təlim keçir.
+          </p>
+
+          {/* Stats */}
+          <div className="grid grid-cols-3 gap-6 max-w-lg mx-auto mb-8">
+            <div className="text-center">
+              <div className="text-3xl font-bold text-[#C5A022]">5+</div>
+              <div className="text-xs text-slate-400 uppercase tracking-wider">Təlimçi</div>
+            </div>
+            <div className="text-center">
+              <div className="text-3xl font-bold text-[#C5A022]">30+</div>
+              <div className="text-xs text-slate-400 uppercase tracking-wider">İl Təcrübə</div>
+            </div>
+            <div className="text-center">
+              <div className="text-3xl font-bold text-[#C5A022]">CTH</div>
+              <div className="text-xs text-slate-400 uppercase tracking-wider">Sertifikatlı</div>
+            </div>
+          </div>
+
+          <p className="text-sm text-slate-400">
+            <GraduationCap className="inline mr-2" size={16} />
+            Təlimçi profilləri tezliklə əlavə olunacaq
+          </p>
+        </div>
       </div>
     </div>
   );

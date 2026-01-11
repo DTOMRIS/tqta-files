@@ -1,20 +1,59 @@
 'use client';
 
-import React from 'react';
-import { ArrowRight, Play, Award, Globe, Users } from 'lucide-react';
+import React, { useState, useRef } from 'react';
+import { ArrowRight, Play, Award, Globe, Users, Volume2, VolumeX } from 'lucide-react';
 
 export default function Hero({ onStart, onInvest }: any) {
+  const [videoLoaded, setVideoLoaded] = useState(false);
+  const [isMuted, setIsMuted] = useState(true);
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  const toggleMute = () => {
+    if (videoRef.current) {
+      videoRef.current.muted = !videoRef.current.muted;
+      setIsMuted(!isMuted);
+    }
+  };
+
   return (
     <div id="home" className="relative min-h-screen flex items-center overflow-hidden bg-[#0A192F]">
-      {/* Background Image */}
+      {/* Video Background with Fallback Image */}
       <div className="absolute inset-0 z-0">
+        {/* Fallback Image - görünür olacak video yüklenene kadar */}
         <img
-          src="https://images.unsplash.com/photo-1556910103-1c02745aae4d?auto=format&fit=crop&q=80"
-          className="w-full h-full object-cover opacity-30"
-          alt="Professional Culinary Background"
+          src="/brand/kapak-mutfak.png"
+          className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ${videoLoaded ? 'opacity-0' : 'opacity-80'}`}
+          alt="TQTA Kulinariya Akademiyası"
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-[#0A192F] via-[#0A192F]/90 to-transparent"></div>
+        
+        {/* Video Background - Tanıtım Videosu */}
+        <video
+          ref={videoRef}
+          autoPlay
+          loop
+          muted
+          playsInline
+          onLoadedData={() => setVideoLoaded(true)}
+          className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ${videoLoaded ? 'opacity-80' : 'opacity-0'}`}
+        >
+          <source src="/brand/tanitim-videosu.mp4" type="video/mp4" />
+        </video>
+
+        {/* Gradient Overlay - Daha hafif */}
+        <div className="absolute inset-0 bg-gradient-to-r from-[#0A192F]/80 via-[#0A192F]/50 to-transparent"></div>
+        <div className="absolute inset-0 bg-gradient-to-t from-[#0A192F]/70 via-transparent to-transparent"></div>
       </div>
+
+      {/* Video Mute Toggle */}
+      {videoLoaded && (
+        <button
+          onClick={toggleMute}
+          className="absolute bottom-8 right-8 z-20 p-3 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white hover:bg-white/20 transition-all"
+          aria-label={isMuted ? 'Səsi aç' : 'Səsi bağla'}
+        >
+          {isMuted ? <VolumeX className="w-5 h-5" /> : <Volume2 className="w-5 h-5" />}
+        </button>
+      )}
 
       <div className="max-w-7xl mx-auto px-6 relative z-10 py-32">
         <div className="max-w-4xl">
@@ -64,52 +103,28 @@ export default function Hero({ onStart, onInvest }: any) {
               {/* CTH */}
               <div className="group relative">
                 <img
-                  src="/logos/cth.png"
+                  src="/brand/CTH Approved Centre rgb.png"
                   alt="CTH Awards UK"
-                  className="h-12 md:h-16 grayscale hover:grayscale-0 opacity-60 hover:opacity-100 transition-all duration-300 hover:scale-110"
-                  onError={(e: any) => {
-                    e.target.style.display = 'none';
-                    e.target.nextElementSibling.style.display = 'flex';
-                  }}
+                  className="h-12 md:h-16 grayscale hover:grayscale-0 opacity-70 hover:opacity-100 transition-all duration-300 hover:scale-110 bg-white/10 rounded-lg p-2"
                 />
-                <div className="hidden items-center gap-2 text-white/80 text-sm font-bold">
-                  <Award className="w-5 h-5 text-[#C5A022]" />
-                  <span>CTH Awards</span>
-                </div>
               </div>
 
               {/* DMA */}
               <div className="group relative">
                 <img
-                  src="/logos/dma.png"
+                  src="/brand/dma-logo.png"
                   alt="DMA"
-                  className="h-12 md:h-16 grayscale hover:grayscale-0 opacity-60 hover:opacity-100 transition-all duration-300 hover:scale-110"
-                  onError={(e: any) => {
-                    e.target.style.display = 'none';
-                    e.target.nextElementSibling.style.display = 'flex';
-                  }}
+                  className="h-12 md:h-16 grayscale hover:grayscale-0 opacity-70 hover:opacity-100 transition-all duration-300 hover:scale-110 bg-white/10 rounded-lg p-2"
                 />
-                <div className="hidden items-center gap-2 text-white/80 text-sm font-bold">
-                  <Globe className="w-5 h-5 text-[#C5A022]" />
-                  <span>DMA</span>
-                </div>
               </div>
 
               {/* TİKA */}
               <div className="group relative">
                 <img
-                  src="/logos/tika.png"
+                  src="/brand/tika.jpg"
                   alt="TİKA"
-                  className="h-12 md:h-16 grayscale hover:grayscale-0 opacity-60 hover:opacity-100 transition-all duration-300 hover:scale-110"
-                  onError={(e: any) => {
-                    e.target.style.display = 'none';
-                    e.target.nextElementSibling.style.display = 'flex';
-                  }}
+                  className="h-12 md:h-16 grayscale hover:grayscale-0 opacity-70 hover:opacity-100 transition-all duration-300 hover:scale-110 bg-white/10 rounded-lg p-2"
                 />
-                <div className="hidden items-center gap-2 text-white/80 text-sm font-bold">
-                  <Users className="w-5 h-5 text-[#C5A022]" />
-                  <span>TİKA</span>
-                </div>
               </div>
             </div>
           </div>

@@ -8,6 +8,7 @@ const NAV_LINKS = [
   { label: 'Haqqımızda', id: 'about' },
   { label: 'Proqramlar', id: 'courses' },
   { label: 'Workshoplar', id: 'workshops' },
+  { label: 'Korporativ', id: 'corporate' },
   { label: 'Əlaqə', id: 'contact' },
 ];
 
@@ -50,9 +51,9 @@ export default function Navbar({ onNavigate, activeSection }: any) {
           aria-label="TQTA Ana Səhifə"
         >
           <img
-            src="/logos/tqta-mark.png"
+            src="/brand/tqta-logo.jpeg"
             alt="TQTA"
-            className="w-11 h-11 rounded-lg"
+            className="w-11 h-11 rounded-lg object-cover"
           />
           <div className="flex flex-col leading-tight">
             <span className={`text-base sm:text-lg font-bold ${isScrolled ? 'text-[#0A192F]' : 'text-white'}`}>
